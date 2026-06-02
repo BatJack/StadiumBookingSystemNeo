@@ -1,4 +1,4 @@
-{% extends 'booking/base.html' %}
+﻿{% extends 'booking/base.html' %}
 
 {% block title %}场地列表 - 体育场馆预约系统{% endblock %}
 
@@ -84,13 +84,14 @@
             padding: 16px;
             background: white;
             border: 3px solid #ecf0f1;
+            border-radius: var(--radius-lg);
         }
         .filter-btn {
             padding: 10px 20px;
             background: #ecf0f1;
             color: #2c3e50;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -106,7 +107,7 @@
         }
         .matrix-wrapper {
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 0px;
             margin-top: 0px;
             margin-bottom: 0px;
@@ -173,7 +174,7 @@
             padding: 8px 4px;
             cursor: pointer;
             transition: all 0.2s ease;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 13px;
             min-width: 70px;
             height: 60px;
@@ -308,7 +309,7 @@
             padding: 60px 20px;
             color: #7f8c8d;
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             border: 3px solid #ecf0f1;
         }
         .no-availability .icon {
@@ -325,7 +326,7 @@
             left: 0;
             right: 0;
             background: #ecf0f1;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 20px 24px;
             display: none;
             border-top: 6px solid #3498db;
@@ -383,7 +384,7 @@
             background: #2ecc71;
             color: white;
             border: none;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
@@ -398,7 +399,7 @@
             background: #ecf0f1;
             color: #7f8c8d;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
@@ -426,7 +427,7 @@
         .legend-dot {
             width: 20px;
             height: 20px;
-            border-radius: 0;
+            border-radius: var(--radius);
         }
         .legend-dot.available {
             background: #2ecc71;
@@ -450,7 +451,7 @@
             gap: 12px;
             padding: 16px 20px;
             background: #f39c12;
-            border-radius: 0;
+            border-radius: var(--radius);
             margin-bottom: 20px;
             border: 3px solid #e67e22;
             font-size: 14px;
@@ -476,7 +477,7 @@
         }
         .modal-content {
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 0;
             width: 90%;
             max-width: 420px;
@@ -531,7 +532,7 @@
             width: 100%;
             padding: 12px 16px;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 15px;
             transition: all 0.2s;
             box-sizing: border-box;
@@ -553,7 +554,7 @@
         .modal-footer .btn {
             flex: 1;
             padding: 14px 20px;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
