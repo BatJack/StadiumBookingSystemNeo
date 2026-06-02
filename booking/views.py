@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+﻿from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -112,7 +112,7 @@ def admin_dashboard(request):
         messages.error(request, '您没有权限访问此页面')
         return redirect('court_list')
     
-    return render(request, 'booking/admin_dashboard.html')
+    return render(request, 'booking/admin/admin_dashboard.html')
 
 
 @login_required
@@ -126,7 +126,7 @@ def admin_statistics(request):
     availabilities_count = CourtAvailability.objects.count()
     students_count = Student.objects.count()
     
-    return render(request, 'booking/admin_statistics.html', {
+    return render(request, 'booking/admin/admin_statistics.html', {
         'courts_count': courts_count,
         'bookings_count': bookings_count,
         'availabilities_count': availabilities_count,
@@ -142,7 +142,7 @@ def admin_court_list(request):
     
     courts = Court.objects.select_related('court_type').all()
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin_court_list.html', {'courts': courts, 'court_types': court_types})
+    return render(request, 'booking/admin/admin_court_list.html', {'courts': courts, 'court_types': court_types})
 
 
 @login_required
@@ -174,7 +174,7 @@ def admin_court_add(request):
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin_court_form.html', {'court_types': court_types})
+    return render(request, 'booking/admin/admin_court_form.html', {'court_types': court_types})
 
 
 @login_required
@@ -204,7 +204,7 @@ def admin_court_edit(request, court_id):
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin_court_form.html', {'court': court, 'court_types': court_types})
+    return render(request, 'booking/admin/admin_court_form.html', {'court': court, 'court_types': court_types})
 
 
 @login_required
@@ -226,7 +226,7 @@ def admin_court_type_list(request):
         return redirect('court_list')
     
     court_types = CourtType.objects.prefetch_related('courts').all()
-    return render(request, 'booking/admin_court_type_list.html', {'court_types': court_types})
+    return render(request, 'booking/admin/admin_court_type_list.html', {'court_types': court_types})
 
 
 @login_required
@@ -242,7 +242,7 @@ def admin_court_type_add(request):
             messages.success(request, '场地类型添加成功')
         return redirect('admin_court_type_list')
     
-    return render(request, 'booking/admin_court_type_form.html')
+    return render(request, 'booking/admin/admin_court_type_form.html')
 
 
 @login_required
@@ -261,7 +261,7 @@ def admin_court_type_edit(request, type_id):
             messages.success(request, '场地类型更新成功')
         return redirect('admin_court_type_list')
     
-    return render(request, 'booking/admin_court_type_form.html', {'court_type': court_type})
+    return render(request, 'booking/admin/admin_court_type_form.html', {'court_type': court_type})
 
 
 @login_required
@@ -292,7 +292,7 @@ def admin_availability_list(request):
         end_date__gte=today
     ).select_related('court').order_by('start_date', 'start_time')
     
-    return render(request, 'booking/admin_availability_list.html', {
+    return render(request, 'booking/admin/admin_availability_list.html', {
         'availabilities': availabilities,
         'courts': courts,
     })
@@ -320,13 +320,13 @@ def admin_availability_add(request):
             
             if start_date > end_date:
                 messages.error(request, '结束日期必须大于等于开始日期')
-                return render(request, 'booking/admin_availability_form.html', {
+                return render(request, 'booking/admin/admin_availability_form.html', {
                     'courts': Court.objects.all(),
                 })
             
             if start_time >= end_time:
                 messages.error(request, '结束时间必须大于开始时间')
-                return render(request, 'booking/admin_availability_form.html', {
+                return render(request, 'booking/admin/admin_availability_form.html', {
                     'courts': Court.objects.all(),
                 })
             
@@ -346,7 +346,7 @@ def admin_availability_add(request):
         except Court.DoesNotExist:
             messages.error(request, '场地不存在')
     
-    return render(request, 'booking/admin_availability_form.html', {
+    return render(request, 'booking/admin/admin_availability_form.html', {
         'courts': Court.objects.all(),
     })
 
@@ -358,7 +358,7 @@ def admin_bookings(request):
         return redirect('court_list')
     
     bookings = Booking.objects.all().select_related('user', 'court').order_by('date', 'start_time')
-    return render(request, 'booking/admin_bookings.html', {'bookings': bookings})
+    return render(request, 'booking/admin/admin_bookings.html', {'bookings': bookings})
 
 
 @login_required
@@ -385,14 +385,14 @@ def admin_booking_add(request):
             
             if start_time >= end_time:
                 messages.error(request, '结束时间必须大于开始时间')
-                return render(request, 'booking/admin_booking_form.html', {
+                return render(request, 'booking/admin/admin_booking_form.html', {
                     'courts': Court.objects.all(),
                     'users': User.objects.all(),
                 })
             
             if start_time.minute not in [0, 30] or end_time.minute not in [0, 30]:
                 messages.error(request, '时间必须是整点或半点')
-                return render(request, 'booking/admin_booking_form.html', {
+                return render(request, 'booking/admin/admin_booking_form.html', {
                     'courts': Court.objects.all(),
                     'users': User.objects.all(),
                 })
@@ -404,15 +404,15 @@ def admin_booking_add(request):
             ).first()
             
             if not availability:
-                messages.error(request, '该日期场地未开放')
-                return render(request, 'booking/admin_booking_form.html', {
+                messages.error(request, '该日期场地未开放预约')
+                return render(request, 'booking/admin/admin_booking_form.html', {
                     'courts': Court.objects.all(),
                     'users': User.objects.all(),
                 })
             
             if start_time < availability.start_time or end_time > availability.end_time:
                 messages.error(request, '预约时间不在场地开放时间内')
-                return render(request, 'booking/admin_booking_form.html', {
+                return render(request, 'booking/admin/admin_booking_form.html', {
                     'courts': Court.objects.all(),
                     'users': User.objects.all(),
                 })
@@ -429,7 +429,7 @@ def admin_booking_add(request):
             
             if conflicting_bookings.exists():
                 messages.error(request, '该时间段已被预约')
-                return render(request, 'booking/admin_booking_form.html', {
+                return render(request, 'booking/admin/admin_booking_form.html', {
                     'courts': Court.objects.all(),
                     'users': User.objects.all(),
                 })
@@ -455,7 +455,7 @@ def admin_booking_add(request):
         except ValueError:
             messages.error(request, '时间格式错误')
     
-    return render(request, 'booking/admin_booking_form.html', {
+    return render(request, 'booking/admin/admin_booking_form.html', {
         'courts': Court.objects.all(),
         'users': User.objects.all(),
     })
@@ -483,7 +483,7 @@ def admin_booking_edit(request, booking_id):
             messages.success(request, '预约已删除')
             return redirect('admin_bookings')
     
-    return render(request, 'booking/admin_booking_edit.html', {'booking': booking})
+    return render(request, 'booking/admin/admin_booking_edit.html', {'booking': booking})
 
 
 @login_required
@@ -599,7 +599,7 @@ def create_booking_api(request):
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
-        return JsonResponse({'error': '无效的请求数据'}, status=400)
+        return JsonResponse({'error': '无效的请求参数'}, status=400)
     
     court_id = data.get('court_id')
     date_str = data.get('date')
@@ -629,7 +629,7 @@ def create_booking_api(request):
     ).first()
     
     if not availability:
-        return JsonResponse({'error': '该日期场地未开放'}, status=400)
+        return JsonResponse({'error': '该日期场地未开放预约'}, status=400)
     
     if start_time < availability.start_time or end_time > availability.end_time:
         return JsonResponse({'error': '预约时间不在场地开放时间内'}, status=400)
@@ -668,7 +668,7 @@ def admin_student_list(request):
         return redirect('court_list')
     
     students = Student.objects.all().order_by('name')
-    return render(request, 'booking/admin_student_list.html', {'students': students})
+    return render(request, 'booking/admin/admin_student_list.html', {'students': students})
 
 
 @login_required
@@ -686,7 +686,7 @@ def admin_student_add(request):
         messages.success(request, '学员添加成功')
         return redirect('admin_student_list')
     
-    return render(request, 'booking/admin_student_form.html')
+    return render(request, 'booking/admin/admin_student_form.html')
 
 
 @login_required
@@ -705,7 +705,7 @@ def admin_student_edit(request, student_id):
         messages.success(request, '学员信息更新成功')
         return redirect('admin_student_list')
     
-    return render(request, 'booking/admin_student_form.html', {'student': student})
+    return render(request, 'booking/admin/admin_student_form.html', {'student': student})
 
 
 @login_required
@@ -728,7 +728,7 @@ def admin_course_booking_list(request):
     
     today = timezone.now().date()
     bookings = Booking.objects.filter(booking_type='course').select_related('court').order_by('-date', 'start_time')
-    return render(request, 'booking/admin_course_booking_list.html', {
+    return render(request, 'booking/admin/admin_course_booking_list.html', {
         'bookings': bookings,
         'today': today,
     })
@@ -757,14 +757,14 @@ def admin_course_booking_add(request):
                 
                 if start_time >= end_time:
                     messages.error(request, '结束时间必须大于开始时间')
-                    return render(request, 'booking/admin_course_booking_form.html', {
+                    return render(request, 'booking/admin/admin_course_booking_form.html', {
                         'courts': Court.objects.all(),
                         'students': Student.objects.all(),
                     })
                 
                 if start_time.minute not in [0, 30] or end_time.minute not in [0, 30]:
                     messages.error(request, '时间必须是整点或半点')
-                    return render(request, 'booking/admin_course_booking_form.html', {
+                    return render(request, 'booking/admin/admin_course_booking_form.html', {
                         'courts': Court.objects.all(),
                         'students': Student.objects.all(),
                     })
@@ -776,15 +776,15 @@ def admin_course_booking_add(request):
                 ).first()
                 
                 if not availability:
-                    messages.error(request, '该日期场地未开放')
-                    return render(request, 'booking/admin_course_booking_form.html', {
+                    messages.error(request, '该日期场地未开放预约')
+                    return render(request, 'booking/admin/admin_course_booking_form.html', {
                         'courts': Court.objects.all(),
                         'students': Student.objects.all(),
                     })
                 
                 if start_time < availability.start_time or end_time > availability.end_time:
                     messages.error(request, '预约时间不在场地开放时间内')
-                    return render(request, 'booking/admin_course_booking_form.html', {
+                    return render(request, 'booking/admin/admin_course_booking_form.html', {
                         'courts': Court.objects.all(),
                         'students': Student.objects.all(),
                     })
@@ -801,7 +801,7 @@ def admin_course_booking_add(request):
                 
                 if conflicting.exists():
                     messages.error(request, '该时间段已被预约')
-                    return render(request, 'booking/admin_course_booking_form.html', {
+                    return render(request, 'booking/admin/admin_course_booking_form.html', {
                         'courts': Court.objects.all(),
                         'students': Student.objects.all(),
                     })
@@ -815,7 +815,7 @@ def admin_course_booking_add(request):
                     status='active'
                 )
                 
-                messages.success(request, '课程预约已创建，请添加学员')
+                messages.success(request, '课程预约已创建，请添加学生')
                 return redirect('admin_course_booking_edit', booking_id=booking.id)
                 
             except Court.DoesNotExist:
@@ -832,7 +832,7 @@ def admin_course_booking_add(request):
             
             if not student_ids:
                 messages.error(request, '请至少选择一名学员')
-                return render(request, 'booking/admin_course_booking_edit.html', {
+                return render(request, 'booking/admin/admin_course_booking_edit.html', {
                     'booking': booking,
                     'students': Student.objects.all(),
                 })
@@ -841,13 +841,13 @@ def admin_course_booking_add(request):
                 hours = int(class_hours)
                 if hours <= 0:
                     messages.error(request, '课时数必须大于0')
-                    return render(request, 'booking/admin_course_booking_edit.html', {
+                    return render(request, 'booking/admin/admin_course_booking_edit.html', {
                         'booking': booking,
                         'students': Student.objects.all(),
                     })
             except (ValueError, TypeError):
                 messages.error(request, '课时数格式错误')
-                return render(request, 'booking/admin_course_booking_edit.html', {
+                return render(request, 'booking/admin/admin_course_booking_edit.html', {
                     'booking': booking,
                     'students': Student.objects.all(),
                 })
@@ -858,7 +858,7 @@ def admin_course_booking_add(request):
                     student = Student.objects.get(id=sid)
                     
                     if booking.students.filter(student=student).exists():
-                        messages.warning(request, f'学员 {student.name} 已在课程中')
+                        messages.warning(request, f'学员 {student.name} 已在课程预约中')
                         continue
                     
                     if student.total_class_hours < hours:
@@ -878,10 +878,10 @@ def admin_course_booking_add(request):
                     pass
             
             if added > 0:
-                messages.success(request, f'成功添加 {added} 名学员，已扣除课时')
+                messages.success(request, f'成功添加 {added} 名学员，已扣除课时 {hours}')
             return redirect('admin_course_booking_edit', booking_id=booking_id)
     
-    return render(request, 'booking/admin_course_booking_form.html', {
+    return render(request, 'booking/admin/admin_course_booking_form.html', {
         'courts': Court.objects.all(),
         'students': Student.objects.all(),
     })
@@ -911,7 +911,7 @@ def admin_course_booking_edit(request, booking_id):
                 student.save()
                 
                 cs.delete()
-                messages.success(request, f'已移除学员 {student.name}，退还 {hours} 课时')
+                messages.success(request, f'已移除学员 {student.name}，退 {hours} 课时')
             except BookingStudent.DoesNotExist:
                 messages.error(request, '操作失败')
         
@@ -921,7 +921,7 @@ def admin_course_booking_edit(request, booking_id):
             
             if not student_ids:
                 messages.error(request, '请至少选择一名学员')
-                return render(request, 'booking/admin_course_booking_edit.html', {
+                return render(request, 'booking/admin/admin_course_booking_edit.html', {
                     'booking': booking,
                     'booking_students': booking_students,
                     'students': all_students,
@@ -931,14 +931,14 @@ def admin_course_booking_edit(request, booking_id):
                 hours = int(class_hours)
                 if hours <= 0:
                     messages.error(request, '课时数必须大于0')
-                    return render(request, 'booking/admin_course_booking_edit.html', {
+                    return render(request, 'booking/admin/admin_course_booking_edit.html', {
                         'booking': booking,
                         'booking_students': booking_students,
                         'students': all_students,
                     })
             except (ValueError, TypeError):
                 messages.error(request, '课时数格式错误')
-                return render(request, 'booking/admin_course_booking_edit.html', {
+                return render(request, 'booking/admin/admin_course_booking_edit.html', {
                     'booking': booking,
                     'booking_students': booking_students,
                     'students': all_students,
@@ -950,7 +950,7 @@ def admin_course_booking_edit(request, booking_id):
                     student = Student.objects.get(id=sid)
                     
                     if booking.students.filter(student=student).exists():
-                        messages.warning(request, f'学员 {student.name} 已在课程中')
+                        messages.warning(request, f'学员 {student.name} 已在课程预约中')
                         continue
                     
                     if student.total_class_hours < hours:
@@ -970,7 +970,7 @@ def admin_course_booking_edit(request, booking_id):
                     pass
             
             if added > 0:
-                messages.success(request, f'成功添加 {added} 名学员，已扣除课时')
+                messages.success(request, f'成功添加 {added} 名学员，已扣除课时 {hours}')
             return redirect('admin_course_booking_edit', booking_id=booking_id)
         
         elif action == 'cancel_booking':
@@ -981,7 +981,7 @@ def admin_course_booking_edit(request, booking_id):
                     cs.delete()
                 booking.status = 'cancelled'
                 booking.save()
-                messages.success(request, '课程预约已取消，所有学员课时已退还')
+                messages.success(request, '课程预约已取消，所有学员课时已退回')
             return redirect('admin_course_booking_list')
         
         elif action == 'update_booking':
@@ -996,7 +996,7 @@ def admin_course_booking_edit(request, booking_id):
                 
                 if start_time >= end_time:
                     messages.error(request, '结束时间必须大于开始时间')
-                    return render(request, 'booking/admin_course_booking_edit.html', {
+                    return render(request, 'booking/admin/admin_course_booking_edit.html', {
                         'booking': booking,
                         'booking_students': booking_students,
                         'students': all_students,
@@ -1012,7 +1012,7 @@ def admin_course_booking_edit(request, booking_id):
             
             return redirect('admin_course_booking_edit', booking_id=booking_id)
     
-    return render(request, 'booking/admin_course_booking_edit.html', {
+    return render(request, 'booking/admin/admin_course_booking_edit.html', {
         'booking': booking,
         'booking_students': booking_students,
         'students': all_students,

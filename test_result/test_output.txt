@@ -1,0 +1,1520 @@
+﻿D:\Programs\miniconda3\envs\django\python.exe : Creating
+ test database for alias 'default'...
+所在位置 行:1 字符: 5
++ & { D:\Programs\miniconda3\envs\django\python.exe mana
+ge.py test book ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Creating t 
+   est d...as 'default'...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+.E........E.........F...........
+========================================================
+==============
+ERROR: test_admin_add_court (booking.tests.AdminTests.te
+st_admin_add_court)
+测试添加场地
+--------------------------------------------------------
+--------------
+Traceback (most recent call last):
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\sqlite3\base.py", line 359, in e
+xecute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: book
+ing_court.description
+
+The above exception was the direct cause of the followin
+g exception:
+
+Traceback (most recent call last):
+  File "D:\Workspace\StaduimBookingSystem\booking\tests.
+py", line 279, in test_admin_add_court
+    response = self.client.post(reverse('admin_court_add
+'), {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 1153, in post
+    response = super().post(
+               ^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 499, in post
+    return self.generic(
+           ^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 671, in generic
+    return self.request(**r)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 1087, in request
+    self.check_exception(response)
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 802, in check_exceptio
+n
+    raise exc_value
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\core\handlers\exception.py", line 55, in inn
+er
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\core\handlers\base.py", line 198, in _get_re
+sponse
+    response = wrapped_callback(request, *callback_args,
+ **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\contrib\auth\decorators.py", line 59, in _vi
+ew_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Workspace\StaduimBookingSystem\booking\views.
+py", line 167, in admin_court_add
+    Court.objects.create(
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\manager.py", line 87, in manager_m
+ethod
+    return getattr(self.get_queryset(), name)(*args, **k
+wargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\query.py", line 669, in create
+    obj.save(force_insert=True, using=self.db)
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 874, in save
+    self.save_base(
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 966, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 1167, in _save_tabl
+e
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 1218, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\manager.py", line 87, in manager_m
+ethod
+    return getattr(self.get_queryset(), name)(*args, **k
+wargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\query.py", line 1918, in _insert
+    return query.get_compiler(using=using).execute_sql(r
+eturning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\sql\compiler.py", line 1925, in ex
+ecute_sql
+    cursor.execute(sql, params)
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 92, in _execute_
+with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from ex
+c_value
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\sqlite3\base.py", line 359, in e
+xecute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint fail
+ed: booking_court.description
+
+========================================================
+==============
+ERROR: test_admin_edit_court (booking.tests.AdminTests.t
+est_admin_edit_court)
+测试编辑场地
+--------------------------------------------------------
+--------------
+Traceback (most recent call last):
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\sqlite3\base.py", line 359, in e
+xecute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: book
+ing_court.description
+
+The above exception was the direct cause of the followin
+g exception:
+
+Traceback (most recent call last):
+  File "D:\Workspace\StaduimBookingSystem\booking\tests.
+py", line 289, in test_admin_edit_court
+    response = self.client.post(reverse('admin_court_edi
+t', args=[self.court.id]), {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 1153, in post
+    response = super().post(
+               ^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 499, in post
+    return self.generic(
+           ^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 671, in generic
+    return self.request(**r)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 1087, in request
+    self.check_exception(response)
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\test\client.py", line 802, in check_exceptio
+n
+    raise exc_value
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\core\handlers\exception.py", line 55, in inn
+er
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\core\handlers\base.py", line 198, in _get_re
+sponse
+    response = wrapped_callback(request, *callback_args,
+ **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\contrib\auth\decorators.py", line 59, in _vi
+ew_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Workspace\StaduimBookingSystem\booking\views.
+py", line 202, in admin_court_edit
+    court.save()
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 874, in save
+    self.save_base(
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 966, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 1110, in _save_tabl
+e
+    results = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\base.py", line 1211, in _do_update
+    return filtered._update(values, returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\query.py", line 1327, in _update
+    return query.get_compiler(self.db).execute_returning
+_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\sql\compiler.py", line 2140, in ex
+ecute_returning_sql
+    row_count = self.execute_sql(ROW_COUNT)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\sql\compiler.py", line 2111, in ex
+ecute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\models\sql\compiler.py", line 1624, in ex
+ecute_sql
+    cursor.execute(sql, params)
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 92, in _execute_
+with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from ex
+c_value
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs\miniconda3\envs\django\Lib\site-pack
+ages\django\db\backends\sqlite3\base.py", line 359, in e
+xecute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint fail
+ed: booking_court.description
+
+========================================================
+==============
+FAIL: test_court_list_shows_courts (booking.tests.CourtL
+istTests.test_court_list_shows_courts)
+测试场地列表显示场地
+--------------------------------------------------------
+--------------
+Traceback (most recent call last):
+  File "D:\Workspace\StaduimBookingSystem\booking\tests.
+py", line 189, in test_court_list_shows_courts
+    self.assertContains(response, '羽毛球场A')
+AssertionError: False is not true : Couldn't find '羽毛球场A
+' in the following response
+b'<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n    <met
+a charset="UTF-8">\n    <meta name="viewport" content="w
+idth=device-width, initial-scale=1.0">\n    <title>\xe5\
+x9c\xba\xe5\x9c\xb0\xe5\x88\x97\xe8\xa1\xa8 - \xe4\xbd\x
+93\xe8\x82\xb2\xe5\x9c\xba\xe9\xa6\x86\xe9\xa2\x84\xe7\x
+ba\xa6\xe7\xb3\xbb\xe7\xbb\x9f</title>\n    <link rel="p
+reconnect" href="https://fonts.googleapis.com">\n    <li
+nk rel="preconnect" href="https://fonts.gstatic.com" cro
+ssorigin>\n    <link href="https://fonts.googleapis.com/
+css2?family=Fira+Sans:wght@300;400;500;600;700&display=s
+wap" rel="stylesheet">\n    <style>\n        :root {\n  
+          --primary: #4F46E5;\n            --primary-hov
+er: #4338CA;\n            --primary-light: #EEF2FF;\n   
+         --secondary: #64748B;\n            --success: #
+10B981;\n            --success-hover: #059669;\n        
+    --success-light: #D1FAE5;\n            --danger: #EF
+4444;\n            --danger-hover: #DC2626;\n           
+ --danger-light: #FEE2E2;\n            --warning: #F59E0
+B;\n            --warning-light: #FEF3C7;\n            -
+-info: #3B82F6;\n            --info-light: #DBEAFE;\n   
+         --gray-50: #F9FAFB;\n            --gray-100: #F
+3F4F6;\n            --gray-200: #E5E7EB;\n            --
+gray-300: #D1D5DB;\n            --gray-400: #9CA3AF;\n  
+          --gray-500: #6B7280;\n            --gray-600: 
+#4B5563;\n            --gray-700: #374151;\n            
+--gray-800: #1F2937;\n            --gray-900: #111827;\n
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05)
+;\n            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+ 0 1px 2px -1px rgba(0, 0, 0, 0.1);\n            --shado
+w-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px 
+rgba(0, 0, 0, 0.1);\n            --shadow-lg: 0 10px 15p
+x -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 
+0.1);\n            --radius-sm: 4px;\n            --radi
+us: 8px;\n            --radius-lg: 12px;\n            --
+transition: all 0.2s ease;\n        }\n        * {\n    
+        margin: 0;\n            padding: 0;\n           
+ box-sizing: border-box;\n        }\n        body {\n   
+         font-family: \'Fira Sans\', -apple-system, Blin
+kMacSystemFont, \'Segoe UI\', \'Microsoft YaHei\', Robot
+o, sans-serif;\n            background-color: #f5f5f5;\n
+            color: #2c3e50;\n            line-height: 1.
+6;\n            min-height: 100vh;\n        }\n        .
+header {\n            background: #3498db;\n            
+color: white;\n            padding: 0;\n            box-
+shadow: none;\n            position: sticky;\n          
+  top: 0;\n            z-index: 100;\n        }\n       
+ .header .container {\n            max-width: 1280px;\n 
+           margin: 0 auto;\n            padding: 0 24px;
+\n            display: flex;\n            justify-conten
+t: space-between;\n            align-items: center;\n   
+         height: 64px;\n        }\n        .header h1 {\
+n            font-size: 20px;\n            font-weight: 
+700;\n            letter-spacing: -0.5px;\n            c
+olor: #ffffff;\n        }\n        .nav {\n            d
+isplay: flex;\n            gap: 8px;\n        }\n       
+ .nav a {\n            color: white;\n            text-d
+ecoration: none;\n            padding: 8px 16px;\n      
+      border-radius: 0;\n            font-size: 14px;\n 
+           font-weight: 600;\n            transition: va
+r(--transition);\n            border: 3px solid transpar
+ent;\n        }\n        .nav a:hover {\n            bac
+kground-color: rgba(255, 255, 255, 0.2);\n            bo
+rder-color: white;\n        }\n        .nav a.active {\n
+            background-color: rgba(255, 255, 255, 0.2);\
+n            border-color: white;\n        }\n        .n
+av .btn-logout {\n            background-color: #e74c3c;
+\n            border-color: #c0392b;\n            color:
+ white;\n        }\n        .nav .btn-logout:hover {\n  
+          background-color: #c0392b;\n            border
+-color: #a93226;\n        }\n        .container {\n     
+       max-width: 1280px;\n            margin: 0 auto;\n
+            padding: 24px;\n        }\n        .messages
+ {\n            margin-bottom: 24px;\n        }\n       
+ .messages .message {\n            padding: 14px 18px;\n
+            margin-bottom: 12px;\n            border-rad
+ius: 0;\n            font-size: 14px;\n            displ
+ay: flex;\n            align-items: center;\n           
+ gap: 10px;\n        }\n        .messages .error {\n    
+        background-color: #e74c3c;\n            color: w
+hite;\n            border-left: 6px solid #c0392b;\n    
+    }\n        .messages .success {\n            backgro
+und-color: #2ecc71;\n            color: white;\n        
+    border-left: 6px solid #27ae60;\n        }\n        
+.btn {\n            display: inline-flex;\n            a
+lign-items: center;\n            justify-content: center
+;\n            gap: 6px;\n            padding: 10px 18px
+;\n            background-color: #3498db;\n            c
+olor: white;\n            text-decoration: none;\n      
+      border: none;\n            border-radius: 0;\n    
+        cursor: pointer;\n            font-size: 14px;\n
+            font-weight: 600;\n            transition: v
+ar(--transition);\n            white-space: nowrap;\n   
+     }\n        .btn:hover {\n            background-col
+or: #2980b9;\n        }\n        .btn:active {\n        
+    background-color: #21618c;\n        }\n        .btn-
+danger {\n            background-color: #e74c3c;\n      
+  }\n        .btn-danger:hover {\n            background
+-color: #c0392b;\n        }\n        .btn-success {\n   
+         background-color: #2ecc71;\n        }\n        
+.btn-success:hover {\n            background-color: #27a
+e60;\n        }\n        .btn-outline {\n            bac
+kground-color: transparent;\n            color: #2c3e50;
+\n            border: 3px solid #bdc3c7;\n            bo
+rder-radius: 0;\n        }\n        .btn-outline:hover {
+\n            background-color: #ecf0f1;\n            bo
+rder-color: #95a5a6;\n        }\n        .btn-sm {\n    
+        padding: 6px 12px;\n            font-size: 13px;
+\n        }\n        .btn-icon {\n            padding: 8
+px;\n            width: 36px;\n            height: 36px;
+\n        }\n        .card {\n            background-col
+or: white;\n            border-radius: 0;\n            p
+adding: 24px;\n            box-shadow: none;\n          
+  margin-bottom: 24px;\n            border: 3px solid #e
+cf0f1;\n        }\n        .card h2 {\n            margi
+n-bottom: 20px;\n            color: #2c3e50;\n          
+  font-size: 20px;\n            font-weight: 700;\n     
+   }\n        .card h3 {\n            color: #2c3e50;\n 
+           font-size: 16px;\n            font-weight: 60
+0;\n        }\n        table {\n            width: 100%;
+\n            border-collapse: collapse;\n            ma
+rgin-top: 16px;\n        }\n        table th, table td {
+\n            padding: 14px 16px;\n            text-alig
+n: left;\n            border-bottom: 3px solid #ecf0f1;\
+n        }\n        table th {\n            background-c
+olor: #3498db;\n            font-weight: 600;\n         
+   color: white;\n            font-size: 12px;\n        
+    text-transform: uppercase;\n            letter-spaci
+ng: 0.5px;\n        }\n        table tbody tr {\n       
+     transition: var(--transition);\n        }\n        
+table tbody tr:hover {\n            background-color: #e
+cf0f1;\n        }\n        table tbody td {\n           
+ color: #2c3e50;\n            font-size: 14px;\n        
+}\n        .form-group {\n            margin-bottom: 20p
+x;\n        }\n        .form-group label {\n            
+display: block;\n            margin-bottom: 10px;\n     
+       font-weight: 600;\n            color: #2c3e50;\n 
+           font-size: 14px;\n            text-transform:
+ uppercase;\n            letter-spacing: 0.5px;\n       
+ }\n        .form-group input, .form-group select, .form
+-group textarea {\n            width: 100%;\n           
+ padding: 12px 14px;\n            border: 3px solid #bdc
+3c7;\n            border-radius: 0;\n            font-si
+ze: 14px;\n            transition: var(--transition);\n 
+           background-color: #ecf0f1;\n            color
+: #2c3e50;\n        }\n        .form-group input:focus, 
+.form-group select:focus, .form-group textarea:focus {\n
+            outline: none;\n            border-color: #3
+498db;\n            background-color: white;\n        }\
+n        .form-group small {\n            display: block
+;\n            margin-top: 6px;\n            color: #7f8
+c8d;\n            font-size: 12px;\n        }\n        .
+grid {\n            display: grid;\n            grid-tem
+plate-columns: repeat(auto-fill, minmax(320px, 1fr));\n 
+           gap: 24px;\n        }\n        .page-title {\
+n            font-size: 24px;\n            font-weight: 
+700;\n            color: #2c3e50;\n            margin-bo
+ttom: 24px;\n        }\n        .page-header {\n        
+    text-align: center;\n            margin-bottom: 32px
+;\n        }\n        .page-header h2 {\n            fon
+t-size: 28px;\n            color: #2c3e50;\n            
+margin-bottom: 8px;\n            font-weight: 700;\n    
+    }\n        .page-header p {\n            color: #7f8
+c8d;\n            font-size: 14px;\n        }\n        .
+court-card {\n            background: white;\n          
+  border-radius: 0;\n            overflow: hidden;\n    
+        box-shadow: none;\n            transition: var(-
+-transition);\n            border: 3px solid #ecf0f1;\n 
+       }\n        .court-card:hover {\n            borde
+r-color: #3498db;\n        }\n        .court-card-header
+ {\n            background: #3498db;\n            color:
+ white;\n            padding: 24px;\n            text-al
+ign: center;\n        }\n        .court-card-header h3 {
+\n            font-size: 18px;\n            margin: 0;\n
+            font-weight: 600;\n        }\n        .court
+-card-body {\n            padding: 20px;\n        }\n   
+     .court-card-body p {\n            color: #7f8c8d;\n
+            font-size: 14px;\n            line-height: 1
+.6;\n            min-height: 60px;\n        }\n        .
+court-card-footer {\n            padding: 16px 20px;\n  
+          background: #ecf0f1;\n            border-top: 
+3px solid #bdc3c7;\n            display: flex;\n        
+    justify-content: space-between;\n            align-i
+tems: center;\n        }\n        .court-status {\n     
+       display: inline-flex;\n            align-items: c
+enter;\n            gap: 6px;\n            padding: 6px 
+12px;\n            border-radius: 0;\n            font-s
+ize: 12px;\n            font-weight: 600;\n        }\n  
+      .status-available {\n            background: #2ecc
+71;\n            color: white;\n        }\n        .stat
+us-unavailable {\n            background: #e74c3c;\n    
+        color: white;\n        }\n        .status-dot {\
+n            width: 8px;\n            height: 8px;\n    
+        border-radius: 0;\n            display: inline-b
+lock;\n        }\n        .status-available .status-dot 
+{\n            background: white;\n        }\n        .s
+tatus-unavailable .status-dot {\n            background:
+ white;\n        }\n        .btn-book {\n            pad
+ding: 10px 24px;\n            background: #2ecc71;\n    
+        color: white;\n            text-decoration: none
+;\n            border-radius: 0;\n            font-weigh
+t: 600;\n            transition: var(--transition);\n   
+         border: none;\n            cursor: pointer;\n  
+          font-size: 14px;\n        }\n        .btn-book
+:hover {\n            background: #27ae60;\n        }\n 
+       .empty-state {\n            text-align: center;\n
+            padding: 60px 20px;\n            color: #7f8
+c8d;\n        }\n        .empty-state-icon {\n          
+  font-size: 48px;\n            margin-bottom: 16px;\n  
+          opacity: 0.5;\n        }\n        .empty-state
+ h3 {\n            font-size: 18px;\n            color: 
+#2c3e50;\n            margin-bottom: 8px;\n            f
+ont-weight: 600;\n        }\n        .date-selector {\n 
+           display: flex;\n            align-items: cent
+er;\n            gap: 16px;\n            margin-bottom: 
+24px;\n            flex-wrap: wrap;\n        }\n        
+.date-selector label {\n            font-weight: 600;\n 
+           color: #2c3e50;\n        }\n        .date-sel
+ector input {\n            padding: 10px 14px;\n        
+    border: 3px solid #bdc3c7;\n            border-radiu
+s: 0;\n            font-size: 14px;\n            transit
+ion: var(--transition);\n            background-color: #
+ecf0f1;\n        }\n        .date-selector input:focus {
+\n            border-color: #3498db;\n            backgr
+ound-color: white;\n        }\n        .time-grid-contai
+ner {\n            background: white;\n            borde
+r-radius: 0;\n            padding: 24px;\n            bo
+x-shadow: none;\n            margin-bottom: 24px;\n     
+       border: 3px solid #ecf0f1;\n        }\n        .t
+ime-grid-header {\n            display: flex;\n         
+   justify-content: space-between;\n            align-it
+ems: center;\n            margin-bottom: 16px;\n        
+    padding-bottom: 12px;\n            border-bottom: 3p
+x solid #ecf0f1;\n        }\n        .time-grid-header h
+4 {\n            color: #2c3e50;\n            font-size:
+ 16px;\n            font-weight: 600;\n        }\n      
+  .time-grid {\n            display: flex;\n            
+flex-wrap: wrap;\n            gap: 10px;\n        }\n   
+     .time-slot {\n            min-width: 80px;\n       
+     padding: 12px 10px;\n            text-align: center
+;\n            border-radius: 0;\n            font-size:
+ 13px;\n            font-weight: 600;\n            curso
+r: pointer;\n            transition: var(--transition);\
+n            border: 3px solid transparent;\n        }\n
+        .time-slot.available {\n            background: 
+#ecf0f1;\n            color: #2c3e50;\n            borde
+r-color: #2ecc71;\n        }\n        .time-slot.availab
+le:hover {\n            background: #2ecc71;\n          
+  color: white;\n        }\n        .time-slot.booked {\
+n            background: #e74c3c;\n            color: wh
+ite;\n            border-color: #c0392b;\n            cu
+rsor: not-allowed;\n        }\n        .time-slot.select
+ed {\n            background: #3498db;\n            colo
+r: white;\n            border-color: #2980b9;\n        }
+\n        .time-slot.selected:hover {\n            backg
+round: #2980b9;\n        }\n        .booking-summary {\n
+            background: #ecf0f1;\n            border-lef
+t: 6px solid #3498db;\n            border-radius: 0;\n  
+          padding: 20px;\n            margin-top: 20px;\
+n            display: none;\n        }\n        .booking
+-summary.show {\n            display: block;\n        }\
+n        .booking-summary h4 {\n            color: #2c3e
+50;\n            margin-bottom: 10px;\n            font-
+weight: 600;\n        }\n        .booking-summary p {\n 
+           color: #7f8c8d;\n            margin-bottom: 1
+6px;\n        }\n        .booking-actions {\n           
+ display: flex;\n            gap: 12px;\n        }\n    
+    .btn-confirm {\n            padding: 12px 28px;\n   
+         background: #2ecc71;\n            color: white;
+\n            border: none;\n            border-radius: 
+0;\n            font-size: 14px;\n            font-weigh
+t: 600;\n            cursor: pointer;\n            trans
+ition: var(--transition);\n        }\n        .btn-confi
+rm:hover {\n            background: #27ae60;\n        }\
+n        .btn-cancel {\n            padding: 12px 28px;\
+n            background: #ecf0f1;\n            color: #7
+f8c8d;\n            border: 3px solid #bdc3c7;\n        
+    border-radius: 0;\n            font-size: 14px;\n   
+         font-weight: 600;\n            cursor: pointer;
+\n            transition: var(--transition);\n        }\
+n        .btn-cancel:hover {\n            background: #b
+dc3c7;\n            border-color: #95a5a6;\n        }\n 
+       .legend {\n            display: flex;\n          
+  gap: 24px;\n            margin-top: 16px;\n           
+ padding-top: 16px;\n            border-top: 3px solid #
+ecf0f1;\n        }\n        .legend-item {\n            
+display: flex;\n            align-items: center;\n      
+      gap: 8px;\n            font-size: 13px;\n         
+   color: #7f8c8d;\n        }\n        .legend-dot {\n  
+          width: 16px;\n            height: 16px;\n     
+       border-radius: 0;\n        }\n        .legend-dot
+.available {\n            background: #2ecc71;\n        
+    border: 3px solid #27ae60;\n        }\n        .lege
+nd-dot.booked {\n            background: #e74c3c;\n     
+       border: 3px solid #c0392b;\n        }\n        .l
+egend-dot.selected {\n            background: #3498db;\n
+            border: 3px solid #2980b9;\n        }\n     
+   .no-availability {\n            text-align: center;\n
+            padding: 40px;\n            color: #7f8c8d;\
+n        }\n        .no-availability p {\n            ma
+rgin-top: 12px;\n            font-size: 14px;\n        }
+\n        .court-section {\n            margin-bottom: 3
+2px;\n        }\n        .court-title {\n            dis
+play: flex;\n            align-items: center;\n         
+   gap: 12px;\n            margin-bottom: 16px;\n       
+ }\n        .court-title h3 {\n            color: #2c3e5
+0;\n            font-size: 18px;\n            font-weigh
+t: 600;\n        }\n        .action-btns {\n            
+display: flex;\n            gap: 8px;\n        }\n      
+  .badge {\n            display: inline-flex;\n         
+   align-items: center;\n            padding: 4px 10px;\
+n            border-radius: 0;\n            font-size: 1
+2px;\n            font-weight: 600;\n        }\n        
+.badge-primary {\n            background: #3498db;\n    
+        color: white;\n        }\n        .badge-success
+ {\n            background: #2ecc71;\n            color:
+ white;\n        }\n        .badge-warning {\n          
+  background: #f39c12;\n            color: white;\n     
+   }\n        .badge-danger {\n            background: #
+e74c3c;\n            color: white;\n        }\n        .
+table-wrapper {\n            overflow-x: auto;\n        
+    border-radius: 0;\n            border: 3px solid #ec
+f0f1;\n        }\n        .stat-cards {\n            dis
+play: grid;\n            grid-template-columns: repeat(a
+uto-fit, minmax(240px, 1fr));\n            gap: 20px;\n 
+           margin-bottom: 32px;\n        }\n        .sta
+t-card {\n            background: white;\n            bo
+rder-radius: 0;\n            padding: 24px;\n           
+ border: 3px solid #ecf0f1;\n            box-shadow: non
+e;\n            transition: var(--transition);\n        
+}\n        .stat-card:hover {\n            border-color:
+ #3498db;\n        }\n        .stat-card-icon {\n       
+     width: 48px;\n            height: 48px;\n          
+  border-radius: 0;\n            display: flex;\n       
+     align-items: center;\n            justify-content: 
+center;\n            font-size: 24px;\n            margi
+n-bottom: 16px;\n        }\n        .stat-card-icon.blue
+ {\n            background: #3498db;\n            color:
+ white;\n        }\n        .stat-card-icon.green {\n   
+         background: #2ecc71;\n            color: white;
+\n        }\n        .stat-card-icon.orange {\n         
+   background: #f39c12;\n            color: white;\n    
+    }\n        .stat-card-icon.red {\n            backgr
+ound: #e74c3c;\n            color: white;\n        }\n  
+      .stat-card-value {\n            font-size: 32px;\n
+            font-weight: 700;\n            color: #2c3e5
+0;\n            margin-bottom: 4px;\n        }\n        
+.stat-card-label {\n            font-size: 14px;\n      
+      color: #7f8c8d;\n        }\n        @media (max-wi
+dth: 768px) {\n            .header .container {\n       
+         padding: 0 16px;\n                height: 56px;
+\n                flex-wrap: wrap;\n            }\n     
+       .header h1 {\n                font-size: 16px;\n 
+           }\n            .nav {\n                gap: 4
+px;\n                flex-wrap: wrap;\n                j
+ustify-content: center;\n            }\n            .nav
+ a {\n                padding: 6px 12px;\n              
+  font-size: 12px;\n            }\n            .containe
+r {\n                padding: 16px;\n            }\n    
+        .page-header h2 {\n                font-size: 22
+px;\n            }\n            .card {\n               
+ padding: 16px;\n            }\n            .card h2 {\n
+                font-size: 18px;\n            }\n       
+     .grid {\n                grid-template-columns: 1fr
+;\n                gap: 16px;\n            }\n          
+  .stat-cards {\n                grid-template-columns: 
+1fr 1fr;\n                gap: 12px;\n            }\n   
+         .stat-card {\n                padding: 16px;\n 
+           }\n            .stat-card-value {\n          
+      font-size: 24px;\n            }\n            .stat
+-card-label {\n                font-size: 12px;\n       
+     }\n            .stat-card-icon {\n                w
+idth: 40px;\n                height: 40px;\n            
+    font-size: 20px;\n                margin-bottom: 12p
+x;\n            }\n            table {\n                
+font-size: 12px;\n            }\n            table th, t
+able td {\n                padding: 10px 8px;\n         
+   }\n            .btn {\n                padding: 8px 1
+4px;\n                font-size: 13px;\n            }\n 
+           .btn-sm {\n                padding: 4px 8px;\
+n                font-size: 12px;\n            }\n      
+      .action-btns {\n                flex-direction: co
+lumn;\n                gap: 4px;\n            }\n       
+     .date-selector {\n                flex-direction: c
+olumn;\n                align-items: flex-start;\n      
+          gap: 8px;\n            }\n            .message
+s .message {\n                padding: 10px 14px;\n     
+           font-size: 13px;\n            }\n            
+.court-card-header {\n                padding: 16px;\n  
+          }\n            .court-card-body {\n           
+     padding: 16px;\n            }\n            .court-c
+ard-footer {\n                padding: 12px 16px;\n     
+           flex-direction: column;\n                gap:
+ 8px;\n            }\n            .matrix-wrapper {\n   
+             padding: 12px;\n            }\n            
+.matrix-table th,\n            .matrix-table td {\n     
+           padding: 8px 4px;\n                font-size:
+ 12px;\n            }\n            .time-cell {\n       
+         padding: 6px 2px;\n                font-size: 1
+1px;\n                min-width: 50px;\n            }\n 
+           .time-cell.booked .slot-status {\n           
+     font-size: 11px;\n            }\n            .time-
+cell.booked .slot-phone,\n            .time-cell.booked 
+.slot-info,\n            .time-cell.booked .slot-student
+s {\n                font-size: 10px;\n            }\n  
+          .modal-content {\n                width: 95%;\
+n                margin: 0 10px;\n            }\n       
+     .modal-header {\n                padding: 16px 20px
+;\n            }\n            .modal-body {\n           
+     padding: 16px;\n            }\n            .modal-f
+ooter {\n                padding: 16px 20px;\n          
+      flex-direction: column;\n            }\n          
+  .modal-footer .btn {\n                padding: 12px 16
+px;\n            }\n            .booking-actions {\n    
+            flex-direction: column;\n            }\n    
+        .btn-confirm, .btn-cancel {\n                wid
+th: 100%;\n            }\n            .legend {\n       
+         flex-wrap: wrap;\n                gap: 12px;\n 
+           }\n            .info-banner {\n              
+  padding: 12px 16px;\n                font-size: 13px;\
+n            }\n            .page-header {\n            
+    margin-bottom: 20px;\n            }\n            .ba
+ck-btn {\n                width: 36px;\n                
+height: 36px;\n            }\n            .page-header-t
+itle {\n                font-size: 20px;\n            }\
+n            .step-indicator {\n                flex-dir
+ection: column;\n                gap: 4px;\n            
+    padding: 12px 16px;\n            }\n            .ste
+p-arrow {\n                transform: rotate(90deg);\n  
+          }\n        }\n        @media (max-width: 480px
+) {\n            .header .container {\n                p
+adding: 0 12px;\n                height: 52px;\n        
+    }\n            .header h1 {\n                font-si
+ze: 14px;\n            }\n            .nav {\n          
+      gap: 4px;\n            }\n            .nav a {\n  
+              padding: 6px 10px;\n                font-s
+ize: 11px;\n            }\n            .container {\n   
+             padding: 12px;\n            }\n            
+.stat-cards {\n                grid-template-columns: 1f
+r;\n            }\n            .management-cards {\n    
+            grid-template-columns: 1fr !important;\n    
+        }\n        }\n    </style>\n</head>\n<body>\n   
+ <div class="header">\n        <div class="container">\n
+            <h1>\xe4\xbd\x93\xe8\x82\xb2\xe5\x9c\xba\xe9
+\xa6\x86\xe9\xa2\x84\xe7\xba\xa6\xe7\xb3\xbb\xe7\xbb\x9f
+</h1>\n            <div class="nav">\n                \n
+                    <a href="/courts/">\xe5\x9c\xba\xe5\
+x9c\xb0\xe5\x88\x97\xe8\xa1\xa8</a>\n                   
+ <a href="/my-bookings/">\xe6\x88\x91\xe7\x9a\x84\xe9\xa
+2\x84\xe7\xba\xa6</a>\n                    \n           
+         <a href="/logout/" class="btn-logout">\xe9\x80\
+x80\xe5\x87\xba\xe7\x99\xbb\xe5\xbd\x95</a>\n           
+     \n            </div>\n        </div>\n    </div>\n\
+n    <div class="container">\n        \n\n        \n    
+<div class="page-header">\n        <h2>\xe5\x9c\xba\xe5\
+x9c\xb0\xe9\xa2\x84\xe7\xba\xa6</h2>\n        <p>\xe9\x8
+0\x89\xe6\x8b\xa9\xe6\x97\xa5\xe6\x9c\x9f\xe5\x92\x8c\xe
+6\x97\xb6\xe9\x97\xb4\xe6\xae\xb5\xe8\xbf\x9b\xe8\xa1\x8
+c\xe9\xa2\x84\xe7\xba\xa6</p>\n    </div>\n\n    <div cl
+ass="date-selector">\n        <label for="booking-date">
+\xe9\x80\x89\xe6\x8b\xa9\xe6\x97\xa5\xe6\x9c\x9f\xef\xbc
+\x9a</label>\n        <input type="date" id="booking-dat
+e" min="2026-05-30" value="2026-05-30">\n    </div>\n\n 
+   <div id="court-type-filter" class="court-type-filter"
+>\n        <button class="filter-btn active" data-type="
+all">\xe5\x85\xa8\xe9\x83\xa8\xe5\x9c\xba\xe5\x9c\xb0</b
+utton>\n    </div>\n\n    <div id="booking-matrix-contai
+ner">\n        <div class="no-availability">\n          
+  <p>\xe8\xaf\xb7\xe9\x80\x89\xe6\x8b\xa9\xe6\x97\xa5\xe
+6\x9c\x9f\xe6\x9f\xa5\xe7\x9c\x8b\xe5\x8f\xaf\xe7\x94\xa
+8\xe5\x9c\xba\xe5\x9c\xb0</p>\n        </div>\n    </div
+>\n\n    <div id="booking-summary-overlay" class="bookin
+g-summary-overlay"></div>\n    <div id="booking-summary"
+ class="booking-summary">\n        <h4>\xe9\xa2\x84\xe7\
+xba\xa6\xe7\xa1\xae\xe8\xae\xa4</h4>\n        <p id="boo
+king-info"></p>\n        <div class="booking-actions">\n
+            <button class="btn-confirm" onclick="showBoo
+kingModal()">\xe7\xa1\xae\xe8\xae\xa4\xe9\xa2\x84\xe7\xb
+a\xa6</button>\n            <button class="btn-cancel" o
+nclick="cancelSelection()">\xe5\x8f\x96\xe6\xb6\x88\xe9\
+x80\x89\xe6\x8b\xa9</button>\n        </div>\n    </div>
+\n\n    <div id="booking-modal" class="modal">\n        
+<div class="modal-content">\n            <div class="mod
+al-header">\n                <h3>\xe5\xa1\xab\xe5\x86\x9
+9\xe9\xa2\x84\xe7\xba\xa6\xe4\xba\xba\xe4\xbf\xa1\xe6\x8
+1\xaf</h3>\n                <span class="modal-close" on
+click="closeBookingModal()">&times;</span>\n            
+</div>\n            <div class="modal-body">\n          
+      <div class="form-group">\n                    <lab
+el for="modal-booker-name">\xe9\xa2\x84\xe7\xba\xa6\xe4\
+xba\xba\xe5\xa7\x93\xe5\x90\x8d *</label>\n             
+       <input type="text" id="modal-booker-name" placeho
+lder="\xe8\xaf\xb7\xe8\xbe\x93\xe5\x85\xa5\xe9\xa2\x84\x
+e7\xba\xa6\xe4\xba\xba\xe5\xa7\x93\xe5\x90\x8d" required
+>\n                </div>\n                <div class="f
+orm-group">\n                    <label for="modal-booke
+r-phone">\xe8\x81\x94\xe7\xb3\xbb\xe6\x96\xb9\xe5\xbc\x8
+f\xef\xbc\x88\xe6\x89\x8b\xe6\x9c\xba\xe5\x8f\xb7\xef\xb
+c\x89 *</label>\n                    <input type="tel" i
+d="modal-booker-phone" placeholder="\xe8\xaf\xb7\xe8\xbe
+\x93\xe5\x85\xa5\xe6\x89\x8b\xe6\x9c\xba\xe5\x8f\xb7\xe7
+\xa0\x81" required>\n                </div>\n           
+ </div>\n            <div class="modal-footer">\n       
+         <button class="btn-confirm" onclick="submitBook
+ing()">\xe7\xa1\xae\xe8\xae\xa4\xe9\xa2\x84\xe7\xba\xa6<
+/button>\n                <button class="btn-cancel" onc
+lick="closeBookingModal()">\xe5\x8f\x96\xe6\xb6\x88</but
+ton>\n            </div>\n        </div>\n    </div>\n\n
+    <div class="legend">\n        <div class="legend-ite
+m">\n            <div class="legend-dot available"></div
+>\n            <span>\xe5\x8f\xaf\xe9\xa2\x84\xe7\xba\xa
+6</span>\n        </div>\n        <div class="legend-ite
+m">\n            <div class="legend-dot booked"></div>\n
+            <span>\xe5\xb7\xb2\xe8\xa2\xab\xe9\xa2\x84\x
+e7\xba\xa6</span>\n        </div>\n        <div class="l
+egend-item">\n            <div class="legend-dot selecte
+d"></div>\n            <span>\xe5\xb7\xb2\xe9\x80\x89\xe
+6\x8b\xa9</span>\n        </div>\n        <div class="le
+gend-item">\n            <div class="legend-dot past"></
+div>\n            <span>\xe5\xb7\xb2\xe8\xbf\x87\xe6\x97
+\xb6</span>\n        </div>\n    </div>\n\n    <style>\n
+        .court-type-filter {\n            display: flex;
+\n            flex-wrap: wrap;\n            gap: 10px;\n
+            margin-bottom: 20px;\n            padding: 1
+6px;\n            background: white;\n            border
+: 3px solid #ecf0f1;\n        }\n        .filter-btn {\n
+            padding: 10px 20px;\n            background:
+ #ecf0f1;\n            color: #2c3e50;\n            bord
+er: 3px solid #bdc3c7;\n            border-radius: 0;\n 
+           font-size: 14px;\n            font-weight: 60
+0;\n            cursor: pointer;\n            transition
+: all 0.2s ease;\n        }\n        .filter-btn:hover {
+\n            background: #bdc3c7;\n        }\n        .
+filter-btn.active {\n            background: #3498db;\n 
+           color: white;\n            border-color: #298
+0b9;\n        }\n        .matrix-wrapper {\n            
+background: white;\n            border-radius: 0;\n     
+       padding: 0px;\n            margin-top: 0px;\n    
+        margin-bottom: 0px;\n            box-shadow: non
+e;\n            border: 3px solid #ecf0f1;\n            
+overflow-x: auto;\n            overflow-y: auto;\n      
+      max-height: 80vh;\n        }\n        .matrix-tabl
+e tbody tr {\n            content-visibility: auto;\n   
+         contain-intrinsic-size: 0 60px;\n        }\n   
+     .matrix-table {\n            padding: 0px;\n       
+     margin: 0px;\n            width: 100%;\n           
+ border-collapse: separate;\n            border-spacing:
+ 0;\n            min-width: 600px;\n        }\n        .
+matrix-table th,\n        .matrix-table td {\n          
+  padding: 12px 8px;\n            text-align: center;\n 
+           border: 3px solid #ecf0f1;\n        }\n      
+  .matrix-table thead th {\n            width: 0;\n     
+       height: 50px;\n            font-size: clamp(10px,
+ 1.8vw, 13px);\n            overflow: hidden;\n         
+   align-items: center;\n            justify-content: ce
+nter;\n            background: #3498db;\n            fon
+t-weight: 600;\n            color: white;\n            p
+osition: sticky;\n            top: 0;\n            z-ind
+ex: 10;\n        }\n        .matrix-table thead th:not(:
+first-child) {\n            overflow: hidden;\n         
+   white-space: normal;\n            word-wrap: break-wo
+rd;\n            word-break: break-all;\n        }\n    
+    .matrix-table thead th:first-child {\n            ba
+ckground: #2980b9;\n            width: 50px;\n          
+  position: sticky;\n            left: 0;\n            z
+-index: 11;\n        }\n        .matrix-table tbody td:f
+irst-child {\n            background: #ecf0f1;\n        
+    font-weight: 600;\n            color: #2c3e50;\n    
+        position: sticky;\n            left: 0;\n       
+     z-index: 1;\n        }\n        .time-cell {\n     
+       padding: 8px 4px;\n            cursor: pointer;\n
+            transition: all 0.2s ease;\n            bord
+er-radius: 0;\n            font-size: 13px;\n           
+ min-width: 70px;\n            height: 60px;\n          
+  display: flex;\n            flex-direction: column;\n 
+           align-items: center;\n            justify-con
+tent: center;\n            overflow: hidden;\n        }\
+n        .time-cell .slot-label {\n            font-weig
+ht: 600;\n            display: block;\n        }\n      
+  .time-cell .slot-status {\n            font-size: 10px
+;\n            margin-top: 2px;\n            opacity: 0.
+8;\n        }\n        .time-cell.available {\n         
+   background: #ecf0f1;\n            color: #2c3e50;\n  
+          border: 3px solid #2ecc71;\n        }\n       
+ .time-cell.available:hover {\n            background: #
+2ecc71;\n            color: white;\n        }\n        .
+time-cell.booked {\n            background: #e74c3c;\n  
+          color: white;\n            border: 3px solid #
+c0392b;\n            cursor: not-allowed;\n        }\n  
+      .time-cell.booked:hover {\n            transform: 
+none;\n            box-shadow: none;\n        }\n       
+ .time-cell.booked .slot-label {\n            font-size:
+ 11px;\n            opacity: 0.8;\n        }\n        .t
+ime-cell.booked .slot-status {\n            font-size: 1
+2px;\n            font-weight: 600;\n            margin-
+top: 2px;\n        }\n        .time-cell.booked .slot-in
+fo {\n            font-size: 11px;\n            font-wei
+ght: 500;\n            margin-top: 1px;\n            col
+or: #f5b7b1;\n            overflow: hidden;\n           
+ text-overflow: ellipsis;\n            white-space: nowr
+ap;\n            max-width: 100%;\n        }\n        .t
+ime-cell.booked .slot-students {\n            font-size:
+ 10px;\n            opacity: 0.8;\n            margin-to
+p: 1px;\n            color: #fadbd8;\n            overfl
+ow: hidden;\n            text-overflow: ellipsis;\n     
+       white-space: nowrap;\n            max-width: 100%
+;\n        }\n        .time-cell.booked .slot-phone {\n 
+           font-size: 10px;\n            opacity: 0.8;\n
+            margin-top: 1px;\n            cursor: pointe
+r;\n            text-decoration: underline;\n           
+ text-decoration-style: dotted;\n            overflow: h
+idden;\n            text-overflow: ellipsis;\n          
+  white-space: nowrap;\n            max-width: 100%;\n  
+      }\n        .time-cell.booked .slot-phone:hover {\n
+            opacity: 1;\n        }\n        .time-cell.p
+ast {\n            background: #bdc3c7;\n            col
+or: #7f8c8d;\n            border: 3px solid #95a5a6;\n  
+          cursor: not-allowed;\n        }\n        .time
+-cell.past:hover {\n            transform: none;\n      
+      box-shadow: none;\n        }\n        .time-cell.p
+ast .slot-label {\n            font-size: 11px;\n       
+     opacity: 0.6;\n        }\n        .time-cell.past .
+slot-status {\n            font-size: 11px;\n           
+ opacity: 0.6;\n        }\n        .time-cell.selected {
+\n            background: #3498db;\n            color: w
+hite;\n            border: 3px solid #2980b9;\n        }
+\n        .time-cell.selected:hover {\n            backg
+round: #2980b9;\n        }\n        .time-cell.no-court 
+{\n            background: #ecf0f1;\n            color: 
+#bdc3c7;\n            cursor: not-allowed;\n        }\n 
+       .time-cell .slot-label {\n            font-weight
+: 600;\n            display: block;\n        }\n        
+.time-cell .slot-status {\n            font-size: 10px;\
+n            margin-top: 2px;\n            opacity: 0.8;
+\n        }\n        .court-header {\n            font-s
+ize: 14px;\n            white-space: nowrap;\n        }\
+n        .time-header {\n            font-size: 12px;\n 
+           color: white;\n        }\n        .no-availab
+ility {\n            text-align: center;\n            pa
+dding: 60px 20px;\n            color: #7f8c8d;\n        
+    background: white;\n            border-radius: 0;\n 
+           border: 3px solid #ecf0f1;\n        }\n      
+  .no-availability .icon {\n            font-size: 48px;
+\n            margin-bottom: 16px;\n        }\n        .
+no-availability p {\n            font-size: 15px;\n     
+       color: #7f8c8d;\n        }\n        .booking-summ
+ary {\n            position: fixed;\n            bottom:
+ 0;\n            left: 0;\n            right: 0;\n      
+      background: #ecf0f1;\n            border-radius: 0
+;\n            padding: 20px 24px;\n            display:
+ none;\n            border-top: 6px solid #3498db;\n    
+        box-shadow: none;\n            z-index: 1000;\n 
+           opacity: 0;\n            transition: all 0.3s
+ ease;\n            max-height: 35vh;\n            overf
+low-y: auto;\n        }\n        .booking-summary.show {
+\n            display: block;\n            opacity: 1;\n
+        }\n        .booking-summary-overlay {\n         
+   position: fixed;\n            top: 0;\n            le
+ft: 0;\n            right: 0;\n            bottom: 0;\n 
+           background: rgba(0, 0, 0, 0.3);\n            
+display: none;\n            z-index: 999;\n        }\n  
+      .booking-summary-overlay.show {\n            displ
+ay: block;\n        }\n        .booking-summary h4 {\n  
+          color: #2c3e50;\n            margin-bottom: 12
+px;\n            font-size: 16px;\n            font-weig
+ht: 600;\n        }\n        .booking-summary p {\n     
+       color: #7f8c8d;\n            margin-bottom: 16px;
+\n            font-size: 14px;\n        }\n        .book
+ing-actions {\n            display: flex;\n            g
+ap: 12px;\n            justify-content: center;\n       
+ }\n        .booking-summary .btn-cancel {\n            
+background: #ecf0f1;\n            color: #e74c3c;\n     
+       border: 3px solid #e74c3c;\n        }\n        .b
+ooking-summary .btn-cancel:hover {\n            backgrou
+nd: #e74c3c;\n            color: white;\n        }\n    
+    .btn-confirm {\n            padding: 14px 32px;\n   
+         background: #2ecc71;\n            color: white;
+\n            border: none;\n            border-radius: 
+0;\n            font-size: 15px;\n            font-weigh
+t: 600;\n            cursor: pointer;\n            trans
+ition: all 0.2s ease;\n            box-shadow: none;\n  
+      }\n        .btn-confirm:hover {\n            backg
+round: #27ae60;\n        }\n        .btn-cancel {\n     
+       padding: 14px 32px;\n            background: #ecf
+0f1;\n            color: #7f8c8d;\n            border: 3
+px solid #bdc3c7;\n            border-radius: 0;\n      
+      font-size: 15px;\n            font-weight: 600;\n 
+           cursor: pointer;\n            transition: all
+ 0.2s ease;\n        }\n        .btn-cancel:hover {\n   
+         background: #bdc3c7;\n            border-color:
+ #95a5a6;\n        }\n        .legend {\n            dis
+play: flex;\n            gap: 24px;\n            margin-
+top: 20px;\n            padding-top: 20px;\n            
+border-top: 3px solid #ecf0f1;\n            justify-cont
+ent: center;\n        }\n        .legend-item {\n       
+     display: flex;\n            align-items: center;\n 
+           gap: 8px;\n            font-size: 14px;\n    
+        color: #7f8c8d;\n        }\n        .legend-dot 
+{\n            width: 20px;\n            height: 20px;\n
+            border-radius: 0;\n        }\n        .legen
+d-dot.available {\n            background: #2ecc71;\n   
+         border: 3px solid #27ae60;\n        }\n        
+.legend-dot.booked {\n            background: #e74c3c;\n
+            border: 3px solid #c0392b;\n        }\n     
+   .legend-dot.selected {\n            background: #3498
+db;\n            border: 3px solid #2980b9;\n        }\n
+        .legend-dot.past {\n            background: #bdc
+3c7;\n            border: 3px solid #95a5a6;\n        }\
+n        .info-banner {\n            display: flex;\n   
+         align-items: center;\n            gap: 12px;\n 
+           padding: 16px 20px;\n            background: 
+#f39c12;\n            border-radius: 0;\n            mar
+gin-bottom: 20px;\n            border: 3px solid #e67e22
+;\n            font-size: 14px;\n            color: whit
+e;\n        }\n        .info-banner .icon {\n           
+ font-size: 20px;\n        }\n        .modal {\n        
+    display: none;\n            position: fixed;\n      
+      top: 0;\n            left: 0;\n            width: 
+100%;\n            height: 100%;\n            background
+-color: rgba(0, 0, 0, 0.5);\n            z-index: 1000;\
+n            justify-content: center;\n            align
+-items: center;\n        }\n        .modal.show {\n     
+       display: flex;\n        }\n        .modal-content
+ {\n            background: white;\n            border-r
+adius: 0;\n            padding: 0;\n            width: 9
+0%;\n            max-width: 420px;\n            box-shad
+ow: none;\n            border: 3px solid #3498db;\n     
+   }\n        .modal-header {\n            display: flex
+;\n            justify-content: space-between;\n        
+    align-items: center;\n            padding: 20px 24px
+;\n            border-bottom: 3px solid #ecf0f1;\n      
+      background: #3498db;\n        }\n        .modal-he
+ader h3 {\n            margin: 0;\n            color: wh
+ite;\n            font-size: 18px;\n            font-wei
+ght: 600;\n        }\n        .modal-close {\n          
+  color: white;\n            font-size: 28px;\n         
+   font-weight: 300;\n            cursor: pointer;\n    
+        line-height: 1;\n            opacity: 0.8;\n    
+        transition: opacity 0.2s;\n        }\n        .m
+odal-close:hover {\n            opacity: 1;\n        }\n
+        .modal-body {\n            padding: 24px;\n     
+   }\n        .modal-body .form-group {\n            mar
+gin-bottom: 20px;\n        }\n        .modal-body .form-
+group:last-child {\n            margin-bottom: 0;\n     
+   }\n        .modal-body .form-group label {\n         
+   display: block;\n            font-size: 14px;\n      
+      font-weight: 600;\n            color: #2c3e50;\n  
+          margin-bottom: 10px;\n            text-transfo
+rm: uppercase;\n            letter-spacing: 0.5px;\n    
+    }\n        .modal-body .form-group input {\n        
+    width: 100%;\n            padding: 12px 16px;\n     
+       border: 3px solid #bdc3c7;\n            border-ra
+dius: 0;\n            font-size: 15px;\n            tran
+sition: all 0.2s;\n            box-sizing: border-box;\n
+            background: #ecf0f1;\n            color: #2c
+3e50;\n        }\n        .modal-body .form-group input:
+focus {\n            outline: none;\n            border-
+color: #3498db;\n            background: white;\n       
+ }\n        .modal-footer {\n            display: flex;\
+n            gap: 12px;\n            padding: 20px 24px;
+\n            border-top: 3px solid #ecf0f1;\n          
+  background: #ecf0f1;\n        }\n        .modal-footer
+ .btn {\n            flex: 1;\n            padding: 14px
+ 20px;\n            border-radius: 0;\n            font-
+size: 15px;\n            font-weight: 600;\n            
+cursor: pointer;\n            transition: all 0.2s;\n   
+         border: none;\n        }\n        .modal-footer
+ .btn-confirm {\n            background: #2ecc71;\n     
+       color: white;\n        }\n        .modal-footer .
+btn-confirm:hover {\n            background: #27ae60;\n 
+       }\n        .modal-footer .btn-cancel {\n         
+   background: white;\n            color: #7f8c8d;\n    
+        border: 3px solid #bdc3c7;\n        }\n        .
+modal-footer .btn-cancel:hover {\n            background
+: #ecf0f1;\n        }\n    </style>\n\n    <script>\n   
+     let selectedSlots = [];\n        let selectedCourtI
+d = null;\n        let currentDate = null;\n        let 
+courtsData = [];\n        let serverTime = null;\n      
+  let serverDate = null;\n        let currentFilterType 
+= \'all\';\n        const isAdmin = false;\n        cons
+t adminBookingEditUrl = "/manage/bookings/edit/0/";\n   
+     const adminCourseBookingEditUrl = "/manage/course-b
+ookings/edit/0/";\n\n        function formatDate(dateStr
+) {\n            const date = new Date(dateStr);\n      
+      const year = date.getFullYear();\n            cons
+t month = String(date.getMonth() + 1).padStart(2, \'0\')
+;\n            const day = String(date.getDate()).padSta
+rt(2, \'0\');\n            return `${year}\xe5\xb9\xb4${
+month}\xe6\x9c\x88${day}\xe6\x97\xa5`;\n        }\n\n   
+     function isSlotPast(slotEndTime) {\n            if 
+(!serverTime || !serverDate || !currentDate) {\n        
+        return false;\n            }\n            \n    
+        if (currentDate !== serverDate) {\n             
+   return false;\n            }\n            \n         
+   const [endHour, endMinute] = slotEndTime.split(\':\')
+.map(Number);\n            const [serverHour, serverMinu
+te] = serverTime.split(\' \')[1].split(\':\').map(Number
+);\n            \n            const endMinutes = endHour
+ * 60 + endMinute;\n            const currentMinutes = s
+erverHour * 60 + serverMinute;\n            \n          
+  return endMinutes <= currentMinutes;\n        }\n\n   
+     function updateFilterButtons() {\n            const
+ filterContainer = document.getElementById(\'court-type-
+filter\');\n            const typeSet = new Set();\n    
+        \n            courtsData.forEach(court => {\n   
+             if (court.is_available && court.court_type_
+name) {\n                    typeSet.add(court.court_typ
+e_name);\n                }\n            });\n          
+  \n            let html = \'<button class="filter-btn \
+' + (currentFilterType === \'all\' ? \'active\' : \'\') 
++ \'" data-type="all">\xe5\x85\xa8\xe9\x83\xa8\xe5\x9c\x
+ba\xe5\x9c\xb0</button>\';\n            \n            co
+nst sortedTypes = Array.from(typeSet).sort();\n         
+   sortedTypes.forEach(type => {\n                const 
+isActive = currentFilterType === type ? \'active\' : \'\
+';\n                html += `<button class="filter-btn $
+{isActive}" data-type="${type}">${type}</button>`;\n    
+        });\n            \n            filterContainer.i
+nnerHTML = html;\n            \n            filterContai
+ner.querySelectorAll(\'.filter-btn\').forEach(btn => {\n
+                btn.addEventListener(\'click\', function
+() {\n                    filterContainer.querySelectorA
+ll(\'.filter-btn\').forEach(b => b.classList.remove(\'ac
+tive\'));\n                    this.classList.add(\'acti
+ve\');\n                    currentFilterType = this.dat
+aset.type;\n                    selectedSlots = [];\n   
+                 selectedCourtId = null;\n              
+      updateBookingSummary();\n                    rende
+rMatrix(courtsData);\n                });\n            }
+);\n        }\n\n        function loadTimeSlots() {\n   
+         const dateInput = document.getElementById(\'boo
+king-date\');\n            const selectedDate = dateInpu
+t.value;\n\n            if (!selectedDate) return;\n\n  
+          currentDate = selectedDate;\n            selec
+tedSlots = [];\n            selectedCourtId = null;\n   
+         currentFilterType = \'all\';\n            updat
+eBookingSummary();\n\n            const url = `/api/time
+-slots/?date=${selectedDate}`;\n\n            fetch(url)
+\n                .then(response => response.json())\n  
+              .then(data => {\n                    court
+sData = data.courts || [];\n                    serverTi
+me = data.server_time || null;\n                    serv
+erDate = data.server_date || null;\n                    
+updateFilterButtons();\n                    renderMatrix
+(courtsData);\n                })\n                .catc
+h(error => {\n                    console.error(\'Error:
+\', error);\n                    document.getElementById
+(\'booking-matrix-container\').innerHTML = \n           
+             \'<div class="no-availability"><div class="
+icon">X</div><p>\xe5\x8a\xa0\xe8\xbd\xbd\xe5\xa4\xb1\xe8
+\xb4\xa5\xef\xbc\x8c\xe8\xaf\xb7\xe9\x87\x8d\xe8\xaf\x95
+</p></div>\';\n                });\n        }\n\n       
+ function renderMatrix(courts) {\n            const cont
+ainer = document.getElementById(\'booking-matrix-contain
+er\');\n            \n            if (courts.length === 
+0) {\n                container.innerHTML = \'<div class
+="no-availability"><div class="icon">?</div><p>\xe6\x9a\
+x82\xe6\x97\xa0\xe5\x9c\xba\xe5\x9c\xb0</p></div>\';\n  
+              return;\n            }\n\n            let 
+filteredCourts = courts.filter(c => c.is_available);\n  
+          \n            if (currentFilterType !== \'all\
+') {\n                filteredCourts = filteredCourts.fi
+lter(c => c.court_type_name === currentFilterType);\n   
+         }\n            \n            if (filteredCourts
+.length === 0) {\n                container.innerHTML = 
+\'<div class="no-availability"><div class="icon">?</div>
+<p>\xe8\xaf\xa5\xe7\xb1\xbb\xe5\x9e\x8b\xe6\x9a\x82\xe6\
+x97\xa0\xe5\xbc\x80\xe6\x94\xbe\xe7\x9a\x84\xe5\x9c\xba\
+xe5\x9c\xb0</p></div>\';\n                return;\n     
+       }\n\n            const allTimeSlots = [];\n      
+      const timeSet = new Set();\n            \n        
+    filteredCourts.forEach(court => {\n                i
+f (court.time_slots && court.time_slots.length > 0) {\n 
+                   court.time_slots.forEach(slot => {\n 
+                       const key = `${slot.start}-${slot
+.end}`;\n                        if (!timeSet.has(key)) 
+{\n                            timeSet.add(key);\n      
+                      allTimeSlots.push({\n             
+                   start: slot.start,\n                 
+               end: slot.end,\n                         
+       sortKey: slot.start.replace(\':\', \'\')\n       
+                     });\n                        }\n   
+                 });\n                }\n            });
+\n\n            allTimeSlots.sort((a, b) => a.sortKey.lo
+caleCompare(b.sortKey));\n\n            if (allTimeSlots
+.length === 0) {\n                container.innerHTML = 
+\'<div class="no-availability"><div class="icon">?</div>
+<p>\xe6\x9a\x82\xe6\x97\xa0\xe5\x8f\xaf\xe7\x94\xa8\xe6\
+x97\xb6\xe9\x97\xb4\xe6\xae\xb5</p></div>\';\n          
+      return;\n            }\n\n            let html = `
+<div class="info-banner">\n                <span class="
+icon">!</span>\n                <span>\xe7\x82\xb9\xe5\x
+87\xbb\xe6\x97\xb6\xe9\x97\xb4\xe6\xae\xb5\xe8\xbf\x9b\x
+e8\xa1\x8c\xe9\xa2\x84\xe7\xba\xa6\xef\xbc\x8c\xe5\x8f\x
+af\xe5\x90\x8c\xe6\x97\xb6\xe9\x80\x89\xe6\x8b\xa9\xe5\x
+a4\x9a\xe4\xb8\xaa\xe6\x97\xb6\xe9\x97\xb4\xe6\xae\xb5</
+span>\n            </div>`;\n\n            html += \'<di
+v class="matrix-wrapper">\';\n            html += \'<tab
+le class="matrix-table">\';\n            \n            h
+tml += \'<thead><tr>\';\n            html += \'<th class
+="time-header">\xe6\x97\xb6\xe9\x97\xb4</th>\';\n       
+     filteredCourts.forEach(court => {\n                
+const courtNumber = court.court_number ? ` - ${court.cou
+rt_number}` : \'\';\n                html += `<th class=
+"court-header">${court.name}${courtNumber}</th>`;\n     
+       });\n            html += \'</tr></thead>\';\n\n  
+          html += \'<tbody>\';\n            allTimeSlots
+.forEach(slot => {\n                const isPast = isSlo
+tPast(slot.end);\n                \n                html
+ += \'<tr>\';\n                html += `<td>${slot.start
+}<br><span style="font-size:11px;color:#9ca3af">${slot.e
+nd}</span></td>`;\n\n                filteredCourts.forE
+ach(court => {\n                    const courtSlot = co
+urt.time_slots.find(s => s.start === slot.start && s.end
+ === slot.end);\n                    const isBooked = co
+urtSlot ? courtSlot.is_booked : true;\n                 
+   let statusClass = isBooked ? \'booked\' : \'available
+\';\n                    let statusText = isBooked ? \'\
+xe5\xb7\xb2\xe6\xbb\xa1\' : \'\xe5\x8f\xaf\xe9\xa2\x84\x
+e7\xba\xa6\';\n                    \n                   
+ if (isPast && !isBooked) {\n                        sta
+tusClass = \'past\';\n                        statusText
+ = \'\xe5\xb7\xb2\xe8\xbf\x87\xe6\x97\xb6\';\n          
+          }\n\n                    if (!court.is_availab
+le) {\n                        html += `<td><div class="
+time-cell no-court"><span class="slot-label">-</span></d
+iv></td>`;\n                    } else if (isBooked) {\n
+                        const bookingType = courtSlot ? 
+courtSlot.booking_type : \'court\';\n                   
+     const bookerName = courtSlot ? (courtSlot.booker_na
+me || \'\xe6\x9c\xaa\xe7\x9f\xa5\') : \'\xe6\x9c\xaa\xe7
+\x9f\xa5\';\n                        const bookerPhone =
+ courtSlot ? (courtSlot.booker_phone || \'\') : \'\';\n 
+                       const bookingId = courtSlot ? cou
+rtSlot.booking_id : \'\';\n                        const
+ studentCount = courtSlot ? (courtSlot.student_count || 
+0) : 0;\n                        const totalClassHours =
+ courtSlot ? (courtSlot.total_class_hours || 0) : 0;\n  
+                      const students = courtSlot ? (cour
+tSlot.students || []) : [];\n\n                        l
+et cellContent = `<span class="slot-label">${slot.start}
+</span>`;\n\n                        if (isAdmin) {\n   
+                         if (bookingType === \'course\')
+ {\n                                cellContent += `<spa
+n class="slot-status">\xf0\x9f\x93\x9a \xe8\xaf\xbe\xe7\
+xa8\x8b\xe9\xa2\x84\xe7\xba\xa6</span>`;\n              
+                  cellContent += `<span class="slot-info
+">${studentCount}\xe4\xba\xba / ${totalClassHours}\xe8\x
+af\xbe\xe6\x97\xb6</span>`;\n                           
+     if (students.length > 0) {\n                       
+             const studentNames = students.map(s => s.st
+udent__name).join(\'\xe3\x80\x81\');\n                  
+                  cellContent += `<span class="slot-stud
+ents">${studentNames}</span>`;\n                        
+        }\n                            } else {\n       
+                         cellContent += `<span class="sl
+ot-status">${bookerName}</span>`;\n                     
+           cellContent += `<span class="slot-phone" oncl
+ick="copyPhone(event, \'${bookerPhone}\')" title="\xe7\x
+82\xb9\xe5\x87\xbb\xe5\xa4\x8d\xe5\x88\xb6\xe7\x94\xb5\x
+e8\xaf\x9d">${bookerPhone}</span>`;\n                   
+         }\n\n                            const editUrl 
+= bookingType === \'course\'\n                          
+      ? adminCourseBookingEditUrl.replace(\'0\', booking
+Id)\n                                : adminBookingEditU
+rl.replace(\'0\', bookingId);\n\n                       
+     html += `<td><div class="time-cell ${statusClass}"\
+n                                data-court-id="${court.
+id}"\n                                data-court-name="$
+{court.name}"\n                                data-star
+t="${slot.start}"\n                                data-
+end="${slot.end}"\n                                data-
+booked="true"\n                                data-book
+ing-type="${bookingType}"\n                             
+   data-booking-id="${bookingId}"\n                     
+           ondblclick="navigateToEdit(this)">\n         
+                       ${cellContent}\n                 
+           </div></td>`;\n                        } else
+ {\n                            cellContent += `<span cl
+ass="slot-status">\xe5\xb7\xb2\xe9\xa2\x84\xe7\xba\xa6</
+span>`;\n                            html += `<td><div c
+lass="time-cell ${statusClass}"\n                       
+         data-court-id="${court.id}"\n                  
+              data-court-name="${court.name}"\n         
+                       data-start="${slot.start}"\n     
+                           data-end="${slot.end}"\n     
+                           data-booked="true">\n        
+                        ${cellContent}\n                
+            </div></td>`;\n                        }\n  
+                  } else {\n                        cons
+t clickHandler = isPast ? \'\' : \'onclick="toggleSlot(t
+his)"\';\n                        html += `<td><div clas
+s="time-cell ${statusClass}"\n                          
+  data-court-id="${court.id}"\n                         
+   data-court-name="${court.name}"\n                    
+        data-start="${slot.start}"\n                    
+        data-end="${slot.end}"\n                        
+    data-booked="false"\n                            ${c
+lickHandler}>\n                            <span class="
+slot-label">${slot.start}</span>\n                      
+      <span class="slot-status">${statusText}</span>\n  
+                      </div></td>`;\n                   
+ }\n                });\n\n                html += \'</t
+r>\';\n            });\n            html += \'</tbody></
+table></div>\';\n\n            container.innerHTML = htm
+l;\n        }\n\n        function toggleSlot(element) {\
+n            if (element.classList.contains(\'booked\') 
+|| element.classList.contains(\'no-court\') || element.c
+lassList.contains(\'past\')) {\n                return;\
+n            }\n\n            const courtId = element.da
+taset.courtId;\n            const courtName = element.da
+taset.courtName;\n            const start = element.data
+set.start;\n            const end = element.dataset.end;
+\n            const slotKey = `${courtId}-${start}-${end
+}`;\n\n            if (selectedCourtId && selectedCourtI
+d !== courtId) {\n                alert(\'\xe8\xaf\xb7\x
+e9\x80\x89\xe6\x8b\xa9\xe5\x90\x8c\xe4\xb8\x80\xe5\x9c\x
+ba\xe5\x9c\xb0\xe7\x9a\x84\xe6\x97\xb6\xe9\x97\xb4\xe6\x
+ae\xb5\');\n                return;\n            }\n\n  
+          if (element.classList.contains(\'selected\')) 
+{\n                element.classList.remove(\'selected\'
+);\n                element.classList.add(\'available\')
+;\n                element.querySelector(\'.slot-status\
+').textContent = \'\xe5\x8f\xaf\xe9\xa2\x84\xe7\xba\xa6\
+';\n                selectedSlots = selectedSlots.filter
+(s => s.key !== slotKey);\n                \n           
+     if (selectedSlots.length === 0) {\n                
+    selectedCourtId = null;\n                }\n        
+    } else {\n                element.classList.remove(\
+'available\');\n                element.classList.add(\'
+selected\');\n                element.querySelector(\'.s
+lot-status\').textContent = \'\xe5\xb7\xb2\xe9\x80\x89\x
+e6\x8b\xa9\';\n                selectedSlots.push({\n   
+                 key: slotKey,\n                    cour
+tId: courtId,\n                    courtName: courtName,
+\n                    start: start,\n                   
+ end: end\n                });\n                selected
+CourtId = courtId;\n            }\n\n            updateB
+ookingSummary();\n        }\n\n        function updateBo
+okingSummary() {\n            const summary = document.g
+etElementById(\'booking-summary\');\n            const i
+nfo = document.getElementById(\'booking-info\');\n\n    
+        if (selectedSlots.length === 0) {\n             
+   summary.classList.remove(\'show\');\n                
+return;\n            }\n\n            summary.classList.
+add(\'show\');\n\n            const sortedSlots = [...se
+lectedSlots].sort((a, b) => a.start.localeCompare(b.star
+t));\n            const startTime = sortedSlots[0].start
+;\n            const lastSlot = sortedSlots[sortedSlots.
+length - 1];\n            const courtName = sortedSlots[
+0].courtName;\n\n            let totalMinutes = 0;\n    
+        sortedSlots.forEach(slot => {\n                c
+onst [sh, sm] = slot.start.split(\':\').map(Number);\n  
+              const [eh, em] = slot.end.split(\':\').map
+(Number);\n                totalMinutes += (eh * 60 + em
+) - (sh * 60 + sm);\n            });\n\n            cons
+t hours = Math.floor(totalMinutes / 60);\n            co
+nst minutes = totalMinutes % 60;\n            let durati
+on = \'\';\n            if (hours > 0) duration += `${ho
+urs}\xe5\xb0\x8f\xe6\x97\xb6`;\n            if (minutes 
+> 0) duration += `${minutes}\xe5\x88\x86\xe9\x92\x9f`;\n
+\n            info.innerHTML = `\xe5\xb7\xb2\xe9\x80\x89
+\xe6\x8b\xa9 <strong>${courtName}</strong>\xef\xbc\x8c\x
+e6\x97\xa5\xe6\x9c\x9f\xef\xbc\x9a<strong>${formatDate(c
+urrentDate)}</strong>\xef\xbc\x8c\xe6\x97\xb6\xe9\x97\xb
+4\xef\xbc\x9a<strong>${startTime} - ${lastSlot.end}</str
+ong>\xef\xbc\x8c\xe5\x85\xb1 <strong>${duration}</strong
+>\xef\xbc\x8c<strong>${selectedSlots.length}</strong> \x
+e4\xb8\xaa\xe6\x97\xb6\xe6\xae\xb5`;\n        }\n\n     
+   function cancelSelection() {\n            document.qu
+erySelectorAll(\'.time-cell.selected\').forEach(el => {\
+n                el.classList.remove(\'selected\');\n   
+             el.classList.add(\'available\');\n         
+       el.querySelector(\'.slot-status\').textContent = 
+\'\xe5\x8f\xaf\xe9\xa2\x84\xe7\xba\xa6\';\n            }
+);\n            selectedSlots = [];\n            selecte
+dCourtId = null;\n            updateBookingSummary();\n 
+       }\n\n        function showBookingModal() {\n     
+       if (selectedSlots.length === 0) {\n              
+  alert(\'\xe8\xaf\xb7\xe5\x85\x88\xe9\x80\x89\xe6\x8b\x
+a9\xe6\x97\xb6\xe9\x97\xb4\xe6\xae\xb5\');\n            
+    return;\n            }\n\n            const sortedSl
+ots = [...selectedSlots].sort((a, b) => a.start.localeCo
+mpare(b.start));\n            const hasGap = checkForGap
+s(sortedSlots);\n            if (hasGap) {\n            
+    alert(\'\xe8\xaf\xb7\xe9\x80\x89\xe6\x8b\xa9\xe8\xbf
+\x9e\xe7\xbb\xad\xe7\x9a\x84\xe6\x97\xb6\xe9\x97\xb4\xe6
+\xae\xb5\');\n                return;\n            }\n\n
+            document.getElementById(\'booking-summary\')
+.classList.remove(\'show\');\n            document.getEl
+ementById(\'booking-modal\').classList.add(\'show\');\n 
+           document.getElementById(\'modal-booker-name\'
+).value = \'\';\n            document.getElementById(\'m
+odal-booker-phone\').value = \'\';\n            document
+.getElementById(\'modal-booker-name\').focus();\n       
+ }\n\n        function closeBookingModal() {\n          
+  document.getElementById(\'booking-modal\').classList.r
+emove(\'show\');\n            if (selectedSlots.length >
+ 0) {\n                document.getElementById(\'booking
+-summary\').classList.add(\'show\');\n            }\n   
+     }\n\n        function submitBooking() {\n          
+  const bookerName = document.getElementById(\'modal-boo
+ker-name\').value.trim();\n            const bookerPhone
+ = document.getElementById(\'modal-booker-phone\').value
+.trim();\n\n            if (!bookerName) {\n            
+    alert(\'\xe8\xaf\xb7\xe8\xbe\x93\xe5\x85\xa5\xe9\xa2
+\x84\xe7\xba\xa6\xe4\xba\xba\xe5\xa7\x93\xe5\x90\x8d\');
+\n                document.getElementById(\'modal-booker
+-name\').focus();\n                return;\n            
+}\n\n            if (!bookerPhone) {\n                al
+ert(\'\xe8\xaf\xb7\xe8\xbe\x93\xe5\x85\xa5\xe8\x81\x94\x
+e7\xb3\xbb\xe6\x96\xb9\xe5\xbc\x8f\');\n                
+document.getElementById(\'modal-booker-phone\').focus();
+\n                return;\n            }\n\n            
+const phoneRegex = /^1[3-9]\\d{9}$/;\n            if (!p
+honeRegex.test(bookerPhone)) {\n                alert(\'
+\xe8\xaf\xb7\xe8\xbe\x93\xe5\x85\xa5\xe6\xad\xa3\xe7\xa1
+\xae\xe7\x9a\x84\xe6\x89\x8b\xe6\x9c\xba\xe5\x8f\xb7\xe7
+\xa0\x81\');\n                document.getElementById(\'
+modal-booker-phone\').focus();\n                return;\
+n            }\n\n            const sortedSlots = [...se
+lectedSlots].sort((a, b) => a.start.localeCompare(b.star
+t));\n            const startTime = sortedSlots[0].start
+;\n            const lastSlot = sortedSlots[sortedSlots.
+length - 1];\n            const endTime = lastSlot.end;\
+n\n            const csrfToken = document.querySelector(
+\'[name=csrfmiddlewaretoken]\')?.value ||\n             
+                 document.cookie.match(/csrftoken=([^;]+
+)/)?.[1];\n\n            fetch(\'/api/create-booking/\',
+ {\n                method: \'POST\',\n                h
+eaders: {\n                    \'Content-Type\': \'appli
+cation/json\',\n                    \'X-CSRFToken\': csr
+fToken\n                },\n                body: JSON.s
+tringify({\n                    court_id: selectedCourtI
+d,\n                    date: currentDate,\n            
+        start_time: startTime,\n                    end_
+time: endTime,\n                    booker_name: bookerN
+ame,\n                    booker_phone: bookerPhone\n   
+             })\n            })\n            .then(respo
+nse => response.json())\n            .then(data => {\n  
+              if (data.success) {\n                    c
+loseBookingModal();\n                    alert(\'\xe9\xa
+2\x84\xe7\xba\xa6\xe6\x88\x90\xe5\x8a\x9f\xef\xbc\x81\')
+;\n                    window.location.href = \'/my-book
+ings/\';\n                } else {\n                    
+alert(\'\xe9\xa2\x84\xe7\xba\xa6\xe5\xa4\xb1\xe8\xb4\xa5
+\xef\xbc\x9a\' + (data.error || \'\xe6\x9c\xaa\xe7\x9f\x
+a5\xe9\x94\x99\xe8\xaf\xaf\'));\n                }\n    
+        })\n            .catch(error => {\n             
+   console.error(\'Error:\', error);\n                al
+ert(\'\xe9\xa2\x84\xe7\xba\xa6\xe5\xa4\xb1\xe8\xb4\xa5\x
+ef\xbc\x8c\xe8\xaf\xb7\xe9\x87\x8d\xe8\xaf\x95\');\n    
+        });\n        }\n\n        function copyPhone(eve
+nt, phone) {\n            event.stopPropagation();\n    
+        if (!phone) return;\n\n            if (navigator
+.clipboard && navigator.clipboard.writeText) {\n        
+        navigator.clipboard.writeText(phone).then(() => 
+{\n                    showCopyToast(\'\xe5\xb7\xb2\xe5\
+xa4\x8d\xe5\x88\xb6: \' + phone);\n                }).ca
+tch(() => {\n                    fallbackCopy(phone);\n 
+               });\n            } else {\n              
+  fallbackCopy(phone);\n            }\n        }\n\n    
+    function navigateToEdit(element) {\n            cons
+t bookingType = element.dataset.bookingType;\n          
+  const bookingId = element.dataset.bookingId;\n\n      
+      if (!bookingId) return;\n\n            const url =
+ bookingType === \'course\'\n                ? adminCour
+seBookingEditUrl.replace(\'0\', bookingId)\n            
+    : adminBookingEditUrl.replace(\'0\', bookingId);\n\n
+            window.location.href = url;\n        }\n\n  
+      function fallbackCopy(text) {\n            const t
+extarea = document.createElement(\'textarea\');\n       
+     textarea.value = text;\n            textarea.style.
+position = \'fixed\';\n            textarea.style.opacit
+y = \'0\';\n            document.body.appendChild(textar
+ea);\n            textarea.select();\n            try {\
+n                document.execCommand(\'copy\');\n      
+          showCopyToast(\'\xe5\xb7\xb2\xe5\xa4\x8d\xe5\x
+88\xb6: \' + text);\n            } catch (err) {\n      
+          showCopyToast(\'\xe5\xa4\x8d\xe5\x88\xb6\xe5\x
+a4\xb1\xe8\xb4\xa5\', true);\n            }\n           
+ document.body.removeChild(textarea);\n        }\n\n    
+    function showCopyToast(message, isError = false) {\n
+            const toast = document.createElement(\'div\'
+);\n            toast.style.cssText = `\n               
+ position: fixed;\n                top: 20px;\n         
+       left: 50%;\n                transform: translateX
+(-50%);\n                background: ${isError ? \'#ef44
+44\' : \'#10b981\'};\n                color: white;\n   
+             padding: 12px 24px;\n                border
+-radius: 8px;\n                z-index: 9999;\n         
+       font-size: 14px;\n                box-shadow: 0 4
+px 12px rgba(0,0,0,0.15);\n            `;\n            t
+oast.textContent = message;\n            document.body.a
+ppendChild(toast);\n            setTimeout(() => {\n    
+            toast.style.opacity = \'0\';\n              
+  toast.style.transition = \'opacity 0.3s\';\n          
+      setTimeout(() => document.body.removeChild(toast),
+ 300);\n            }, 2000);\n        }\n\n        func
+tion checkForGaps(slots) {\n            if (slots.length
+ <= 1) return false;\n            \n            for (let
+ i = 0; i < slots.length - 1; i++) {\n                co
+nst currentEnd = slots[i].end;\n                const ne
+xtStart = slots[i + 1].start;\n                \n       
+         if (currentEnd !== nextStart) {\n              
+      return true;\n                }\n            }\n  
+          return false;\n        }\n\n        document.g
+etElementById(\'booking-date\').addEventListener(\'chang
+e\', loadTimeSlots);\n\n        loadTimeSlots();\n    </
+script>\n\n    </div>\n</body>\n</html>\n'
+
+--------------------------------------------------------
+--------------
+Ran 32 tests in 38.561s
+
+FAILED (failures=1, errors=2)
+Destroying test database for alias 'default'...
+
+Found 32 test(s).
+System check identified no issues (0 silenced).
