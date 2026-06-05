@@ -86,7 +86,7 @@
             color: white;
             text-decoration: none;
             padding: 8px 16px;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             transition: var(--transition);
@@ -146,7 +146,7 @@
             color: white;
             text-decoration: none;
             border: none;
-            border-radius: 0;
+            border-radius: var(--radius);
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
@@ -175,7 +175,7 @@
             background-color: transparent;
             color: #2c3e50;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
         }
         .btn-outline:hover {
             background-color: #ecf0f1;
@@ -226,6 +226,7 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         table tbody tr {
             transition: var(--transition);
@@ -592,7 +593,7 @@
             display: inline-flex;
             align-items: center;
             padding: 4px 10px;
-            border-radius: 0;
+            border-radius: var(--radius-sm);
             font-size: 12px;
             font-weight: 600;
         }
@@ -614,8 +615,7 @@
         }
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 0;
-            border: 3px solid #ecf0f1;
+            border-radius: var(--radius);
         }
         .stat-cards {
             display: grid;
@@ -896,7 +896,6 @@
                     {% endif %}
                     <a href="{% url 'logout' %}" class="btn-logout">退出登录</a>
                 {% else %}
-                    <a href="{% url 'login' %}">登录</a>
                 {% endif %}
             </div>
         </div>

@@ -18,7 +18,7 @@
         justify-content: center;
         width: 40px;
         height: 40px;
-        border-radius: 0;
+        border-radius: var(--radius);
         background-color: #3498db;
         color: white;
         text-decoration: none;
@@ -34,6 +34,7 @@
         font-size: 24px;
         font-weight: 700;
         color: #2c3e50;
+        white-space: nowrap;
     }
     .header-actions {
         display: flex;
@@ -42,11 +43,72 @@
     .type-badge {
         display: inline-block;
         padding: 4px 10px;
-        border-radius: 0;
+        border-radius: var(--radius-sm);
         font-size: 12px;
         font-weight: 600;
         background: #3498db;
         color: white;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: var(--radius);
+    }
+    table {
+        padding: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        min-width: 600px;
+        border-radius: var(--radius);
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header-title {
+            font-size: 20px;
+        }
+        .header-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+        }
+        .page-header-title {
+            font-size: 18px;
+        }
+        .header-actions {
+            gap: 8px;
+        }
+        .btn {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+        .action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .action-btns .btn {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
 
@@ -61,7 +123,7 @@
 
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">场地列表</h2>
+            <h2 style="margin: 0; white-space: nowrap;">场地列表</h2>
             <div class="header-actions">
                 <a href="{% url 'admin_court_type_list' %}" class="btn btn-outline">场地类型</a>
                 <a href="{% url 'admin_court_add' %}" class="btn btn-success">+ 添加场地</a>

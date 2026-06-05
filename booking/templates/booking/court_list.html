@@ -124,21 +124,21 @@
         .matrix-table {
             padding: 0px;
             margin: 0px;
-            width: 100%;
+            width: auto;
             border-collapse: separate;
             border-spacing: 0;
-            min-width: 600px;
         }
         .matrix-table th,
         .matrix-table td {
-            padding: 12px 8px;
+            padding: 0;
             text-align: center;
             border: 3px solid #ecf0f1;
         }
         .matrix-table thead th {
-            width: 0;
-            height: 50px;
-            font-size: clamp(10px, 1.8vw, 13px);
+            min-width: 140px;
+            width: 140px;
+            height: 55px;
+            font-size: clamp(10px, calc(140px * 0.08), 13px);
             overflow: hidden;
             align-items: center;
             justify-content: center;
@@ -148,6 +148,8 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            padding: 6px 8px;
+            line-height: 1.3;
         }
         .matrix-table thead th:not(:first-child) {
             overflow: hidden;
@@ -157,7 +159,8 @@
         }
         .matrix-table thead th:first-child {
             background: #2980b9;
-            width: 50px;
+            width: 60px;
+            min-width: 60px;
             position: sticky;
             left: 0;
             z-index: 11;
@@ -169,6 +172,9 @@
             position: sticky;
             left: 0;
             z-index: 1;
+            width: 60px;
+            min-width: 60px;
+            padding: 8px;
         }
         .time-cell {
             padding: 8px 4px;
@@ -176,8 +182,9 @@
             transition: all 0.2s ease;
             border-radius: var(--radius);
             font-size: 13px;
-            min-width: 70px;
-            height: 60px;
+            min-width: 140px;
+            width: 140px;
+            height: 65px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -575,6 +582,95 @@
         }
         .modal-footer .btn-cancel:hover {
             background: #ecf0f1;
+        }
+
+        @media (max-width: 768px) {
+            .court-type-filter {
+                padding: 12px;
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+            .filter-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+                flex: 1 1 auto;
+                min-width: calc(50% - 4px);
+                text-align: center;
+            }
+            .matrix-wrapper {
+                max-height: 70vh;
+                padding: 0;
+            }
+            .matrix-table th,
+            .matrix-table td {
+                padding: 8px 4px;
+            }
+            .legend {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px;
+            }
+            .legend-item {
+                flex: 1 1 auto;
+                min-width: calc(50% - 6px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .court-type-filter {
+                padding: 10px;
+                gap: 6px;
+            }
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-height: 38px;
+            }
+            .matrix-table th,
+            .matrix-table td {
+                padding: 6px 3px;
+            }
+            .booking-summary {
+                padding: 16px;
+            }
+            .booking-summary h4 {
+                font-size: 16px;
+            }
+            .booking-summary p {
+                font-size: 13px;
+            }
+            .booking-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .btn-confirm, .btn-cancel {
+                width: 100%;
+                padding: 12px 20px;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 0 10px;
+            }
+            .modal-header {
+                padding: 14px 16px;
+            }
+            .modal-body {
+                padding: 14px 16px;
+            }
+            .modal-footer {
+                padding: 14px 16px;
+                flex-direction: column;
+            }
+            .modal-footer .btn {
+                width: 100%;
+            }
+            .legend {
+                gap: 8px;
+                padding: 10px;
+            }
+            .legend-item span {
+                font-size: 12px;
+            }
         }
     </style>
 
