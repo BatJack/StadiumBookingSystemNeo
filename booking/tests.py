@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+﻿﻿from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -47,11 +47,11 @@ class ModelTests(TestCase):
         self.assertEqual(self.regular_user.profile.user_type, 'regular')
 
     def test_court_str(self):
-        """测试场地字符串表示"""
+        """测试场地字符串表示""
         self.assertEqual(str(self.court), '羽毛球场 - 1')
 
     def test_availability_check(self):
-        """测试时间段可用性检查"""
+        """测试时间段可用性检查""
         self.assertTrue(self.availability.is_date_available(date.today()))
         self.assertFalse(self.availability.is_date_available(date.today() - timedelta(days=10)))
 
@@ -117,7 +117,7 @@ class AuthenticationTests(TestCase):
         self.assertTemplateUsed(response, 'booking/login.html')
 
     def test_admin_login_redirect(self):
-        """测试管理员登录跳转"""
+        """测试管理员登录跳转""
         response = self.client.post(reverse('login'), {
             'username': 'admin',
             'password': 'admin123'
@@ -125,7 +125,7 @@ class AuthenticationTests(TestCase):
         self.assertRedirects(response, reverse('admin_dashboard'))
 
     def test_regular_login_redirect(self):
-        """测试普通用户登录跳转"""
+        """测试普通用户登录跳转""
         response = self.client.post(reverse('login'), {
             'username': 'user1',
             'password': 'user123'
@@ -264,16 +264,16 @@ class AdminTests(TestCase):
         self.client.login(username='admin', password='admin123')
 
     def test_admin_dashboard(self):
-        """测试管理仪表盘"""
+        """测试管理仪表盘""
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_dashboard.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_dashboard.html')
 
     def test_admin_court_list(self):
         """测试场地管理页面"""
         response = self.client.get(reverse('admin_court_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_court_list.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_court_list.html')
 
     def test_admin_add_court(self):
         """测试添加场地"""
@@ -305,13 +305,13 @@ class AdminTests(TestCase):
         self.assertFalse(Court.objects.filter(id=self.court.id).exists())
 
     def test_admin_availability_list(self):
-        """测试可用时间段管理"""
+        """测试可用时间段管理""
         response = self.client.get(reverse('admin_availability_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_availability_list.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_availability_list.html')
 
     def test_admin_add_availability(self):
-        """测试添加可用时间段"""
+        """测试添加可用时间段""
         response = self.client.post(reverse('admin_availability_add'), {
             'court': self.court.id,
             'start_date': date.today().isoformat(),
@@ -326,13 +326,13 @@ class AdminTests(TestCase):
         """测试预约管理页面"""
         response = self.client.get(reverse('admin_bookings'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_bookings.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_bookings.html')
 
     def test_admin_student_list(self):
         """测试学员管理页面"""
         response = self.client.get(reverse('admin_student_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_student_list.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_student_list.html')
 
     def test_admin_add_student(self):
         """测试添加学员"""
@@ -368,7 +368,7 @@ class AdminTests(TestCase):
         """测试课程预约列表"""
         response = self.client.get(reverse('admin_course_booking_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'booking/admin_course_booking_list.html')
+        self.assertTemplateUsed(response, 'booking/admin/admin_course_booking_list.html')
 
 
 class PermissionTests(TestCase):
@@ -383,13 +383,13 @@ class PermissionTests(TestCase):
         Profile.objects.create(user=self.regular_user, user_type='regular')
 
     def test_regular_user_cannot_access_admin(self):
-        """测试普通用户无法访问管理后台"""
+        """测试普通用户无法访问管理后台""
         self.client.login(username='user1', password='user123')
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 302)
 
     def test_unauthenticated_user_redirected_to_login(self):
-        """测试未登录用户跳转到登录页"""
+        """测试未登录用户跳转到登录页""
         response = self.client.get(reverse('court_list'))
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url.startswith(reverse('login')))

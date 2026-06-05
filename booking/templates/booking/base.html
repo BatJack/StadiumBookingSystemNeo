@@ -86,7 +86,7 @@
             color: white;
             text-decoration: none;
             padding: 8px 16px;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             transition: var(--transition);
@@ -146,7 +146,7 @@
             color: white;
             text-decoration: none;
             border: none;
-            border-radius: 0;
+            border-radius: var(--radius);
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
@@ -175,7 +175,7 @@
             background-color: transparent;
             color: #2c3e50;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
         }
         .btn-outline:hover {
             background-color: #ecf0f1;
@@ -226,6 +226,7 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         table tbody tr {
             transition: var(--transition);
@@ -408,7 +409,7 @@
         .date-selector input {
             padding: 10px 14px;
             border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             transition: var(--transition);
             background-color: #ecf0f1;
@@ -592,7 +593,7 @@
             display: inline-flex;
             align-items: center;
             padding: 4px 10px;
-            border-radius: 0;
+            border-radius: var(--radius-sm);
             font-size: 12px;
             font-weight: 600;
         }
@@ -614,8 +615,7 @@
         }
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 0;
-            border: 3px solid #ecf0f1;
+            border-radius: var(--radius);
         }
         .stat-cards {
             display: grid;
@@ -680,13 +680,17 @@
                 font-size: 16px;
             }
             .nav {
-                gap: 4px;
+                gap: 6px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
             .nav a {
-                padding: 6px 12px;
-                font-size: 12px;
+                padding: 10px 14px;
+                font-size: 13px;
+                min-height: 40px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
             }
             .container {
                 padding: 16px;
@@ -835,17 +839,35 @@
         @media (max-width: 480px) {
             .header .container {
                 padding: 0 12px;
-                height: 52px;
+                height: auto;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding-top: 8px;
+                padding-bottom: 8px;
             }
             .header h1 {
-                font-size: 14px;
+                font-size: 15px;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 4px;
             }
             .nav {
-                gap: 4px;
+                gap: 6px;
+                width: 100%;
+                justify-content: center;
             }
             .nav a {
-                padding: 6px 10px;
-                font-size: 11px;
+                padding: 10px 12px;
+                font-size: 13px;
+                min-height: 42px;
+                flex: 1 1 auto;
+                max-width: 48%;
+                text-align: center;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: var(--radius);
             }
             .container {
                 padding: 12px;
@@ -866,13 +888,14 @@
             <div class="nav">
                 {% if user.is_authenticated %}
                     <a href="{% url 'court_list' %}">场地列表</a>
-                    <a href="{% url 'my_bookings' %}">我的预约</a>
+                    {% if user.profile.user_type != 'admin' %}
+                        <a href="{% url 'my_bookings' %}">我的预约</a>
+                    {% endif %}
                     {% if user.profile.user_type == 'admin' %}
                         <a href="{% url 'admin_dashboard' %}">管理后台</a>
                     {% endif %}
                     <a href="{% url 'logout' %}" class="btn-logout">退出登录</a>
                 {% else %}
-                    <a href="{% url 'login' %}">登录</a>
                 {% endif %}
             </div>
         </div>

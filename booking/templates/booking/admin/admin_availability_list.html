@@ -10,7 +10,7 @@
         gap: 16px;
         margin-bottom: 24px;
         padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
+        border-bottom: 3px solid #ecf0f1;
     }
     .back-btn {
         display: inline-flex;
@@ -19,20 +19,65 @@
         width: 40px;
         height: 40px;
         border-radius: var(--radius);
-        background-color: var(--gray-800);
+        background-color: #3498db;
         color: white;
         text-decoration: none;
         transition: var(--transition);
         flex-shrink: 0;
+        border: 3px solid transparent;
     }
     .back-btn:hover {
-        background-color: var(--gray-900);
-        transform: translateX(-2px);
+        background-color: #2980b9;
+        border-color: #3498db;
     }
     .page-header-title {
         font-size: 24px;
-        font-weight: 600;
-        color: var(--gray-900);
+        font-weight: 700;
+        color: #2c3e50;
+        white-space: nowrap;
+    }
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header-title {
+            font-size: 20px;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            min-width: 600px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+        }
+        .page-header-title {
+            font-size: 18px;
+        }
+        .action-btns {
+            flex-direction: column;
+            gap: 6px;
+        }
+        .action-btns .btn {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
 
@@ -61,6 +106,7 @@
                             <th>结束日期</th>
                             <th>每天开放时间</th>
                             <th>更新时间</th>
+                            <th style="width: 160px;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +119,12 @@
                                 <td>{{ availability.end_date|date:"Y-m-d" }}</td>
                                 <td>{{ availability.start_time|time:"H:i" }} - {{ availability.end_time|time:"H:i" }}</td>
                                 <td>{{ availability.updated_at|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="{% url 'admin_availability_edit' availability.id %}" class="btn btn-sm btn-outline">编辑</a>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteAvailability({{ availability.id }}, '{{ availability.court.name }}')">删除</button>
+                                    </div>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -86,4 +138,18 @@
             </div>
         {% endif %}
     </div>
+
+    <form id="delete-form" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <script>
+        function deleteAvailability(id, courtName) {
+            if (confirm('确定要删除"' + courtName + '"的时间段吗？')) {
+                const form = document.getElementById('delete-form');
+                form.action = '/manage/availabilities/delete/' + id + '/';
+                form.submit();
+            }
+        }
+    </script>
 {% endblock %}

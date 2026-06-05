@@ -1,0 +1,107 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}编辑可用时间段 - 体育场馆预约系统{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 3px solid #ecf0f1;
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        transition: var(--transition);
+        flex-shrink: 0;
+        border: 3px solid transparent;
+    }
+    .back-btn:hover {
+        background-color: #2980b9;
+        border-color: #3498db;
+    }
+    .page-header-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header-title {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+        }
+        .page-header-title {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <a href="{% url 'admin_availability_list' %}" class="back-btn" title="返回时间段列表">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </a>
+    <span class="page-header-title">编辑可用时间段</span>
+</div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>场地</label>
+                <input type="text" value="{{ availability.court.name }}" disabled class="form-control-disabled">
+            </div>
+            <div class="form-group">
+                <label for="start_date">开始日期</label>
+                <input type="date" id="start_date" name="start_date" value="{{ availability.start_date|date:'Y-m-d' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="end_date">结束日期</label>
+                <input type="date" id="end_date" name="end_date" value="{{ availability.end_date|date:'Y-m-d' }}" required>
+                <small>设置场地可预约的日期范围</small>
+            </div>
+            <div class="form-group">
+                <label for="start_time">每天开始时间</label>
+                <input type="time" id="start_time" name="start_time" value="{{ availability.start_time|time:'H:i' }}" step="1800" required>
+                <small>时间必须是整点或半点</small>
+            </div>
+            <div class="form-group">
+                <label for="end_time">每天结束时间</label>
+                <input type="time" id="end_time" name="end_time" value="{{ availability.end_time|time:'H:i' }}" step="1800" required>
+                <small>时间必须是整点或半点</small>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button type="submit" class="btn btn-success">保存</button>
+                <a href="{% url 'admin_availability_list' %}" class="btn btn-outline">取消</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
