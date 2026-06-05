@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -330,6 +330,14 @@ def admin_availability_add(request):
                     'courts': Court.objects.all(),
                 })
             
+            # 检查该场地是否已有时间段记录
+            existing = CourtAvailability.objects.filter(court=court).first()
+            if existing:
+                messages.error(request, f'该场地已有时间段记录，请先编辑或删除现有记录')
+                return render(request, 'booking/admin/admin_availability_form.html', {
+                    'courts': Court.objects.all(),
+                })
+            
             CourtAvailability.objects.create(
                 court=court,
                 start_date=start_date,
@@ -349,6 +357,91 @@ def admin_availability_add(request):
     return render(request, 'booking/admin/admin_availability_form.html', {
         'courts': Court.objects.all(),
     })
+
+
+@login_required
+def admin_availability_edit(request, availability_id):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    try:
+        availability = CourtAvailability.objects.get(id=availability_id)
+    except CourtAvailability.DoesNotExist:
+        messages.error(request, '时间段记录不存在')
+        return redirect('admin_availability_list')
+    
+    if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+        start_time_str = request.POST.get('start_time')
+        end_time_str = request.POST.get('end_time')
+        
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            start_time = datetime.strptime(start_time_str, '%H:%M').time()
+            end_time = datetime.strptime(end_time_str, '%H:%M').time()
+            
+            if start_date > end_date:
+                messages.error(request, '结束日期必须大于等于开始日期')
+                return render(request, 'booking/admin/admin_availability_edit.html', {
+                    'availability': availability,
+                })
+            
+            if start_time >= end_time:
+                messages.error(request, '结束时间必须大于开始时间')
+                return render(request, 'booking/admin/admin_availability_edit.html', {
+                    'availability': availability,
+                })
+            
+            availability.start_date = start_date
+            availability.end_date = end_date
+            availability.start_time = start_time
+            availability.end_time = end_time
+            availability.save()
+            
+            messages.success(request, '可用时间段更新成功')
+            return redirect('admin_availability_list')
+            
+        except ValueError:
+            messages.error(request, '时间格式错误')
+    
+    return render(request, 'booking/admin/admin_availability_edit.html', {
+        'availability': availability,
+    })
+
+
+@login_required
+def admin_availability_delete(request, availability_id):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    try:
+        availability = CourtAvailability.objects.get(id=availability_id)
+        court = availability.court
+        
+        # 删除该时间段范围内的所有预约记录
+        deleted_bookings = Booking.objects.filter(
+            court=court,
+            date__gte=availability.start_date,
+            date__lte=availability.end_date,
+            start_time__gte=availability.start_time,
+            end_time__lte=availability.end_time
+        ).delete()
+        
+        # 删除时间段记录
+        availability.delete()
+        
+        if deleted_bookings[0] > 0:
+            messages.success(request, f'时间段已删除，同时删除了 {deleted_bookings[0]} 条预约记录')
+        else:
+            messages.success(request, '时间段已删除')
+    except CourtAvailability.DoesNotExist:
+        messages.error(request, '时间段记录不存在')
+    
+    return redirect('admin_availability_list')
 
 
 @login_required
