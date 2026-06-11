@@ -4,99 +4,37 @@
 
 {% block content %}
 <style>
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 3px solid #ecf0f1;
     }
-
-    .statistics-container {
-        max-width: 1000px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .statistics-card {
-        background: var(--bg-secondary);
-        border-radius: var(--radius-lg);
-        padding: 48px 40px;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border-color);
-        animation: cardEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .statistics-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    }
-
-    @keyframes cardEntrance {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .statistics-header {
-        text-align: center;
-        margin-bottom: 40px;
-        animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
-    }
-
-    .statistics-header h1 {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 8px;
-        font-family: 'Barlow Condensed', sans-serif;
-        letter-spacing: -0.02em;
-    }
-
-    .statistics-header p {
-        color: var(--text-muted);
-        font-size: 15px;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .back-link {
+    .back-btn {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        color: var(--text-muted);
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background-color: #3498db;
+        color: white;
         text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 24px;
-        transition: color 0.25s ease;
+        transition: var(--transition);
+        flex-shrink: 0;
+        border: 3px solid transparent;
     }
-
-    .back-link:hover {
-        color: var(--primary);
+    .back-btn:hover {
+        background-color: #2980b9;
+        border-color: #3498db;
+    }
+    .page-header-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        white-space: nowrap;
     }
 
     .stat-cards {
@@ -106,44 +44,19 @@
     }
 
     .stat-card {
-        background: var(--bg-primary);
+        background: white;
         border-radius: var(--radius);
         padding: 28px;
-        border: 2px solid var(--border-color);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 3px solid #ecf0f1;
+        transition: var(--transition);
         position: relative;
         overflow: hidden;
-        animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
-
-    .stat-card:nth-child(1) { animation-delay: 0.2s; }
-    .stat-card:nth-child(2) { animation-delay: 0.25s; }
-    .stat-card:nth-child(3) { animation-delay: 0.3s; }
-    .stat-card:nth-child(4) { animation-delay: 0.35s; }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .stat-card.blue::before { background: var(--info); }
-    .stat-card.green::before { background: var(--success); }
-    .stat-card.orange::before { background: var(--warning); }
-    .stat-card.purple::before { background: #8B5CF6; }
 
     .stat-card:hover {
-        border-color: var(--border-color);
+        border-color: #3498db;
         box-shadow: var(--shadow-md);
         transform: translateY(-2px);
-    }
-
-    .stat-card:hover::before {
-        width: 6px;
     }
 
     .stat-card-content {
@@ -160,7 +73,7 @@
         align-items: center;
         justify-content: center;
         font-size: 20px;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--transition);
     }
 
     .stat-card:hover .stat-card-icon {
@@ -168,29 +81,29 @@
     }
 
     .stat-card-icon.blue {
-        background: var(--info-light);
-        color: var(--info);
+        background: #3498db;
+        color: white;
     }
 
     .stat-card-icon.green {
-        background: var(--success-light);
-        color: var(--success);
+        background: #2ecc71;
+        color: white;
     }
 
     .stat-card-icon.orange {
-        background: var(--warning-light);
-        color: var(--warning);
+        background: #f39c12;
+        color: white;
     }
 
     .stat-card-icon.purple {
-        background: #EDE9FE;
-        color: #8B5CF6;
+        background: #9b59b6;
+        color: white;
     }
 
     .stat-card-value {
         font-size: 36px;
         font-weight: 700;
-        color: var(--text-primary);
+        color: #2c3e50;
         line-height: 1;
         font-family: 'Fira Sans', sans-serif;
         letter-spacing: -0.02em;
@@ -198,95 +111,43 @@
 
     .stat-card-label {
         font-size: 13px;
-        color: var(--text-muted);
+        color: #7f8c8d;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
 
-    .sports-decoration {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        overflow: hidden;
-        z-index: -1;
-    }
-
-    .sports-decoration::before,
-    .sports-decoration::after {
-        content: '';
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.05;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .sports-decoration::before {
-        width: 300px;
-        height: 300px;
-        background: var(--primary);
-        top: -150px;
-        right: -100px;
-    }
-
-    .sports-decoration::after {
-        width: 200px;
-        height: 200px;
-        background: var(--secondary);
-        bottom: -100px;
-        left: -50px;
-        animation-delay: 3s;
-    }
-
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0) scale(1);
-        }
-        50% {
-            transform: translateY(-20px) scale(1.05);
-        }
-    }
-
     @media (max-width: 768px) {
-        .statistics-container {
-            margin: 30px auto;
-            padding: 0 16px;
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
         }
-
-        .statistics-card {
-            padding: 32px 24px;
+        .page-header-title {
+            font-size: 20px;
         }
-
-        .statistics-header h1 {
-            font-size: 28px;
-        }
-
         .stat-cards {
             grid-template-columns: 1fr;
             gap: 16px;
         }
-
         .stat-card {
             padding: 24px;
         }
-
         .stat-card-value {
             font-size: 32px;
         }
     }
 
     @media (max-width: 480px) {
-        .statistics-header h1 {
-            font-size: 24px;
+        .back-btn {
+            width: 36px;
+            height: 36px;
         }
-
+        .page-header-title {
+            font-size: 18px;
+        }
         .stat-card-value {
             font-size: 28px;
         }
-
         .stat-card-icon {
             width: 40px;
             height: 40px;
@@ -295,25 +156,22 @@
     }
 </style>
 
-<div class="statistics-container">
-    <div class="statistics-card">
-        <div class="sports-decoration"></div>
-        
-        <a href="{% url 'admin_dashboard' %}" class="back-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"/>
-                <polyline points="12 19 5 12 12 5"/>
-            </svg>
-            返回管理后台
-        </a>
+<div class="page-header">
+    <a href="{% url 'admin_dashboard' %}" class="back-btn" title="返回管理后台">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </a>
+    <span class="page-header-title">数据统计</span>
+</div>
 
-        <div class="statistics-header">
-            <h1>数据统计</h1>
-            <p>系统运营数据概览</p>
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0; white-space: nowrap;">系统运营数据概览</h2>
         </div>
 
         <div class="stat-cards">
-            <div class="stat-card blue">
+            <div class="stat-card">
                 <div class="stat-card-content">
                     <div class="stat-card-icon blue">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -326,7 +184,7 @@
                     <div class="stat-card-label">场地总数</div>
                 </div>
             </div>
-            <div class="stat-card green">
+            <div class="stat-card">
                 <div class="stat-card-content">
                     <div class="stat-card-icon green">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -341,7 +199,7 @@
                     <div class="stat-card-label">预约总数</div>
                 </div>
             </div>
-            <div class="stat-card orange">
+            <div class="stat-card">
                 <div class="stat-card-content">
                     <div class="stat-card-icon orange">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -353,7 +211,7 @@
                     <div class="stat-card-label">可用时段</div>
                 </div>
             </div>
-            <div class="stat-card purple">
+            <div class="stat-card">
                 <div class="stat-card-content">
                     <div class="stat-card-icon purple">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -369,5 +227,4 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
