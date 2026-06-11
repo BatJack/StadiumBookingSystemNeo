@@ -154,7 +154,20 @@ class UserCreatorApp:
             activebackground=self.bg_color,
             command=self.update_button_text
         )
-        admin_radio.pack(side="left")
+        admin_radio.pack(side="left", padx=(0, 30))
+
+        super_admin_radio = tk.Radiobutton(
+            type_frame,
+            text="超级管理员",
+            variable=self.user_type_var,
+            value="super_admin",
+            font=("Microsoft YaHei", 10),
+            fg="#374151",
+            bg=self.bg_color,
+            activebackground=self.bg_color,
+            command=self.update_button_text
+        )
+        super_admin_radio.pack(side="left")
 
         self.type_label = tk.Label(
             form_frame,
@@ -203,7 +216,10 @@ class UserCreatorApp:
 
     def update_button_text(self):
         user_type = self.user_type_var.get()
-        if user_type == "admin":
+        if user_type == "super_admin":
+            self.create_btn.config(text="创建超级管理员")
+            self.type_label.config(text="✓ 拥有全部权限，可管理所有用户和系统设置", fg="#E74C3C")
+        elif user_type == "admin":
             self.create_btn.config(text="创建管理员")
             self.type_label.config(text="✓ 可管理场地、设置时间段、管理预约", fg="#EF4444")
         else:
@@ -240,8 +256,8 @@ class UserCreatorApp:
                 username=username,
                 password=password,
                 email=email,
-                is_staff=(user_type == "admin"),
-                is_superuser=(user_type == "admin")
+                is_staff=(user_type in ("admin", "super_admin")),
+                is_superuser=(user_type == "super_admin")
             )
 
             Profile.objects.create(
@@ -249,7 +265,12 @@ class UserCreatorApp:
                 user_type=user_type
             )
 
-            type_name = "管理员" if user_type == "admin" else "普通用户"
+            if user_type == "super_admin":
+                type_name = "超级管理员"
+            elif user_type == "admin":
+                type_name = "管理员"
+            else:
+                type_name = "普通用户"
             messagebox.showinfo("成功", f"用户创建成功！\n\n用户名: {username}\n用户类型: {type_name}\n密码: {password}")
 
             self.username_var.set("")

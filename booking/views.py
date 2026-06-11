@@ -44,7 +44,13 @@ def get_current_time():
 
 def is_admin_user(user):
     try:
-        return user.profile.user_type == 'admin'
+        return user.profile.user_type in ('admin', 'super_admin')
+    except Profile.DoesNotExist:
+        return False
+
+def is_super_admin_user(user):
+    try:
+        return user.profile.user_type == 'super_admin'
     except Profile.DoesNotExist:
         return False
 
@@ -112,7 +118,9 @@ def admin_dashboard(request):
         messages.error(request, '您没有权限访问此页面')
         return redirect('court_list')
     
-    return render(request, 'booking/admin/admin_dashboard.html')
+    return render(request, 'booking/admin/admin_dashboard.html', {
+        'is_super_admin': is_super_admin_user(request.user),
+    })
 
 
 @login_required
@@ -1129,3 +1137,64 @@ def admin_course_booking_delete(request, booking_id):
     booking.delete()
     messages.success(request, '课程预约已删除')
     return redirect('admin_course_booking_list')
+
+
+@login_required
+def admin_user_list(request):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    users = User.objects.select_related('profile').all().order_by('username')
+    return render(request, 'booking/admin/admin_user_list.html', {'users': users})
+
+
+@login_required
+def admin_user_edit(request, user_id):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    user = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        new_user_type = request.POST.get('user_type')
+        email = request.POST.get('email')
+        
+        if new_user_type not in dict(Profile.USER_TYPE_CHOICES):
+            messages.error(request, '无效的用户类型')
+            return redirect('admin_user_edit', user_id=user_id)
+        
+        # 不允许超级管理员把自己降级
+        if user == request.user and new_user_type != 'super_admin':
+            messages.error(request, '不能修改自己的用户类型')
+            return redirect('admin_user_edit', user_id=user_id)
+        
+        user.email = email
+        user.save()
+        
+        profile = user.profile
+        profile.user_type = new_user_type
+        profile.save()
+        
+        messages.success(request, f'用户 "{user.username}" 信息已更新')
+        return redirect('admin_user_list')
+    
+    return render(request, 'booking/admin/admin_user_edit.html', {'edit_user': user})
+
+
+@login_required
+def admin_user_delete(request, user_id):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    if request.user.id == user_id:
+        messages.error(request, '不能删除自己的账号')
+        return redirect('admin_user_list')
+    
+    user = get_object_or_404(User, id=user_id)
+    username = user.username
+    user.delete()
+    messages.success(request, f'用户 "{username}" 已删除')
+    return redirect('admin_user_list')

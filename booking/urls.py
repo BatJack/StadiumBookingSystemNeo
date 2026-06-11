@@ -34,4 +34,7 @@ urlpatterns = [
     path('manage/course-bookings/add/', views.admin_course_booking_add, name='admin_course_booking_add'),
     path('manage/course-bookings/edit/<int:booking_id>/', views.admin_course_booking_edit, name='admin_course_booking_edit'),
     path('manage/course-bookings/delete/<int:booking_id>/', views.admin_course_booking_delete, name='admin_course_booking_delete'),
+    path('manage/users/', views.admin_user_list, name='admin_user_list'),
+    path('manage/users/edit/<int:user_id>/', views.admin_user_edit, name='admin_user_edit'),
+    path('manage/users/delete/<int:user_id>/', views.admin_user_delete, name='admin_user_delete'),
 ]

@@ -5,8 +5,8 @@
 
 用法:
     python create_user_cli.py                    # 交互模式
-    python create_user_cli.py -u username -p password [-e email] [--admin]
-    python create_user_cli.py --username username --password password [--email email] [--admin]
+    python create_user_cli.py -u username -p password [-e email] [--admin|--super-admin]
+    python create_user_cli.py --username username --password password [--email email] [--admin|--super-admin]
 """
 
 import os
@@ -30,7 +30,7 @@ def create_user_cli(username, password, email='', user_type='regular'):
         username: 用户名
         password: 密码
         email: 邮箱（可选）
-        user_type: 用户类型 ('admin' 或 'regular')
+        user_type: 用户类型 ('super_admin', 'admin' 或 'regular')
     """
     from django.contrib.auth.models import User
     from booking.models import Profile
@@ -46,8 +46,8 @@ def create_user_cli(username, password, email='', user_type='regular'):
             username=username,
             password=password,
             email=email,
-            is_staff=(user_type == 'admin'),
-            is_superuser=(user_type == 'admin')
+            is_staff=(user_type in ('admin', 'super_admin')),
+            is_superuser=(user_type == 'super_admin')
         )
 
         # 创建 Profile
@@ -56,7 +56,12 @@ def create_user_cli(username, password, email='', user_type='regular'):
             user_type=user_type
         )
 
-        type_name = "管理员" if user_type == 'admin' else "普通用户"
+        if user_type == 'super_admin':
+            type_name = "超级管理员"
+        elif user_type == 'admin':
+            type_name = "管理员"
+        else:
+            type_name = "普通用户"
         print(f"\n✓ 用户创建成功！")
         print(f"  用户名: {username}")
         print(f"  邮箱: {email or '未设置'}")
@@ -99,16 +104,20 @@ def interactive_mode():
     print("\n用户类型:")
     print("  1. 普通用户 - 可预约场地、查看预约")
     print("  2. 管理员 - 可管理场地、设置时间段、管理预约")
+    print("  3. 超级管理员 - 拥有全部权限，可管理所有用户")
 
     while True:
-        choice = input("\n请选择 (1/2): ").strip()
+        choice = input("\n请选择 (1/2/3): ").strip()
         if choice == '1':
             user_type = 'regular'
             break
         elif choice == '2':
             user_type = 'admin'
             break
-        print("无效选择，请输入 1 或 2")
+        elif choice == '3':
+            user_type = 'super_admin'
+            break
+        print("无效选择，请输入 1、2 或 3")
 
     # 确认信息
     print("\n" + "-"*50)
@@ -116,7 +125,8 @@ def interactive_mode():
     print(f"  用户名: {username}")
     print(f"  密码: {'*' * len(password)}")
     print(f"  邮箱: {email or '未设置'}")
-    print(f"  类型: {'管理员' if user_type == 'admin' else '普通用户'}")
+    type_display = {'super_admin': '超级管理员', 'admin': '管理员', 'regular': '普通用户'}.get(user_type, user_type)
+    print(f"  类型: {type_display}")
     print("-"*50)
 
     confirm = input("\n确认创建? (y/n): ").strip().lower()
@@ -137,6 +147,7 @@ def main():
     python create_user_cli.py -u test -p 123456                # 创建普通用户
     python create_user_cli.py -u admin -p 123456 --admin        # 创建管理员
     python create_user_cli.py -u user1 -p pass123 -e a@b.com   # 带邮箱的管理员
+    python create_user_cli.py -u super -p 123456 --super-admin # 创建超级管理员
         """
     )
 
@@ -144,6 +155,7 @@ def main():
     parser.add_argument('-p', '--password', help='密码')
     parser.add_argument('-e', '--email', default='', help='邮箱（可选）')
     parser.add_argument('--admin', action='store_true', help='创建为管理员')
+    parser.add_argument('--super-admin', action='store_true', help='创建为超级管理员')
 
     args = parser.parse_args()
 
@@ -170,7 +182,12 @@ def main():
         print("错误：密码长度至少为6位")
         sys.exit(1)
 
-    user_type = 'admin' if args.admin else 'regular'
+    if args.super_admin:
+        user_type = 'super_admin'
+    elif args.admin:
+        user_type = 'admin'
+    else:
+        user_type = 'regular'
     success = create_user_cli(args.username, args.password, args.email, user_type)
     sys.exit(0 if success else 1)
 
