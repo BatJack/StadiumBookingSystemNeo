@@ -1,0 +1,12 @@
+# local_settings.py — 本地开发配置（已加入 .gitignore，不会提交）
+# 复制此文件为 local_settings.py 并填入实际值
+#
+# 使用方式:
+#   1. cp local_settings.py.example local_settings.py
+#   2. 修改 SECRET_KEY 为实际密钥
+#   3. 可选: 设置 DJANGO_SECRET_KEY 环境变量（优先级更高）
+
+import os
+
+# 生成密钥: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+SECRET_KEY = 'django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
