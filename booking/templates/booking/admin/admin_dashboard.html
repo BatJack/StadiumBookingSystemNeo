@@ -397,49 +397,6 @@
                 </div>
             </a>
 
-            <a href="{% url 'admin_student_list' %}" class="management-card">
-                <div class="management-card-header">
-                    <div class="management-card-icon purple">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                    </div>
-                    <h3 class="management-card-title">学员管理</h3>
-                </div>
-                <p class="management-card-desc">管理学员信息和课时总数</p>
-                <div class="management-card-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                </div>
-            </a>
-
-            <a href="{% url 'admin_course_booking_list' %}" class="management-card">
-                <div class="management-card-header">
-                    <div class="management-card-icon blue">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
-                        </svg>
-                    </div>
-                    <h3 class="management-card-title">课程预约</h3>
-                </div>
-                <p class="management-card-desc">预约课程、管理课时扣除与退还</p>
-                <div class="management-card-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                </div>
-            </a>
-
             {% if is_super_admin %}
             <a href="{% url 'admin_user_list' %}" class="management-card">
                 <div class="management-card-header">

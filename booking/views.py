@@ -93,6 +93,15 @@ def admin_dashboard(request):
 
 
 @login_required
+def training_dashboard(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    return render(request, 'booking/admin/training_dashboard.html')
+
+
+@login_required
 def admin_statistics(request):
     if not is_admin_user(request.user):
         messages.error(request, '您没有权限访问此页面')
