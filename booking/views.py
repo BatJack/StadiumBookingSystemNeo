@@ -6,45 +6,20 @@ from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
+from django.db import models
 from datetime import datetime, timedelta, time
 from .models import Court, CourtAvailability, Booking, Profile, Student, BookingStudent, CourtType
-import socket
-import struct
-
-
-def get_network_time():
-    try:
-        ntp_servers = ['ntp.aliyun.com', 'ntp.tencent.com']
-        for server in ntp_servers:
-            try:
-                client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                client.settimeout(1)
-                data = b'\x1b' + 47 * b'\x00'
-                client.sendto(data, (server, 123))
-                response, _ = client.recvfrom(1024)
-                client.close()
-                
-                if response:
-                    unpacked = struct.unpack('!12I', response[:48])
-                    timestamp = unpacked[10] - 2208988800
-                    return datetime.fromtimestamp(timestamp, tz=timezone.get_current_timezone())
-            except Exception:
-                continue
-    except Exception:
-        pass
-    return None
-
-
-def get_current_time():
-    network_time = get_network_time()
-    if network_time:
-        return network_time
-    return timezone.now()
 
 
 def is_admin_user(user):
     try:
-        return user.profile.user_type == 'admin'
+        return user.profile.user_type in ('admin', 'super_admin')
+    except Profile.DoesNotExist:
+        return False
+
+def is_super_admin_user(user):
+    try:
+        return user.profile.user_type == 'super_admin'
     except Profile.DoesNotExist:
         return False
 
@@ -112,7 +87,18 @@ def admin_dashboard(request):
         messages.error(request, '您没有权限访问此页面')
         return redirect('court_list')
     
-    return render(request, 'booking/admin/admin_dashboard.html')
+    return render(request, 'booking/admin/admin_dashboard.html', {
+        'is_super_admin': is_super_admin_user(request.user),
+    })
+
+
+@login_required
+def training_dashboard(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    return render(request, 'booking/admin/training_dashboard.html')
 
 
 @login_required
@@ -593,17 +579,33 @@ def get_time_slots(request):
     except ValueError:
         return JsonResponse({'error': '日期格式错误'}, status=400)
 
-    courts = Court.objects.all()
+    courts = Court.objects.select_related('court_type').all()
     if court_id:
         courts = courts.filter(id=court_id)
+
+    # 批量查 availability — 一次查询，按 court_id 分组
+    avail_qs = CourtAvailability.objects.filter(
+        start_date__lte=selected_date,
+        end_date__gte=selected_date
+    )
+    avail_map = {a.court_id: a for a in avail_qs}
+
+    # 批量查 bookings — 一次查询，按 court_id 分组，含课程预约学生信息
+    all_bookings = Booking.objects.filter(
+        court__in=[c.id for c in courts],
+        date=selected_date,
+        status='active'
+    ).prefetch_related(
+        models.Prefetch('students', queryset=BookingStudent.objects.select_related('student'))
+    )
+
+    bookings_by_court = {}
+    for b in all_bookings:
+        bookings_by_court.setdefault(b.court_id, []).append(b)
+
     data = []
-    
     for court in courts:
-        availability = CourtAvailability.objects.filter(
-            court=court,
-            start_date__lte=selected_date,
-            end_date__gte=selected_date
-        ).first()
+        availability = avail_map.get(court.id)
         
         court_data = {
             'id': court.id,
@@ -618,30 +620,27 @@ def get_time_slots(request):
         }
         
         if availability:
-            bookings = Booking.objects.filter(
-                court=court,
-                date=selected_date,
-                status='active'
-            )
+            bookings = bookings_by_court.get(court.id, [])
 
             booked_slots = {}
             for booking in bookings:
                 current = datetime.combine(selected_date, booking.start_time)
                 end_dt = datetime.combine(selected_date, booking.end_time)
+                slot_info = {
+                    'booking_type': booking.booking_type,
+                    'booking_id': booking.id,
+                    'booker_name': booking.booker_name,
+                    'booker_phone': booking.booker_phone,
+                }
+                if booking.booking_type == 'course':
+                    students = [
+                        {'student__name': s.student.name, 'student__phone': s.student.phone, 'class_hours': s.class_hours}
+                        for s in booking.students.all()
+                    ]
+                    slot_info['students'] = students
+                    slot_info['student_count'] = len(students)
+                    slot_info['total_class_hours'] = sum(s['class_hours'] for s in booking.students.all())
                 while current < end_dt:
-                    slot_info = {
-                        'booking_type': booking.booking_type,
-                        'booking_id': booking.id,
-                        'booker_name': booking.booker_name,
-                        'booker_phone': booking.booker_phone,
-                    }
-                    if booking.booking_type == 'course':
-                        students = list(booking.students.select_related('student').values(
-                            'student__name', 'student__phone', 'class_hours'
-                        ))
-                        slot_info['students'] = students
-                        slot_info['student_count'] = len(students)
-                        slot_info['total_class_hours'] = sum(s['class_hours'] for s in students)
                     booked_slots[current.time()] = slot_info
                     current += timedelta(minutes=30)
 
@@ -677,7 +676,7 @@ def get_time_slots(request):
         
         data.append(court_data)
 
-    now = get_current_time()
+    now = timezone.localtime()
     return JsonResponse({
         'courts': data,
         'server_time': now.strftime('%Y-%m-%d %H:%M:%S'),
@@ -1129,3 +1128,64 @@ def admin_course_booking_delete(request, booking_id):
     booking.delete()
     messages.success(request, '课程预约已删除')
     return redirect('admin_course_booking_list')
+
+
+@login_required
+def admin_user_list(request):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    users = User.objects.select_related('profile').all().order_by('username')
+    return render(request, 'booking/admin/admin_user_list.html', {'users': users})
+
+
+@login_required
+def admin_user_edit(request, user_id):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    user = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        new_user_type = request.POST.get('user_type')
+        email = request.POST.get('email')
+        
+        if new_user_type not in dict(Profile.USER_TYPE_CHOICES):
+            messages.error(request, '无效的用户类型')
+            return redirect('admin_user_edit', user_id=user_id)
+        
+        # 不允许超级管理员把自己降级
+        if user == request.user and new_user_type != 'super_admin':
+            messages.error(request, '不能修改自己的用户类型')
+            return redirect('admin_user_edit', user_id=user_id)
+        
+        user.email = email
+        user.save()
+        
+        profile = user.profile
+        profile.user_type = new_user_type
+        profile.save()
+        
+        messages.success(request, f'用户 "{user.username}" 信息已更新')
+        return redirect('admin_user_list')
+    
+    return render(request, 'booking/admin/admin_user_edit.html', {'edit_user': user})
+
+
+@login_required
+def admin_user_delete(request, user_id):
+    if not is_super_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('admin_dashboard')
+    
+    if request.user.id == user_id:
+        messages.error(request, '不能删除自己的账号')
+        return redirect('admin_user_list')
+    
+    user = get_object_or_404(User, id=user_id)
+    username = user.username
+    user.delete()
+    messages.success(request, f'用户 "{username}" 已删除')
+    return redirect('admin_user_list')

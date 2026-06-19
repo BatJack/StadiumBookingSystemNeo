@@ -29,15 +29,15 @@
 
 ### 登录页面
 
-![登录页面](assets/login.png)
+<img src="assets/login.png" alt="登录页面" width="600">
 
 ### 创建用户
 
-![创建用户](assets/create_user.png)
+<img src="assets/create_user.png" alt="创建用户" width="600">
 
 ### 场地预约（矩阵式）
 
-![场地预约](assets/book_court.png)
+<img src="assets/book_court.png" alt="场地预约" width="600">
 
 ---
 

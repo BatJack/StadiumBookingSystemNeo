@@ -117,10 +117,8 @@
         display: block;
         margin-bottom: 10px;
         font-weight: 600;
-        color: #2c3e50;
+        color: #334155;
         font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .input-wrapper {
@@ -130,10 +128,10 @@
     .input-wrapper input {
         width: 100%;
         padding: 16px 16px 16px 50px;
-        background: #ecf0f1;
-        border: 3px solid transparent;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
         font-size: 15px;
-        color: #2c3e50;
+        color: #1e293b;
         border-radius: var(--radius);
         transition: all 0.2s ease;
     }
@@ -142,6 +140,12 @@
         outline: none;
         background: #ffffff;
         border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .input-wrapper input:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
 
     .input-wrapper input::placeholder {
@@ -196,18 +200,24 @@
         border: none;
         cursor: pointer;
         border-radius: var(--radius);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: background 0.2s ease;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
         margin-top: 8px;
     }
 
     .btn-login:hover {
         background: #2980b9;
+        transform: translateY(-1px);
     }
 
     .btn-login:active {
         background: #21618c;
+        transform: translateY(0);
+    }
+
+    .btn-login:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
 
     .btn-login:disabled {
@@ -239,11 +249,11 @@
         text-align: center;
         margin-top: 32px;
         padding-top: 24px;
-        border-top: 3px solid #ecf0f1;
+        border-top: 1px solid #e5e7eb;
     }
 
     .login-footer p {
-        color: #7f8c8d;
+        color: #64748b;
         font-size: 14px;
     }
 
@@ -257,21 +267,6 @@
     .login-footer a:hover {
         color: #2980b9;
     }
-
-    .color-bar {
-        display: flex;
-        margin-top: 32px;
-    }
-
-    .color-bar span {
-        flex: 1;
-        height: 6px;
-    }
-
-    .color-bar span:nth-child(1) { background: #3498db; }
-    .color-bar span:nth-child(2) { background: #2ecc71; }
-    .color-bar span:nth-child(3) { background: #f39c12; }
-    .color-bar span:nth-child(4) { background: #e74c3c; }
 
     @media (max-width: 480px) {
         .login-card {
@@ -356,13 +351,6 @@
 
         <div class="login-footer">
             <p>还没有账户？ <a href="#">联系管理员</a></p>
-        </div>
-
-        <div class="color-bar">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
         </div>
     </div>
 </div>

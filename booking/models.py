@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     USER_TYPE_CHOICES = [
+        ('super_admin', '超级管理员'),
         ('admin', '管理员'),
         ('regular', '普通用户'),
     ]

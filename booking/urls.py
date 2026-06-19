@@ -10,6 +10,7 @@ urlpatterns = [
     path('my-bookings/', views.my_bookings, name='my_bookings'),
     path('cancel-booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
     path('manage/', views.admin_dashboard, name='admin_dashboard'),
+    path('manage/training/', views.training_dashboard, name='training_dashboard'),
     path('manage/statistics/', views.admin_statistics, name='admin_statistics'),
     path('manage/courts/', views.admin_court_list, name='admin_court_list'),
     path('manage/courts/add/', views.admin_court_add, name='admin_court_add'),
@@ -34,4 +35,7 @@ urlpatterns = [
     path('manage/course-bookings/add/', views.admin_course_booking_add, name='admin_course_booking_add'),
     path('manage/course-bookings/edit/<int:booking_id>/', views.admin_course_booking_edit, name='admin_course_booking_edit'),
     path('manage/course-bookings/delete/<int:booking_id>/', views.admin_course_booking_delete, name='admin_course_booking_delete'),
+    path('manage/users/', views.admin_user_list, name='admin_user_list'),
+    path('manage/users/edit/<int:user_id>/', views.admin_user_edit, name='admin_user_edit'),
+    path('manage/users/delete/<int:user_id>/', views.admin_user_delete, name='admin_user_delete'),
 ]

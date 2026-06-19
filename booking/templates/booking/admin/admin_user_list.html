@@ -1,6 +1,6 @@
 {% extends 'booking/base.html' %}
 
-{% block title %}预约管理 - 体育场馆预约系统{% endblock %}
+{% block title %}用户管理 - 体育场馆预约系统{% endblock %}
 
 {% block content %}
 <style>
@@ -53,6 +53,23 @@
         min-width: 600px;
         border-radius: var(--radius);
     }
+    .user-type-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+    }
+    .user-type-badge.super_admin {
+        background: #e74c3c;
+    }
+    .user-type-badge.admin {
+        background: #3498db;
+    }
+    .user-type-badge.regular {
+        background: #2ecc71;
+    }
 
     @media (max-width: 768px) {
         .page-header {
@@ -94,60 +111,50 @@
             <polyline points="15 18 9 12 15 6"/>
         </svg>
     </a>
-    <span class="page-header-title">预约管理</span>
+    <span class="page-header-title">用户管理</span>
 </div>
 
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">预约列表</h2>
-            <a href="{% url 'admin_booking_add' %}" class="btn btn-success">+ 添加预约</a>
+            <h2 style="margin: 0;">用户列表</h2>
         </div>
 
-        {% if bookings %}
+        {% if users %}
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th style="width: 60px;">ID</th>
-                            <th>预约人</th>
-                            <th>联系方式</th>
-                            <th>场地</th>
-                            <th>日期</th>
-                            <th>时间</th>
-                            <th>状态</th>
-                            <th style="width: 100px;">操作</th>
+                            <th>用户名</th>
+                            <th>邮箱</th>
+                            <th>用户类型</th>
+                            <th>创建时间</th>
+                            <th style="width: 160px;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for booking in bookings %}
+                        {% for u in users %}
                             <tr>
                                 <td>
-                                    <span class="badge badge-primary">{{ booking.id }}</span>
+                                    <span class="badge badge-primary">{{ u.id }}</span>
                                 </td>
                                 <td>
-                                    <strong>{{ booking.booker_name }}</strong>
+                                    <strong>{{ u.username }}</strong>
                                 </td>
-                                <td>{{ booking.booker_phone }}</td>
-                                <td>{{ booking.court.name }}</td>
-                                <td>{{ booking.date|date:"Y-m-d" }}</td>
-                                <td>{{ booking.start_time|time:"H:i" }} - {{ booking.end_time|time:"H:i" }}</td>
+                                <td>{{ u.email|default:"-" }}</td>
                                 <td>
-                                    {% if booking.status == 'active' %}
-                                        <span class="badge badge-success">进行中</span>
-                                    {% elif booking.status == 'cancelled' %}
-                                        <span class="badge badge-danger">已取消</span>
-                                    {% elif booking.status == 'completed' %}
-                                        <span class="badge badge-warning">已完成</span>
-                                    {% else %}
-                                        <span class="badge">{{ booking.get_status_display }}</span>
-                                    {% endif %}
+                                    <span class="user-type-badge {{ u.profile.user_type }}">
+                                        {{ u.profile.get_user_type_display }}
+                                    </span>
                                 </td>
+                                <td>{{ u.date_joined|date:"Y-m-d H:i" }}</td>
                                 <td>
-                                    {% if booking.status == 'active' %}
-                                        <div class="action-btns">
-                                            <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-sm btn-danger" onclick="return confirm('确定要取消这个预约吗？')">取消</a>
-                                        </div>
-                                    {% endif %}
+                                    <div class="action-btns">
+                                        <a href="{% url 'admin_user_edit' u.id %}" class="btn btn-sm btn-outline">编辑</a>
+                                        {% if u.id != request.user.id %}
+                                            <a href="{% url 'admin_user_delete' u.id %}" class="btn btn-sm btn-danger" onclick="return confirm('确定要删除用户「{{ u.username }}」吗？')">删除</a>
+                                        {% endif %}
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -156,15 +163,8 @@
             </div>
         {% else %}
             <div class="empty-state">
-                <svg class="empty-state-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10 9 9 9 8 9"/>
-                </svg>
-                <h3>暂无预约记录</h3>
-                <p>点击上方"添加预约"按钮创建预约</p>
+                <div class="empty-state-icon">👥</div>
+                <h3>暂无用户</h3>
             </div>
         {% endif %}
     </div>

@@ -10,7 +10,7 @@
         gap: 16px;
         margin-bottom: 24px;
         padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
+        border-bottom: 1px solid #e5e7eb;
     }
     .back-btn {
         display: inline-flex;
@@ -19,20 +19,72 @@
         width: 40px;
         height: 40px;
         border-radius: var(--radius);
-        background-color: var(--gray-800);
+        background-color: #3498db;
         color: white;
         text-decoration: none;
-        transition: var(--transition);
+        transition: all 0.2s ease;
         flex-shrink: 0;
     }
     .back-btn:hover {
-        background-color: var(--gray-900);
-        transform: translateX(-2px);
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+    .back-btn:active {
+        transform: translateY(0);
+    }
+    .back-btn:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
     .page-header-title {
         font-size: 24px;
-        font-weight: 600;
-        color: var(--gray-900);
+        font-weight: 700;
+        color: #2c3e50;
+        white-space: nowrap;
+    }
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: var(--radius);
+    }
+    table {
+        padding: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        min-width: 600px;
+        border-radius: var(--radius);
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header-title {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+        }
+        .page-header-title {
+            font-size: 18px;
+        }
+        .action-btns {
+            flex-direction: column;
+            gap: 6px;
+        }
+        .action-btns .btn {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
 
@@ -101,7 +153,13 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
+            <svg class="empty-state-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+            </svg>
             <h3>暂无课程预约</h3>
             <p>点击上方"新增预约"按钮创建课程预约</p>
         </div>

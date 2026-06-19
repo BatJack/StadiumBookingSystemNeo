@@ -22,8 +22,6 @@
             <p>请选择日期查看可用场地</p>
         </div>
     </div>
-
-    <div id="booking-summary-overlay" class="booking-summary-overlay"></div>
     <div id="booking-summary" class="booking-summary">
         <h4>预约确认</h4>
         <p id="booking-info"></p>
@@ -56,25 +54,6 @@
         </div>
     </div>
 
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-dot available"></div>
-            <span>可预约</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot booked"></div>
-            <span>已被预约</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot selected"></div>
-            <span>已选择</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot past"></div>
-            <span>已过时</span>
-        </div>
-    </div>
-
     <style>
         .court-type-filter {
             display: flex;
@@ -83,14 +62,15 @@
             margin-bottom: 20px;
             padding: 16px;
             background: white;
-            border: 3px solid #ecf0f1;
+            border: 1px solid #e5e7eb;
             border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
         }
         .filter-btn {
             padding: 10px 20px;
-            background: #ecf0f1;
-            color: #2c3e50;
-            border: 3px solid #bdc3c7;
+            background: #f8fafc;
+            color: #334155;
+            border: 1px solid #cbd5e1;
             border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
@@ -98,7 +78,9 @@
             transition: all 0.2s ease;
         }
         .filter-btn:hover {
-            background: #bdc3c7;
+            background: #e2e8f0;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
         }
         .filter-btn.active {
             background: #3498db;
@@ -107,15 +89,30 @@
         }
         .matrix-wrapper {
             background: white;
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             padding: 0px;
             margin-top: 0px;
             margin-bottom: 0px;
-            box-shadow: none;
-            border: 3px solid #ecf0f1;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .matrix-legend {
+            display: flex;
+            gap: 24px;
+            padding: 16px 20px;
+            justify-content: center;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+        .matrix-scroll-container {
             overflow-x: auto;
             overflow-y: auto;
             max-height: 80vh;
+            flex: 1;
         }
         .matrix-table tbody tr {
             content-visibility: auto;
@@ -126,13 +123,14 @@
             margin: 0px;
             width: auto;
             border-collapse: separate;
-            border-spacing: 0;
+            border-spacing: 6px;
         }
         .matrix-table th,
         .matrix-table td {
             padding: 0;
             text-align: center;
-            border: 3px solid #ecf0f1;
+            border: none;
+            background: transparent;
         }
         .matrix-table thead th {
             min-width: 140px;
@@ -150,6 +148,7 @@
             z-index: 10;
             padding: 6px 8px;
             line-height: 1.3;
+            border-radius: var(--radius);
         }
         .matrix-table thead th:not(:first-child) {
             overflow: hidden;
@@ -164,6 +163,7 @@
             position: sticky;
             left: 0;
             z-index: 11;
+            border-radius: var(--radius);
         }
         .matrix-table tbody td:first-child {
             background: #ecf0f1;
@@ -175,6 +175,7 @@
             width: 60px;
             min-width: 60px;
             padding: 8px;
+            border-radius: var(--radius);
         }
         .time-cell {
             padding: 8px 4px;
@@ -201,18 +202,20 @@
             opacity: 0.8;
         }
         .time-cell.available {
-            background: #ecf0f1;
-            color: #2c3e50;
-            border: 3px solid #2ecc71;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #86efac;
         }
         .time-cell.available:hover {
             background: #2ecc71;
             color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         .time-cell.booked {
-            background: #e74c3c;
-            color: white;
-            border: 3px solid #c0392b;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
             cursor: not-allowed;
         }
         .time-cell.booked:hover {
@@ -232,7 +235,7 @@
             font-size: 11px;
             font-weight: 500;
             margin-top: 1px;
-            color: #f5b7b1;
+            color: #dc2626;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -242,7 +245,7 @@
             font-size: 10px;
             opacity: 0.8;
             margin-top: 1px;
-            color: #fadbd8;
+            color: #f87171;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -264,9 +267,9 @@
             opacity: 1;
         }
         .time-cell.past {
-            background: #bdc3c7;
-            color: #7f8c8d;
-            border: 3px solid #95a5a6;
+            background: #f1f5f9;
+            color: #94a3b8;
+            border: 1px solid #cbd5e1;
             cursor: not-allowed;
         }
         .time-cell.past:hover {
@@ -284,14 +287,14 @@
         .time-cell.selected {
             background: #3498db;
             color: white;
-            border: 3px solid #2980b9;
+            border: 1px solid #2980b9;
         }
         .time-cell.selected:hover {
             background: #2980b9;
         }
         .time-cell.no-court {
-            background: #ecf0f1;
-            color: #bdc3c7;
+            background: #f8fafc;
+            color: #cbd5e1;
             cursor: not-allowed;
         }
         .time-cell .slot-label {
@@ -416,22 +419,23 @@
             background: #bdc3c7;
             border-color: #95a5a6;
         }
-        .legend {
+        .matrix-legend {
             display: flex;
             gap: 24px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 3px solid #ecf0f1;
+            padding: 16px 20px;
             justify-content: center;
+            border-bottom: 3px solid #ecf0f1;
+            background: white;
+            flex-shrink: 0;
         }
-        .legend-item {
+        .matrix-legend .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 14px;
             color: #7f8c8d;
         }
-        .legend-dot {
+        .matrix-legend .legend-dot {
             width: 20px;
             height: 20px;
             border-radius: var(--radius);
@@ -826,6 +830,13 @@
             </div>`;
 
             html += '<div class="matrix-wrapper">';
+            html += '<div class="matrix-legend">';
+            html += '<div class="legend-item"><div class="legend-dot available"></div><span>可预约</span></div>';
+            html += '<div class="legend-item"><div class="legend-dot booked"></div><span>已被预约</span></div>';
+            html += '<div class="legend-item"><div class="legend-dot selected"></div><span>已选择</span></div>';
+            html += '<div class="legend-item"><div class="legend-dot past"></div><span>已过时</span></div>';
+            html += '</div>';
+            html += '<div class="matrix-scroll-container">';
             html += '<table class="matrix-table">';
             
             html += '<thead><tr>';

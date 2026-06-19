@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vyvu_t_39q#6lj_1ws0bv1gb_%m#iior%v)^mkjp+#*9vmri04'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    try:
+        from local_settings import *
+    except ImportError:
+        raise RuntimeError(
+            'DJANGO_SECRET_KEY 环境变量未设置，且无 local_settings.py。\n'
+            '请复制 local_settings.py.example 为 local_settings.py 并填入密钥。'
+        )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -76,7 +85,7 @@ WSGI_APPLICATION = 'stadium_booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 
@@ -118,14 +127,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Cache (using local memory cache - sessions lost on server restart)
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
+# Session configuration (database-backed — can browse via admin)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-# Session configuration (cache-backed so sessions lost on server restart)
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
+# Session expiry: 7 days (in seconds)
+SESSION_COOKIE_AGE = 604800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
