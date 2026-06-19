@@ -42,6 +42,8 @@ env/
 .vscode/
 .idea/
 .trae/skills/ui-ux-pro-max/
+.trae/skills/design-taste-frontend/
+.trae/skills/redesign-existing-projects/
 *.swp
 *.swo
 *~
