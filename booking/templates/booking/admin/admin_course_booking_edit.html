@@ -10,7 +10,7 @@
         gap: 16px;
         margin-bottom: 24px;
         padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
+        border-bottom: 1px solid #e5e7eb;
     }
     .back-btn {
         display: inline-flex;
@@ -19,27 +19,34 @@
         width: 40px;
         height: 40px;
         border-radius: var(--radius);
-        background-color: var(--gray-800);
+        background-color: #3498db;
         color: white;
         text-decoration: none;
-        transition: var(--transition);
+        transition: all 0.2s ease;
         flex-shrink: 0;
     }
     .back-btn:hover {
-        background-color: var(--gray-900);
-        transform: translateX(-2px);
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+    .back-btn:active {
+        transform: translateY(0);
+    }
+    .back-btn:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
     .page-header-title {
         font-size: 24px;
-        font-weight: 600;
-        color: var(--gray-900);
+        font-weight: 700;
+        color: #1e293b;
     }
     .booking-info-card {
-        background: var(--gray-50);
+        background: #f8fafc;
         border-radius: var(--radius);
         padding: 20px;
         margin-bottom: 24px;
-        border: 1px solid var(--gray-200);
+        border: 1px solid #e5e7eb;
     }
     .booking-info-grid {
         display: grid;
@@ -48,16 +55,14 @@
     }
     .booking-info-item label {
         font-size: 12px;
-        color: var(--gray-500);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        color: #64748b;
         display: block;
         margin-bottom: 4px;
     }
     .booking-info-item span {
         font-size: 16px;
         font-weight: 600;
-        color: var(--gray-900);
+        color: #1e293b;
     }
     .student-list-item {
         display: flex;
@@ -66,8 +71,13 @@
         padding: 12px 16px;
         background: white;
         border-radius: var(--radius);
-        border: 1px solid var(--gray-200);
+        border: 1px solid #e5e7eb;
         margin-bottom: 8px;
+        transition: all 0.2s ease;
+    }
+    .student-list-item:hover {
+        border-color: #3498db;
+        box-shadow: var(--shadow-sm);
     }
     .student-list-item:last-child {
         margin-bottom: 0;
@@ -81,8 +91,8 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: var(--primary-light);
-        color: var(--primary);
+        background: #dbeafe;
+        color: #2563eb;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -91,27 +101,27 @@
     }
     .student-name {
         font-weight: 600;
-        color: var(--gray-900);
+        color: #1e293b;
         font-size: 14px;
     }
     .student-phone {
         font-size: 12px;
-        color: var(--gray-500);
+        color: #64748b;
     }
     .student-hours {
         font-size: 13px;
-        color: var(--primary);
+        color: #059669;
         font-weight: 600;
-        background: var(--primary-light);
+        background: #d1fae5;
         padding: 4px 10px;
         border-radius: 12px;
     }
     .add-student-form {
-        background: var(--gray-50);
+        background: #f8fafc;
         border-radius: var(--radius);
         padding: 20px;
         margin-top: 16px;
-        border: 1px solid var(--gray-200);
+        border: 1px solid #e5e7eb;
     }
     .add-student-form .form-row {
         display: flex;
@@ -128,7 +138,7 @@
     .student-select-list {
         max-height: 200px;
         overflow-y: auto;
-        border: 1px solid var(--gray-300);
+        border: 1px solid #cbd5e1;
         border-radius: var(--radius);
         padding: 8px;
         background: white;
@@ -137,28 +147,33 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 6px 8px;
-        border-radius: 4px;
+        padding: 8px 10px;
+        border-radius: var(--radius-sm);
         cursor: pointer;
-        transition: var(--transition);
+        transition: all 0.15s ease;
     }
     .student-checkbox:hover {
-        background: var(--gray-50);
+        background: #f1f5f9;
     }
     .student-checkbox input[type="checkbox"] {
         width: 16px;
         height: 16px;
-        accent-color: var(--primary);
+        accent-color: #3498db;
+        cursor: pointer;
     }
     .student-checkbox label {
         cursor: pointer;
         font-size: 14px;
-        color: var(--gray-700);
+        color: #334155;
         flex: 1;
+        margin: 0;
     }
     .student-checkbox .hours-info {
         font-size: 12px;
-        color: var(--gray-400);
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 2px 8px;
+        border-radius: 10px;
     }
     .edit-form-inline {
         display: flex;

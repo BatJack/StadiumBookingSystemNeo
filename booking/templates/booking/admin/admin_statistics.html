@@ -10,7 +10,7 @@
         gap: 16px;
         margin-bottom: 24px;
         padding-bottom: 20px;
-        border-bottom: 3px solid #ecf0f1;
+        border-bottom: 1px solid #e5e7eb;
     }
     .back-btn {
         display: inline-flex;
@@ -22,13 +22,19 @@
         background-color: #3498db;
         color: white;
         text-decoration: none;
-        transition: var(--transition);
+        transition: all 0.2s ease;
         flex-shrink: 0;
-        border: 3px solid transparent;
     }
     .back-btn:hover {
         background-color: #2980b9;
-        border-color: #3498db;
+        transform: translateY(-1px);
+    }
+    .back-btn:active {
+        transform: translateY(0);
+    }
+    .back-btn:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
     .page-header-title {
         font-size: 24px;
@@ -47,14 +53,14 @@
         background: white;
         border-radius: var(--radius);
         padding: 28px;
-        border: 3px solid #ecf0f1;
-        transition: var(--transition);
+        border: 1px solid #e5e7eb;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
         position: relative;
         overflow: hidden;
     }
 
     .stat-card:hover {
-        border-color: #3498db;
         box-shadow: var(--shadow-md);
         transform: translateY(-2px);
     }
@@ -111,10 +117,8 @@
 
     .stat-card-label {
         font-size: 13px;
-        color: #7f8c8d;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        color: #64748b;
+        font-weight: 500;
     }
 
     @media (max-width: 768px) {
