@@ -120,21 +120,22 @@
         .messages .message {
             padding: 14px 18px;
             margin-bottom: 12px;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 10px;
+            box-shadow: var(--shadow-sm);
         }
         .messages .error {
-            background-color: #e74c3c;
-            color: white;
-            border-left: 6px solid #c0392b;
+            background-color: #fef2f2;
+            color: #dc2626;
+            border-left: 4px solid #dc2626;
         }
         .messages .success {
-            background-color: #2ecc71;
-            color: white;
-            border-left: 6px solid #27ae60;
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border-left: 4px solid #16a34a;
         }
         .btn {
             display: inline-flex;
@@ -155,31 +156,40 @@
         }
         .btn:hover {
             background-color: #2980b9;
+            transform: translateY(-1px);
         }
         .btn:active {
             background-color: #21618c;
+            transform: translateY(0);
+        }
+        .btn:focus-visible {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
         }
         .btn-danger {
-            background-color: #e74c3c;
+            background-color: #ef4444;
         }
         .btn-danger:hover {
-            background-color: #c0392b;
+            background-color: #dc2626;
+            transform: translateY(-1px);
         }
         .btn-success {
-            background-color: #2ecc71;
+            background-color: #10b981;
         }
         .btn-success:hover {
-            background-color: #27ae60;
+            background-color: #059669;
+            transform: translateY(-1px);
         }
         .btn-outline {
             background-color: transparent;
             color: #2c3e50;
-            border: 3px solid #bdc3c7;
+            border: 1px solid #cbd5e1;
             border-radius: var(--radius);
         }
         .btn-outline:hover {
-            background-color: #ecf0f1;
-            border-color: #95a5a6;
+            background-color: #f8fafc;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
         }
         .btn-sm {
             padding: 6px 12px;
@@ -192,11 +202,11 @@
         }
         .card {
             background-color: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 24px;
-            box-shadow: none;
+            box-shadow: var(--shadow-sm);
             margin-bottom: 24px;
-            border: 3px solid #ecf0f1;
+            border: 1px solid #e5e7eb;
         }
         .card h2 {
             margin-bottom: 20px;
@@ -217,12 +227,12 @@
         table th, table td {
             padding: 14px 16px;
             text-align: left;
-            border-bottom: 3px solid #ecf0f1;
+            border-bottom: 1px solid #e5e7eb;
         }
         table th {
-            background-color: #3498db;
+            background-color: #f8fafc;
             font-weight: 600;
-            color: white;
+            color: #475569;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -232,10 +242,10 @@
             transition: var(--transition);
         }
         table tbody tr:hover {
-            background-color: #ecf0f1;
+            background-color: #f8fafc;
         }
         table tbody td {
-            color: #2c3e50;
+            color: #334155;
             font-size: 14px;
         }
         .form-group {
@@ -245,30 +255,29 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #334155;
             font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0;
         }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px 14px;
-            border: 3px solid #bdc3c7;
-            border-radius: 0;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius);
             font-size: 14px;
             transition: var(--transition);
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background-color: white;
+            color: #1e293b;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: #3498db;
-            background-color: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
         .form-group small {
             display: block;
             margin-top: 6px;
-            color: #7f8c8d;
+            color: #64748b;
             font-size: 12px;
         }
         .grid {
@@ -298,14 +307,15 @@
         }
         .court-card {
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: none;
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
-            border: 3px solid #ecf0f1;
+            border: 1px solid #e5e7eb;
         }
         .court-card:hover {
-            border-color: #3498db;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
         .court-card-header {
             background: #3498db;
@@ -329,8 +339,8 @@
         }
         .court-card-footer {
             padding: 16px 20px;
-            background: #ecf0f1;
-            border-top: 3px solid #bdc3c7;
+            background: #f8fafc;
+            border-top: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -340,7 +350,7 @@
             align-items: center;
             gap: 6px;
             padding: 6px 12px;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 12px;
             font-weight: 600;
         }
@@ -355,7 +365,7 @@
         .status-dot {
             width: 8px;
             height: 8px;
-            border-radius: 0;
+            border-radius: 50%;
             display: inline-block;
         }
         .status-available .status-dot {
@@ -369,7 +379,7 @@
             background: #2ecc71;
             color: white;
             text-decoration: none;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-weight: 600;
             transition: var(--transition);
             border: none;
@@ -378,6 +388,7 @@
         }
         .btn-book:hover {
             background: #27ae60;
+            transform: translateY(-1px);
         }
         .empty-state {
             text-align: center;
@@ -408,23 +419,23 @@
         }
         .date-selector input {
             padding: 10px 14px;
-            border: 3px solid #bdc3c7;
+            border: 1px solid #cbd5e1;
             border-radius: var(--radius);
             font-size: 14px;
             transition: var(--transition);
-            background-color: #ecf0f1;
+            background-color: white;
         }
         .date-selector input:focus {
             border-color: #3498db;
-            background-color: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
         .time-grid-container {
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 24px;
-            box-shadow: none;
+            box-shadow: var(--shadow-sm);
             margin-bottom: 24px;
-            border: 3px solid #ecf0f1;
+            border: 1px solid #e5e7eb;
         }
         .time-grid-header {
             display: flex;
@@ -432,7 +443,7 @@
             align-items: center;
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 3px solid #ecf0f1;
+            border-bottom: 1px solid #e5e7eb;
         }
         .time-grid-header h4 {
             color: #2c3e50;
@@ -448,26 +459,27 @@
             min-width: 80px;
             padding: 12px 10px;
             text-align: center;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            border: 3px solid transparent;
+            border: 1px solid transparent;
         }
         .time-slot.available {
-            background: #ecf0f1;
+            background: #f8fafc;
             color: #2c3e50;
             border-color: #2ecc71;
         }
         .time-slot.available:hover {
             background: #2ecc71;
             color: white;
+            transform: translateY(-1px);
         }
         .time-slot.booked {
-            background: #e74c3c;
-            color: white;
-            border-color: #c0392b;
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fecaca;
             cursor: not-allowed;
         }
         .time-slot.selected {
@@ -479,9 +491,9 @@
             background: #2980b9;
         }
         .booking-summary {
-            background: #ecf0f1;
-            border-left: 6px solid #3498db;
-            border-radius: 0;
+            background: #f8fafc;
+            border-left: 4px solid #3498db;
+            border-radius: var(--radius);
             padding: 20px;
             margin-top: 20px;
             display: none;
@@ -507,7 +519,7 @@
             background: #2ecc71;
             color: white;
             border: none;
-            border-radius: 0;
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -515,52 +527,51 @@
         }
         .btn-confirm:hover {
             background: #27ae60;
+            transform: translateY(-1px);
         }
         .btn-cancel {
             padding: 12px 28px;
-            background: #ecf0f1;
-            color: #7f8c8d;
-            border: 3px solid #bdc3c7;
-            border-radius: 0;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
         }
         .btn-cancel:hover {
-            background: #bdc3c7;
-            border-color: #95a5a6;
+            background: #e2e8f0;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
         }
         .legend {
             display: flex;
             gap: 24px;
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 3px solid #ecf0f1;
+            border-top: 1px solid #e5e7eb;
         }
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 13px;
-            color: #7f8c8d;
+            color: #64748b;
         }
         .legend-dot {
             width: 16px;
             height: 16px;
-            border-radius: 0;
+            border-radius: var(--radius-sm);
         }
         .legend-dot.available {
             background: #2ecc71;
-            border: 3px solid #27ae60;
         }
         .legend-dot.booked {
             background: #e74c3c;
-            border: 3px solid #c0392b;
         }
         .legend-dot.selected {
             background: #3498db;
-            border: 3px solid #2980b9;
         }
         .no-availability {
             text-align: center;
@@ -625,19 +636,20 @@
         }
         .stat-card {
             background: white;
-            border-radius: 0;
+            border-radius: var(--radius);
             padding: 24px;
-            border: 3px solid #ecf0f1;
-            box-shadow: none;
+            border: 1px solid #e5e7eb;
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
         }
         .stat-card:hover {
-            border-color: #3498db;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
         .stat-card-icon {
             width: 48px;
             height: 48px;
-            border-radius: 0;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
