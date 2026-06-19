@@ -29,7 +29,7 @@
 
 ### 登录页面
 
-![登录页面](assets/login.png)
+![登录页面](assets/login_beta.png)
 
 ### 创建用户
 
@@ -37,7 +37,7 @@
 
 ### 场地预约（矩阵式）
 
-![场地预约](assets/book_court.png)
+![场地预约](assets/book_court_beta.png)
 
 ---
 
