@@ -1,4 +1,4 @@
-﻿{% extends 'booking/base.html' %}
+{% extends 'booking/base.html' %}
 
 {% block title %}场地列表 - 体育场馆预约系统{% endblock %}
 
@@ -604,10 +604,12 @@
             .matrix-wrapper {
                 max-height: 70vh;
                 padding: 0;
+                border-radius: 6px;
             }
             .matrix-table th,
             .matrix-table td {
                 padding: 8px 4px;
+                font-size: 12px;
             }
             .legend {
                 flex-wrap: wrap;
@@ -618,30 +620,60 @@
                 flex: 1 1 auto;
                 min-width: calc(50% - 6px);
             }
+            .booking-summary {
+                padding: 16px;
+                border-radius: 6px;
+            }
+            .booking-summary h4 {
+                font-size: 15px;
+            }
+            .booking-summary p {
+                font-size: 13px;
+            }
+            .modal-content {
+                width: 92%;
+                margin: 20px auto;
+                border-radius: 6px;
+            }
+            .modal-header {
+                padding: 16px 18px;
+            }
+            .modal-body {
+                padding: 16px 18px;
+            }
+            .modal-footer {
+                padding: 16px 18px;
+            }
         }
 
         @media (max-width: 480px) {
             .court-type-filter {
                 padding: 10px;
                 gap: 6px;
+                border-radius: 4px;
             }
             .filter-btn {
                 padding: 8px 12px;
                 font-size: 12px;
                 min-height: 38px;
             }
+            .matrix-wrapper {
+                border-radius: 4px;
+            }
             .matrix-table th,
             .matrix-table td {
                 padding: 6px 3px;
+                font-size: 11px;
             }
             .booking-summary {
-                padding: 16px;
+                padding: 14px;
+                border-radius: 4px;
             }
             .booking-summary h4 {
-                font-size: 16px;
+                font-size: 14px;
             }
             .booking-summary p {
-                font-size: 13px;
+                font-size: 12px;
             }
             .booking-actions {
                 flex-direction: column;
@@ -653,7 +685,8 @@
             }
             .modal-content {
                 width: 95%;
-                margin: 0 10px;
+                margin: 10px auto;
+                border-radius: 4px;
             }
             .modal-header {
                 padding: 14px 16px;
@@ -673,7 +706,7 @@
                 padding: 10px;
             }
             .legend-item span {
-                font-size: 12px;
+                font-size: 11px;
             }
         }
     </style>
