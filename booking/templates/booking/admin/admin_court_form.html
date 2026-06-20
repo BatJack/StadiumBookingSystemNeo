@@ -73,18 +73,29 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="court_number">场地编号</label>
-                    <input type="text" id="court_number" name="court_number" value="{% if court %}{{ court.court_number }}{% endif %}" placeholder="如：1号场、A区">
+                    <label for="building">所属场馆</label>
+                    <select id="building" name="building">
+                        <option value="">-- 请选择 --</option>
+                        {% for value, label in building_choices %}
+                            <option value="{{ value }}" {% if court and court.building == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <label for="name">场地名称</label>
-                <input type="text" id="name" name="name" value="{% if court %}{{ court.name }}{% endif %}" placeholder="请输入场地名称" required>
+                <label for="court_number">场地编号</label>
+                <select id="court_number" name="court_number">
+                    <option value="">-- 请选择 --</option>
+                    {% for value, label in court_number_choices %}
+                        <option value="{{ value }}" {% if court and court.court_number == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label for="description">场地描述</label>
                 <textarea id="description" name="description" rows="4" placeholder="请输入场地描述">{% if court %}{{ court.description }}{% endif %}</textarea>
             </div>
+            <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 16px;">场地名称将自动生成为：场地类型 + 所属场馆 + 场地编号</p>
             <div style="display: flex; gap: 12px; margin-top: 24px;">
                 <button type="submit" class="btn btn-success">{% if court %}更新{% else %}添加{% endif %}</button>
                 <a href="{% url 'admin_court_list' %}" class="btn btn-outline">取消</a>

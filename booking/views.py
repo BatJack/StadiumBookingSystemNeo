@@ -138,10 +138,10 @@ def admin_court_add(request):
         return redirect('court_list')
     
     if request.method == 'POST':
-        name = request.POST.get('name')
         description = request.POST.get('description')
         court_type_id = request.POST.get('court_type')
-        court_number = request.POST.get('court_number', '')
+        court_number = request.POST.get('court_number')
+        building = request.POST.get('building', '')
         
         court_type = None
         if court_type_id:
@@ -150,17 +150,31 @@ def admin_court_add(request):
             except CourtType.DoesNotExist:
                 pass
         
+        # court_number 转为整数
+        court_number_int = None
+        if court_number:
+            try:
+                court_number_int = int(court_number)
+            except (ValueError, TypeError):
+                pass
+        
         Court.objects.create(
-            name=name,
             description=description,
             court_type=court_type,
-            court_number=court_number
+            court_number=court_number_int,
+            building=building
         )
         messages.success(request, '场地添加成功')
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin/admin_court_form.html', {'court_types': court_types})
+    building_choices = Court.BUILDING_CHOICES
+    court_number_choices = Court.COURT_NUMBER_CHOICES
+    return render(request, 'booking/admin/admin_court_form.html', {
+        'court_types': court_types,
+        'building_choices': building_choices,
+        'court_number_choices': court_number_choices
+    })
 
 
 @login_required
@@ -172,10 +186,10 @@ def admin_court_edit(request, court_id):
     court = get_object_or_404(Court, id=court_id)
     
     if request.method == 'POST':
-        court.name = request.POST.get('name')
         court.description = request.POST.get('description')
         court_type_id = request.POST.get('court_type')
-        court.court_number = request.POST.get('court_number', '')
+        court_number = request.POST.get('court_number')
+        court.building = request.POST.get('building', '')
         
         if court_type_id:
             try:
@@ -185,12 +199,28 @@ def admin_court_edit(request, court_id):
         else:
             court.court_type = None
         
+        # court_number 转为整数
+        if court_number:
+            try:
+                court.court_number = int(court_number)
+            except (ValueError, TypeError):
+                court.court_number = None
+        else:
+            court.court_number = None
+        
         court.save()
         messages.success(request, '场地更新成功')
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin/admin_court_form.html', {'court': court, 'court_types': court_types})
+    building_choices = Court.BUILDING_CHOICES
+    court_number_choices = Court.COURT_NUMBER_CHOICES
+    return render(request, 'booking/admin/admin_court_form.html', {
+        'court': court,
+        'court_types': court_types,
+        'building_choices': building_choices,
+        'court_number_choices': court_number_choices
+    })
 
 
 @login_required

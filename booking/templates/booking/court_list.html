@@ -875,8 +875,7 @@
             html += '<thead><tr>';
             html += '<th class="time-header">时间</th>';
             filteredCourts.forEach(court => {
-                const courtNumber = court.court_number ? ` - ${court.court_number}` : '';
-                html += `<th class="court-header">${court.name}${courtNumber}</th>`;
+                html += `<th class="court-header">${court.name}</th>`;
             });
             html += '</tr></thead>';
 

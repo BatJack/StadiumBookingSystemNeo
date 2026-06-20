@@ -12,11 +12,23 @@ description: "Guides database modification for the stadium booking system. Invok
 | auth_user | User | Django内置用户表 |
 | booking_profile | Profile | 用户类型扩展（admin/regular） |
 | booking_courttype | CourtType | 场地类型（篮球场、网球场等） |
-| booking_court | Court | 场地表 |
+| booking_court | Court | 场地表（含场馆、编号，名称自动生成） |
 | booking_courtavailability | CourtAvailability | 场地可用时间段 |
 | booking_booking | Booking | 统一预约模型（场地/课程） |
 | booking_student | Student | 学员信息（含课时） |
 | booking_bookingstudent | BookingStudent | 预约-学员关联表 |
+
+## Court 模型字段说明
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| court_type | ForeignKey | 场地类型（篮球场、羽毛球场等） |
+| building | CharField | 所属场馆（A馆-Z馆，26个选项） |
+| court_number | IntegerField | 场地编号（1-99号） |
+| name | CharField | 场地名称（自动生成，格式：场地类型 + 所属场馆 + 场地编号） |
+| description | TextField | 场地描述 |
+
+**命名规则**：场地名称由系统自动生成，例如"篮球场 A馆 1号"，用户无需手动输入。
 
 ## 外键关系
 
