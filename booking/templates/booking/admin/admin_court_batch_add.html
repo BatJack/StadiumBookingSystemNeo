@@ -1,0 +1,283 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}批量添加场地 - 体育场馆预约系统{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    .back-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+    .back-btn:active {
+        transform: translateY(0);
+    }
+    .back-btn:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
+    }
+    .page-header-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .form-row {
+        display: flex;
+        gap: 16px;
+    }
+    .form-row .form-group {
+        flex: 1;
+    }
+    .court-numbers-input {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .court-number-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        font-size: 14px;
+    }
+    .court-number-tag .remove {
+        cursor: pointer;
+        color: #94a3b8;
+        font-weight: bold;
+    }
+    .court-number-tag .remove:hover {
+        color: #ef4444;
+    }
+    .help-text {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+    .preview-section {
+        margin-top: 24px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: var(--radius);
+        border: 1px solid #e2e8f0;
+    }
+    .preview-section h4 {
+        margin-bottom: 12px;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .preview-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .preview-item {
+        padding: 8px 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        font-size: 13px;
+        color: #334155;
+    }
+</style>
+
+<div class="page-header">
+    <a href="{% url 'admin_court_list' %}" class="back-btn" title="返回场地列表">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </a>
+    <span class="page-header-title">批量添加场地</span>
+</div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form method="post" id="batch-add-form">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="court_type">场地类型</label>
+                    <select id="court_type" name="court_type">
+                        <option value="">-- 请选择 --</option>
+                        {% for ct in court_types %}
+                            <option value="{{ ct.id }}">{{ ct.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="building">所属场馆</label>
+                    <select id="building" name="building">
+                        <option value="">-- 请选择 --</option>
+                        {% for value, label in building_choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="court_numbers">场地编号</label>
+                <input type="text" id="court_numbers_input" placeholder="输入场地编号，按回车添加（如：1, 2, 3 或 1-5）">
+                <div class="court-numbers-input" id="court_numbers_container"></div>
+                <input type="hidden" name="court_numbers" id="court_numbers_hidden">
+                <p class="help-text">支持单个编号（1, 2, 3）或范围（1-5），按回车或逗号分隔添加</p>
+            </div>
+            <div class="form-group">
+                <label for="description">场地描述</label>
+                <textarea id="description" name="description" rows="3" placeholder="请输入场地描述（可选）"></textarea>
+            </div>
+            
+            <div class="preview-section" id="preview-section" style="display: none;">
+                <h4>预览将添加的场地：</h4>
+                <div class="preview-list" id="preview-list"></div>
+            </div>
+            
+            <p style="color: #7f8c8d; font-size: 13px; margin: 16px 0;">场地名称将自动生成为：场地类型 + 所属场馆 + 场地编号</p>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button type="submit" class="btn btn-success">批量添加</button>
+                <a href="{% url 'admin_court_list' %}" class="btn btn-outline">取消</a>
+            </div>
+        </form>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('court_numbers_input');
+    const container = document.getElementById('court_numbers_container');
+    const hiddenInput = document.getElementById('court_numbers_hidden');
+    const previewSection = document.getElementById('preview-section');
+    const previewList = document.getElementById('preview-list');
+    let courtNumbers = [];
+    
+    function updateHiddenInput() {
+        hiddenInput.value = courtNumbers.join(',');
+        updatePreview();
+    }
+    
+    function updatePreview() {
+        if (courtNumbers.length === 0) {
+            previewSection.style.display = 'none';
+            return;
+        }
+        
+        previewSection.style.display = 'block';
+        previewList.innerHTML = '';
+        
+        const courtType = document.getElementById('court_type').options[document.getElementById('court_type').selectedIndex].text;
+        const building = document.getElementById('building').options[document.getElementById('building').selectedIndex].text;
+        
+        courtNumbers.forEach(num => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+            let name = '';
+            if (courtType && courtType !== '-- 请选择 --') name += courtType + ' ';
+            if (building && building !== '-- 请选择 --') name += building + ' ';
+            name += num + '号';
+            item.textContent = name;
+            previewList.appendChild(item);
+        });
+    }
+    
+    function addCourtNumber(num) {
+        num = num.trim();
+        if (num && !courtNumbers.includes(num)) {
+            courtNumbers.push(num);
+            renderCourtNumbers();
+            updateHiddenInput();
+        }
+    }
+    
+    function removeCourtNumber(num) {
+        courtNumbers = courtNumbers.filter(n => n !== num);
+        renderCourtNumbers();
+        updateHiddenInput();
+    }
+    
+    function renderCourtNumbers() {
+        container.innerHTML = '';
+        courtNumbers.forEach(num => {
+            const tag = document.createElement('div');
+            tag.className = 'court-number-tag';
+            tag.innerHTML = num + '号 <span class="remove" data-num="' + num + '">&times;</span>';
+            container.appendChild(tag);
+        });
+        
+        container.querySelectorAll('.remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                removeCourtNumber(this.dataset.num);
+            });
+        });
+    }
+    
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            parseAndAddNumbers(this.value);
+            this.value = '';
+        }
+    });
+    
+    input.addEventListener('blur', function() {
+        if (this.value.trim()) {
+            parseAndAddNumbers(this.value);
+            this.value = '';
+        }
+    });
+    
+    function parseAndAddNumbers(value) {
+        const parts = value.split(/[,，\s]+/);
+        parts.forEach(part => {
+            part = part.trim();
+            if (part.includes('-')) {
+                const range = part.split('-');
+                const start = parseInt(range[0]);
+                const end = parseInt(range[1]);
+                if (!isNaN(start) && !isNaN(end)) {
+                    for (let i = start; i <= end; i++) {
+                        addCourtNumber(i.toString());
+                    }
+                }
+            } else if (!isNaN(parseInt(part))) {
+                addCourtNumber(part);
+            }
+        });
+    }
+    
+    document.getElementById('court_type').addEventListener('change', updatePreview);
+    document.getElementById('building').addEventListener('change', updatePreview);
+    
+    // Ensure hidden input is updated before form submission
+    document.getElementById('batch-add-form').addEventListener('submit', function(e) {
+        updateHiddenInput();
+        if (courtNumbers.length === 0) {
+            e.preventDefault();
+            alert('请至少添加一个场地编号');
+            return false;
+        }
+        return true;
+    });
+});
+</script>
+{% endblock %}

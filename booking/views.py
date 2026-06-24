@@ -236,6 +236,87 @@ def admin_court_delete(request, court_id):
 
 
 @login_required
+def admin_court_batch_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        court_type_id = request.POST.get('court_type')
+        building = request.POST.get('building', '')
+        court_numbers_str = request.POST.get('court_numbers', '')
+        description = request.POST.get('description', '')
+        
+        court_type = None
+        if court_type_id:
+            try:
+                court_type = CourtType.objects.get(id=court_type_id)
+            except CourtType.DoesNotExist:
+                pass
+        
+        # Parse court numbers from comma-separated string
+        court_numbers = [n.strip() for n in court_numbers_str.split(',') if n.strip()]
+        
+        created_count = 0
+        for court_number in court_numbers:
+            try:
+                court_number_int = int(court_number)
+                Court.objects.create(
+                    description=description,
+                    court_type=court_type,
+                    court_number=court_number_int,
+                    building=building
+                )
+                created_count += 1
+            except (ValueError, TypeError):
+                continue
+        
+        if created_count > 0:
+            messages.success(request, f'成功添加 {created_count} 个场地')
+        else:
+            messages.warning(request, '未添加任何场地，请检查输入')
+        return redirect('admin_court_list')
+    
+    court_types = CourtType.objects.all()
+    building_choices = Court.BUILDING_CHOICES
+    return render(request, 'booking/admin/admin_court_batch_add.html', {
+        'court_types': court_types,
+        'building_choices': building_choices
+    })
+
+
+@login_required
+def admin_court_batch_delete(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        court_ids_str = request.POST.get('court_ids', '')
+        court_ids = [id.strip() for id in court_ids_str.split(',') if id.strip()]
+        
+        if court_ids:
+            # Filter to only valid integer IDs
+            valid_ids = []
+            for id_str in court_ids:
+                try:
+                    valid_ids.append(int(id_str))
+                except (ValueError, TypeError):
+                    continue
+            
+            if valid_ids:
+                Court.objects.filter(id__in=valid_ids).delete()
+                messages.success(request, f'成功删除 {len(valid_ids)} 个场地')
+            else:
+                messages.warning(request, '未选中有效的场地')
+        else:
+            messages.warning(request, '请选择要删除的场地')
+        return redirect('admin_court_list')
+    
+    return redirect('admin_court_list')
+
+
+@login_required
 def admin_court_type_list(request):
     if not is_admin_user(request.user):
         messages.error(request, '您没有权限访问此页面')
