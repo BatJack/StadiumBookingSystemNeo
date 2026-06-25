@@ -153,6 +153,42 @@
             flex-wrap: wrap;
         }
     }
+
+    /* Sortable table headers */
+    th.sortable {
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        padding-right: 24px !important;
+        transition: background-color 0.15s ease;
+    }
+    th.sortable:hover {
+        background-color: #f0f7ff;
+    }
+    th.sortable::after {
+        content: '↕';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 11px;
+        opacity: 0.25;
+        color: #7f8c8d;
+        transition: opacity 0.15s ease;
+    }
+    th.sortable:hover::after {
+        opacity: 0.5;
+    }
+    th.sortable.sort-asc::after {
+        content: '↑';
+        opacity: 1;
+        color: #3498db;
+    }
+    th.sortable.sort-desc::after {
+        content: '↓';
+        opacity: 1;
+        color: #3498db;
+    }
 </style>
 
 <div class="page-header">
@@ -195,12 +231,12 @@
                     <thead>
                         <tr>
                             <th style="width: 40px;"></th>
-                            <th style="width: 60px;">ID</th>
-                            <th>场地类型</th>
-                            <th>场地编号</th>
-                            <th>场地名称</th>
-                            <th>描述</th>
-                            <th>创建时间</th>
+                            <th class="sortable" data-sort="id" style="width: 60px;">ID</th>
+                            <th class="sortable" data-sort="type">场地类型</th>
+                            <th class="sortable" data-sort="number">场地编号</th>
+                            <th class="sortable" data-sort="name">场地名称</th>
+                            <th class="sortable" data-sort="description">描述</th>
+                            <th class="sortable" data-sort="created_at">创建时间</th>
                             <th style="width: 160px;">操作</th>
                         </tr>
                     </thead>
@@ -277,5 +313,64 @@ document.getElementById('batch-delete-form').addEventListener('submit', function
     }
     return true;
 });
+
+// Table column sorting — click to sort, click again to restore default
+(function() {
+    const table = document.querySelector('.table-wrapper table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th.sortable');
+    const originalRows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Preserve original order
+    originalRows.forEach((row, i) => row.dataset.sortIndex = i);
+
+    let currentSort = null; // { key: string, asc: boolean }
+
+    headers.forEach(header => {
+        header.addEventListener('click', function() {
+            const key = this.dataset.sort;
+
+            // Same column already sorted → restore default order
+            if (currentSort && currentSort.key === key) {
+                headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+                currentSort = null;
+                originalRows.forEach(row => tbody.appendChild(row));
+                return;
+            }
+
+            // Sort ascending by this column
+            currentSort = { key, asc: true };
+
+            headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            this.classList.add('sort-asc');
+
+            const colIndex = Array.from(this.parentElement.children).indexOf(this);
+
+            const sorted = [...originalRows].sort((a, b) => {
+                const aVal = a.children[colIndex]?.textContent.trim() || '';
+                const bVal = b.children[colIndex]?.textContent.trim() || '';
+
+                // Numeric
+                const aNum = parseFloat(aVal);
+                const bNum = parseFloat(bVal);
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return aNum - bNum;
+                }
+
+                // Date (YYYY-MM-DD HH:MM)
+                if (/^\d{4}-\d{2}-\d{2}/.test(aVal) && /^\d{4}-\d{2}-\d{2}/.test(bVal)) {
+                    return aVal.localeCompare(bVal);
+                }
+
+                // Chinese string
+                return aVal.localeCompare(bVal, 'zh-CN');
+            });
+
+            sorted.forEach(row => tbody.appendChild(row));
+        });
+    });
+})();
 </script>
 {% endblock %}

@@ -893,6 +893,53 @@ def admin_student_add(request):
 
 
 @login_required
+def admin_student_batch_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        students_data = request.POST.get('students_data', '')
+        lines = [line.strip() for line in students_data.split('\n') if line.strip()]
+        
+        created_count = 0
+        errors = []
+        
+        for i, line in enumerate(lines, 1):
+            parts = [p.strip() for p in line.split(',')]
+            if len(parts) < 1 or not parts[0]:
+                errors.append(f'第{i}行：缺少姓名')
+                continue
+            
+            name = parts[0]
+            phone = parts[1] if len(parts) > 1 else ''
+            try:
+                total_class_hours = int(parts[2]) if len(parts) > 2 and parts[2] else 0
+            except (ValueError, TypeError):
+                errors.append(f'第{i}行：课时数格式无效（"{parts[2]}"）')
+                continue
+            
+            Student.objects.create(
+                name=name,
+                phone=phone,
+                total_class_hours=total_class_hours
+            )
+            created_count += 1
+        
+        if created_count > 0:
+            messages.success(request, f'成功添加 {created_count} 个学员')
+        if errors:
+            for err in errors:
+                messages.warning(request, err)
+        if created_count == 0 and not errors:
+            messages.warning(request, '未添加任何学员，请输入学员数据')
+        
+        return redirect('admin_student_list')
+    
+    return render(request, 'booking/admin/admin_student_batch_add.html')
+
+
+@login_required
 def admin_student_edit(request, student_id):
     if not is_admin_user(request.user):
         messages.error(request, '您没有权限访问此页面')
@@ -920,6 +967,36 @@ def admin_student_delete(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     student.delete()
     messages.success(request, '学员删除成功')
+    return redirect('admin_student_list')
+
+
+@login_required
+def admin_student_batch_delete(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        student_ids_str = request.POST.get('student_ids', '')
+        student_ids = [id.strip() for id in student_ids_str.split(',') if id.strip()]
+        
+        if student_ids:
+            valid_ids = []
+            for id_str in student_ids:
+                try:
+                    valid_ids.append(int(id_str))
+                except (ValueError, TypeError):
+                    continue
+            
+            if valid_ids:
+                Student.objects.filter(id__in=valid_ids).delete()
+                messages.success(request, f'成功删除 {len(valid_ids)} 个学员')
+            else:
+                messages.warning(request, '未选中有效的学员')
+        else:
+            messages.warning(request, '请选择要删除的学员')
+        return redirect('admin_student_list')
+    
     return redirect('admin_student_list')
 
 
