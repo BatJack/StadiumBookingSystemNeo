@@ -127,8 +127,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Session configuration (database-backed — can browse via admin)
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# Session configuration (signed cookies — persists across server restarts)
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 # Session expiry: 7 days (in seconds)
 SESSION_COOKIE_AGE = 604800
