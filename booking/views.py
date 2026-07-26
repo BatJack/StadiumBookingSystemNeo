@@ -46,30 +46,30 @@ def login_view(request):
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('court_list')
-    
+
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
         email = request.POST.get('email', '').strip()
-        
+
         # 验证
         if not username or not password:
             messages.error(request, '用户名和密码不能为空')
             return render(request, 'booking/register.html')
-        
+
         if len(password) < 6:
             messages.error(request, '密码长度至少为6位')
             return render(request, 'booking/register.html')
-        
+
         if password != confirm_password:
             messages.error(request, '两次输入的密码不一致')
             return render(request, 'booking/register.html')
-        
+
         if User.objects.filter(username=username).exists():
             messages.error(request, f'用户名 "{username}" 已被使用')
             return render(request, 'booking/register.html')
-        
+
         try:
             user = User.objects.create_user(
                 username=username,
@@ -84,7 +84,7 @@ def register_view(request):
             return redirect('login')
         except Exception as e:
             messages.error(request, f'注册失败：{str(e)}')
-    
+
     return render(request, 'booking/register.html')
 
 

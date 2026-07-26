@@ -10,6 +10,16 @@ media
 /static/
 /staticfiles/
 
+# Auth page backgrounds (large images, synced manually to server)
+/background/*.jpg
+/background/*.jpeg
+/background/*.png
+/background/*.webp
+/background/*.gif
+/background/*.svg
+# But keep README and config
+!/background/README.md
+
 # Python
 __pycache__/
 *.py[cod]

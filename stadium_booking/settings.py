@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'booking.context_processors.background_defaults',
             ],
         },
     },
@@ -125,6 +126,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Additional static file search dirs (top-level /static/ for CSS, /background/ for auth page backgrounds)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    BASE_DIR / 'background',
+]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Session configuration (signed cookies — persists across server restarts)
