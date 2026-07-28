@@ -102,6 +102,11 @@
         color: white;
     }
 
+    .management-card-icon.green {
+        background: #10b981;
+        color: white;
+    }
+
     .management-card-title {
         font-size: 16px;
         font-weight: 600;
@@ -277,6 +282,27 @@
                     <h3 class="management-card-title">学员管理</h3>
                 </div>
                 <p class="management-card-desc">管理学员信息和课时总数</p>
+                <div class="management-card-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="{% url 'admin_coach_list' %}" class="management-card">
+                <div class="management-card-header">
+                    <div class="management-card-icon green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 7h-7"/>
+                            <path d="M14 17H5"/>
+                            <circle cx="17" cy="17" r="3"/>
+                            <circle cx="7" cy="7" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="management-card-title">教练管理</h3>
+                </div>
+                <p class="management-card-desc">管理教练信息和授课学员</p>
                 <div class="management-card-arrow">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"/>

@@ -1,0 +1,235 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}{% if coach %}编辑教练{% else %}添加教练{% endif %} - 体育场馆预约系统{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background-color: var(--primary);
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    .back-btn:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+    .page-header-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--gray-800);
+    }
+    .form-section {
+        margin-bottom: 32px;
+    }
+    .form-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--primary);
+    }
+    .student-selector {
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 16px;
+        background: var(--gray-50);
+    }
+    .student-search {
+        margin-bottom: 12px;
+    }
+    .student-search input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        font-size: 14px;
+    }
+    .student-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        background: white;
+    }
+    .student-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--gray-100);
+        transition: background 0.15s ease;
+    }
+    .student-item:last-child {
+        border-bottom: none;
+    }
+    .student-item:hover {
+        background: var(--gray-50);
+    }
+    .student-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    .student-item label {
+        flex: 1;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .student-name {
+        font-weight: 500;
+        color: var(--gray-800);
+    }
+    .student-phone {
+        font-size: 13px;
+        color: var(--gray-500);
+    }
+    .student-hours {
+        font-size: 12px;
+        color: var(--gray-600);
+        background: var(--gray-100);
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+    .selected-count {
+        margin-top: 12px;
+        padding: 8px 12px;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: var(--radius);
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .empty-students {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray-500);
+    }
+    @media (max-width: 768px) {
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-header-title {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <a href="{% url 'admin_coach_list' %}" class="back-btn" title="返回教练列表">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </a>
+    <span class="page-header-title">{% if coach %}编辑教练{% else %}添加教练{% endif %}</span>
+</div>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <div class="form-section-title">基本信息</div>
+            <div class="form-group">
+                <label for="name">教练姓名 <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="name" name="name" value="{% if coach %}{{ coach.name }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">联系电话</label>
+                <input type="text" id="phone" name="phone" value="{% if coach %}{{ coach.phone }}{% endif %}" placeholder="可选">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-section-title">授课学员</div>
+            {% if students %}
+                <div class="student-selector">
+                    <div class="student-search">
+                        <input type="text" id="student-search" placeholder="搜索学员姓名...">
+                    </div>
+                    <div class="student-list" id="student-list">
+                        {% for student in students %}
+                            <div class="student-item" data-name="{{ student.name|lower }}">
+                                <input type="checkbox" id="student_{{ student.id }}" name="students" value="{{ student.id }}"
+                                    {% if coach_student_ids and student.id in coach_student_ids %}checked{% endif %}>
+                                <label for="student_{{ student.id }}">
+                                    <span>
+                                        <span class="student-name">{{ student.name }}</span>
+                                        {% if student.phone %}
+                                            <span class="student-phone">{{ student.phone }}</span>
+                                        {% endif %}
+                                    </span>
+                                    <span class="student-hours">{{ student.total_class_hours }} 课时</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="selected-count" id="selected-count">
+                        已选择 <strong id="count-number">0</strong> 名学员
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-students">
+                    <p>暂无学员数据，请先<a href="{% url 'admin_student_add' %}">添加学员</a></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button type="submit" class="btn btn-success">{% if coach %}更新{% else %}添加{% endif %}</button>
+            <a href="{% url 'admin_coach_list' %}" class="btn btn-outline">取消</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // 学员搜索功能
+    document.getElementById('student-search')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const items = document.querySelectorAll('.student-item');
+        
+        items.forEach(item => {
+            const name = item.dataset.name;
+            if (name.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // 更新选中数量
+    function updateSelectedCount() {
+        const checkboxes = document.querySelectorAll('input[name="students"]:checked');
+        const count = checkboxes.length;
+        document.getElementById('count-number').textContent = count;
+    }
+
+    // 初始化时更新数量
+    updateSelectedCount();
+
+    // 监听复选框变化
+    document.querySelectorAll('input[name="students"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+</script>
+{% endblock %}

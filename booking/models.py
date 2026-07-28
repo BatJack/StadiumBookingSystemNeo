@@ -38,6 +38,47 @@ class Student(models.Model):
         return f'{self.name} - {self.phone}'
 
 
+class Coach(models.Model):
+    name = models.CharField(max_length=100, verbose_name='教练姓名')
+    phone = models.CharField(max_length=20, blank=True, verbose_name='联系电话')
+    total_class_hours = models.IntegerField(default=0, verbose_name='课时总数')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        verbose_name = '教练'
+        verbose_name_plural = '教练'
+        ordering = ['name']
+
+    def __str__(self):
+        return f'{self.name} - {self.phone}'
+
+    def get_student_count(self):
+        """获取授课学员数量"""
+        return self.students.count()
+
+    def get_total_taught_hours(self):
+        """获取总授课课时"""
+        return sum(cs.class_hours for cs in self.students.all())
+
+
+class CoachStudent(models.Model):
+    """教练-学员关联表"""
+    coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='students', verbose_name='教练')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='coaches', verbose_name='学员')
+    class_hours = models.IntegerField(default=0, verbose_name='授课课时')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        verbose_name = '教练学员'
+        verbose_name_plural = '教练学员'
+        unique_together = ['coach', 'student']
+
+    def __str__(self):
+        return f'{self.coach.name} → {self.student.name} ({self.class_hours}课时)'
+
+
 class CourtType(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='场地类型名称')
     is_default = models.BooleanField(default=False, verbose_name='系统默认类型')

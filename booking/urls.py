@@ -45,4 +45,8 @@ urlpatterns = [
     path('manage/users/', views.admin_user_list, name='admin_user_list'),
     path('manage/users/edit/<int:user_id>/', views.admin_user_edit, name='admin_user_edit'),
     path('manage/users/delete/<int:user_id>/', views.admin_user_delete, name='admin_user_delete'),
+    path('manage/coaches/', views.admin_coach_list, name='admin_coach_list'),
+    path('manage/coaches/add/', views.admin_coach_add, name='admin_coach_add'),
+    path('manage/coaches/edit/<int:coach_id>/', views.admin_coach_edit, name='admin_coach_edit'),
+    path('manage/coaches/delete/<int:coach_id>/', views.admin_coach_delete, name='admin_coach_delete'),
 ]

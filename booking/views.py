@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.db import models
 from datetime import datetime, timedelta, time
-from .models import Court, CourtAvailability, Booking, Profile, Student, BookingStudent, CourtType
+from .models import Court, CourtAvailability, Booking, Profile, Student, BookingStudent, CourtType, Coach, CoachStudent
 
 
 def is_admin_user(user):
@@ -1615,3 +1615,103 @@ def admin_user_delete(request, user_id):
     user.delete()
     messages.success(request, f'用户 "{username}" 已删除')
     return redirect('admin_user_list')
+
+
+# ==================== 教练管理 ====================
+
+@login_required
+def admin_coach_list(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    coaches = Coach.objects.all().order_by('name')
+    return render(request, 'booking/admin/admin_coach_list.html', {'coaches': coaches})
+
+
+@login_required
+def admin_coach_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone', '')
+        
+        if not name:
+            messages.error(request, '教练姓名不能为空')
+            return render(request, 'booking/admin/admin_coach_form.html')
+        
+        coach = Coach.objects.create(name=name, phone=phone)
+        
+        # 处理学员选择
+        student_ids = request.POST.getlist('students')
+        for student_id in student_ids:
+            try:
+                student = Student.objects.get(id=student_id)
+                CoachStudent.objects.create(coach=coach, student=student, class_hours=0)
+            except Student.DoesNotExist:
+                continue
+        
+        messages.success(request, '教练添加成功')
+        return redirect('admin_coach_list')
+    
+    students = Student.objects.all().order_by('name')
+    return render(request, 'booking/admin/admin_coach_form.html', {'students': students})
+
+
+@login_required
+def admin_coach_edit(request, coach_id):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    coach = get_object_or_404(Coach, id=coach_id)
+    
+    if request.method == 'POST':
+        coach.name = request.POST.get('name')
+        coach.phone = request.POST.get('phone', '')
+        coach.save()
+        
+        # 更新学员关系
+        selected_student_ids = set(request.POST.getlist('students'))
+        current_relations = CoachStudent.objects.filter(coach=coach)
+        current_student_ids = set(str(rel.student.id) for rel in current_relations)
+        
+        # 删除取消选择的学员
+        for rel in current_relations:
+            if str(rel.student.id) not in selected_student_ids:
+                rel.delete()
+        
+        # 添加新选择的学员
+        for student_id in selected_student_ids:
+            if student_id not in current_student_ids:
+                try:
+                    student = Student.objects.get(id=student_id)
+                    CoachStudent.objects.create(coach=coach, student=student, class_hours=0)
+                except Student.DoesNotExist:
+                    continue
+        
+        messages.success(request, '教练信息更新成功')
+        return redirect('admin_coach_list')
+    
+    students = Student.objects.all().order_by('name')
+    coach_student_ids = set(coach.students.values_list('student_id', flat=True))
+    return render(request, 'booking/admin/admin_coach_form.html', {
+        'coach': coach,
+        'students': students,
+        'coach_student_ids': coach_student_ids
+    })
+
+
+@login_required
+def admin_coach_delete(request, coach_id):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    coach = get_object_or_404(Coach, id=coach_id)
+    coach.delete()
+    messages.success(request, '教练删除成功')
+    return redirect('admin_coach_list')

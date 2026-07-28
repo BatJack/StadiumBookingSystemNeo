@@ -10,13 +10,15 @@ description: "Guides database modification for the stadium booking system. Invok
 | 表名 | 模型类 | 说明 |
 |------|--------|------|
 | auth_user | User | Django内置用户表 |
-| booking_profile | Profile | 用户类型扩展（admin/regular） |
+| booking_profile | Profile | 用户类型扩展（super_admin/admin/regular） |
 | booking_courttype | CourtType | 场地类型（篮球场、网球场等） |
 | booking_court | Court | 场地表（含场馆、编号，名称自动生成） |
 | booking_courtavailability | CourtAvailability | 场地可用时间段 |
 | booking_booking | Booking | 统一预约模型（场地/课程） |
 | booking_student | Student | 学员信息（含课时） |
 | booking_bookingstudent | BookingStudent | 预约-学员关联表 |
+| booking_coach | Coach | 教练信息（含课时统计） |
+| booking_coachstudent | CoachStudent | 教练-学员授课关联表 |
 
 ## Court 模型字段说明
 
@@ -29,16 +31,6 @@ description: "Guides database modification for the stadium booking system. Invok
 | description | TextField | 场地描述 |
 
 **命名规则**：场地名称由系统自动生成，例如"篮球场 A馆 1号"，用户无需手动输入。
-
-## 外键关系
-
-```
-User ← Profile (1:1)
-CourtType ← Court (1:N)
-User ← Booking → Court (N:1, N:1)
-Court ← CourtAvailability (1:N)
-Booking ← BookingStudent → Student (1:N, N:1)
-```
 
 ## 业务逻辑要点
 
