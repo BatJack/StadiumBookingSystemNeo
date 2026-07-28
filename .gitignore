@@ -10,6 +10,16 @@ media
 /static/
 /staticfiles/
 
+# Auth page backgrounds (large images, synced manually to server)
+/background/*.jpg
+/background/*.jpeg
+/background/*.png
+/background/*.webp
+/background/*.gif
+/background/*.svg
+# But keep README and config
+!/background/README.md
+
 # Python
 __pycache__/
 *.py[cod]
@@ -41,11 +51,13 @@ env/
 # IDE
 .vscode/
 .idea/
+.omo/
 .trae/skills/ui-ux-pro-max/
 .trae/skills/design-taste-frontend/
 .trae/skills/redesign-existing-projects/
 REASONIX.md
 CLAUDE.md
+AGENTS.md
 *.swp
 *.swo
 *~

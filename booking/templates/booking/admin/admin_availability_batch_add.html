@@ -1,0 +1,314 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}批量设置可用时间段 - 体育场馆预约系统{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    .back-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+    .back-btn:active {
+        transform: translateY(0);
+    }
+    .back-btn:focus-visible {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
+    }
+    .page-header-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .courts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 8px;
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        background: #fafafa;
+    }
+    .court-checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        user-select: none;
+    }
+    .court-checkbox-item:hover {
+        border-color: #3498db;
+        background: #eff6ff;
+    }
+    .court-checkbox-item.selected {
+        border-color: #3498db;
+        background: #ebf5fb;
+    }
+    .court-checkbox-item input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #3498db;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .court-checkbox-item .court-name {
+        font-size: 14px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+    .select-all-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        background: #f8f9fa;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+    }
+    .select-all-bar label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #475569;
+        font-weight: 500;
+    }
+    .select-all-bar input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #3498db;
+        cursor: pointer;
+    }
+    .select-all-bar .selected-count {
+        margin-left: auto;
+        font-size: 13px;
+        color: #64748b;
+    }
+    .form-row-duo {
+        display: flex;
+        gap: 16px;
+    }
+    .form-row-duo .form-group {
+        flex: 1;
+    }
+    .preview-banner {
+        margin-top: 20px;
+        padding: 14px 18px;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: var(--radius);
+        color: #0369a1;
+        font-size: 14px;
+    }
+    .preview-banner strong {
+        color: #0284c7;
+    }
+
+    @media (max-width: 768px) {
+        .page-header-title {
+            font-size: 20px;
+        }
+        .form-row-duo {
+            flex-direction: column;
+            gap: 0;
+        }
+        .courts-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            max-height: 240px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header-title {
+            font-size: 18px;
+        }
+        .courts-grid {
+            grid-template-columns: 1fr;
+            max-height: 200px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <a href="{% url 'admin_availability_list' %}" class="back-btn" title="返回时间段列表">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </a>
+    <span class="page-header-title">批量设置可用时间段</span>
+</div>
+
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <form method="post" id="batch-add-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>选择场地 <span style="color: #e74c3c;">*</span></label>
+                <div class="select-all-bar">
+                    <label>
+                        <input type="checkbox" id="select-all-courts">
+                        全选 / 取消全选
+                    </label>
+                    <span class="selected-count" id="selected-count">已选 0 个场地</span>
+                </div>
+                <div class="courts-grid" id="courts-grid">
+                    {% for court in courts %}
+                        <label class="court-checkbox-item">
+                            <input type="checkbox" name="courts" value="{{ court.id }}">
+                            <span class="court-name">{{ court.name }}</span>
+                        </label>
+                    {% empty %}
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 24px; color: #94a3b8;">
+                            暂无场地，请先添加场地
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row-duo">
+                <div class="form-group">
+                    <label for="start_date">开始日期 <span style="color: #e74c3c;">*</span></label>
+                    <input type="date" id="start_date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">结束日期 <span style="color: #e74c3c;">*</span></label>
+                    <input type="date" id="end_date" name="end_date" required>
+                    <small>设置场地可预约的日期范围</small>
+                </div>
+            </div>
+
+            <div class="form-row-duo">
+                <div class="form-group">
+                    <label for="start_time">每天开始时间 <span style="color: #e74c3c;">*</span></label>
+                    <input type="time" id="start_time" name="start_time" step="1800" required>
+                    <small>时间必须是整点或半点</small>
+                </div>
+                <div class="form-group">
+                    <label for="end_time">每天结束时间 <span style="color: #e74c3c;">*</span></label>
+                    <input type="time" id="end_time" name="end_time" step="1800" required>
+                    <small>时间必须是整点或半点</small>
+                </div>
+            </div>
+
+            <div class="preview-banner" id="preview-banner" style="display: none;">
+                将为 <strong id="preview-count">0</strong> 个场地设置可用时间段
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button type="submit" class="btn btn-success" id="submit-btn" disabled>批量设置</button>
+                <a href="{% url 'admin_availability_list' %}" class="btn btn-outline">取消</a>
+            </div>
+        </form>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('select-all-courts');
+    const courtCheckboxes = document.querySelectorAll('.court-checkbox-item input[type="checkbox"]');
+    const selectedCountSpan = document.getElementById('selected-count');
+    const previewBanner = document.getElementById('preview-banner');
+    const previewCount = document.getElementById('preview-count');
+    const submitBtn = document.getElementById('submit-btn');
+
+    function updateSelection() {
+        const checked = document.querySelectorAll('.court-checkbox-item input[type="checkbox"]:checked');
+        const count = checked.length;
+
+        selectedCountSpan.textContent = '已选 ' + count + ' 个场地';
+
+        // Update visual state
+        document.querySelectorAll('.court-checkbox-item').forEach(function(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
+
+        // Update preview
+        if (count > 0) {
+            previewBanner.style.display = 'block';
+            previewCount.textContent = count;
+            submitBtn.disabled = false;
+        } else {
+            previewBanner.style.display = 'none';
+            submitBtn.disabled = true;
+        }
+    }
+
+    // Select all / deselect all
+    selectAllCheckbox.addEventListener('change', function() {
+        const isChecked = this.checked;
+        courtCheckboxes.forEach(function(cb) {
+            cb.checked = isChecked;
+        });
+        updateSelection();
+    });
+
+    // Individual checkboxes
+    courtCheckboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            const allChecked = document.querySelectorAll('.court-checkbox-item input[type="checkbox"]:checked').length === courtCheckboxes.length;
+            selectAllCheckbox.checked = allChecked && courtCheckboxes.length > 0;
+            updateSelection();
+        });
+    });
+
+    // Click on the label box to toggle
+    document.querySelectorAll('.court-checkbox-item').forEach(function(item) {
+        item.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                // Trigger change event
+                const event = new Event('change', { bubbles: true });
+                checkbox.dispatchEvent(event);
+            }
+        });
+    });
+
+    // Form validation
+    document.getElementById('batch-add-form').addEventListener('submit', function(e) {
+        const checked = document.querySelectorAll('.court-checkbox-item input[type="checkbox"]:checked');
+        if (checked.length === 0) {
+            e.preventDefault();
+            alert('请至少选择一个场地');
+            return false;
+        }
+        return true;
+    });
+});
+</script>
+{% endblock %}

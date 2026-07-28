@@ -25,6 +25,10 @@ def is_super_admin_user(user):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        if is_admin_user(request.user):
+            return redirect('admin_dashboard')
+        return redirect('court_list')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -37,6 +41,51 @@ def login_view(request):
         else:
             messages.error(request, '用户名或密码错误')
     return render(request, 'booking/login.html')
+
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('court_list')
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        email = request.POST.get('email', '').strip()
+
+        # 验证
+        if not username or not password:
+            messages.error(request, '用户名和密码不能为空')
+            return render(request, 'booking/register.html')
+
+        if len(password) < 6:
+            messages.error(request, '密码长度至少为6位')
+            return render(request, 'booking/register.html')
+
+        if password != confirm_password:
+            messages.error(request, '两次输入的密码不一致')
+            return render(request, 'booking/register.html')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, f'用户名 "{username}" 已被使用')
+            return render(request, 'booking/register.html')
+
+        try:
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email=email,
+            )
+            Profile.objects.create(
+                user=user,
+                user_type='regular'
+            )
+            messages.success(request, '注册成功，请登录')
+            return redirect('login')
+        except Exception as e:
+            messages.error(request, f'注册失败：{str(e)}')
+
+    return render(request, 'booking/register.html')
 
 
 def logout_view(request):
@@ -138,10 +187,10 @@ def admin_court_add(request):
         return redirect('court_list')
     
     if request.method == 'POST':
-        name = request.POST.get('name')
         description = request.POST.get('description')
         court_type_id = request.POST.get('court_type')
-        court_number = request.POST.get('court_number', '')
+        court_number = request.POST.get('court_number')
+        building = request.POST.get('building', '')
         
         court_type = None
         if court_type_id:
@@ -150,17 +199,31 @@ def admin_court_add(request):
             except CourtType.DoesNotExist:
                 pass
         
+        # court_number 转为整数
+        court_number_int = None
+        if court_number:
+            try:
+                court_number_int = int(court_number)
+            except (ValueError, TypeError):
+                pass
+        
         Court.objects.create(
-            name=name,
             description=description,
             court_type=court_type,
-            court_number=court_number
+            court_number=court_number_int,
+            building=building
         )
         messages.success(request, '场地添加成功')
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin/admin_court_form.html', {'court_types': court_types})
+    building_choices = Court.BUILDING_CHOICES
+    court_number_choices = Court.COURT_NUMBER_CHOICES
+    return render(request, 'booking/admin/admin_court_form.html', {
+        'court_types': court_types,
+        'building_choices': building_choices,
+        'court_number_choices': court_number_choices
+    })
 
 
 @login_required
@@ -172,10 +235,10 @@ def admin_court_edit(request, court_id):
     court = get_object_or_404(Court, id=court_id)
     
     if request.method == 'POST':
-        court.name = request.POST.get('name')
         court.description = request.POST.get('description')
         court_type_id = request.POST.get('court_type')
-        court.court_number = request.POST.get('court_number', '')
+        court_number = request.POST.get('court_number')
+        court.building = request.POST.get('building', '')
         
         if court_type_id:
             try:
@@ -185,12 +248,28 @@ def admin_court_edit(request, court_id):
         else:
             court.court_type = None
         
+        # court_number 转为整数
+        if court_number:
+            try:
+                court.court_number = int(court_number)
+            except (ValueError, TypeError):
+                court.court_number = None
+        else:
+            court.court_number = None
+        
         court.save()
         messages.success(request, '场地更新成功')
         return redirect('admin_court_list')
     
     court_types = CourtType.objects.all()
-    return render(request, 'booking/admin/admin_court_form.html', {'court': court, 'court_types': court_types})
+    building_choices = Court.BUILDING_CHOICES
+    court_number_choices = Court.COURT_NUMBER_CHOICES
+    return render(request, 'booking/admin/admin_court_form.html', {
+        'court': court,
+        'court_types': court_types,
+        'building_choices': building_choices,
+        'court_number_choices': court_number_choices
+    })
 
 
 @login_required
@@ -202,6 +281,87 @@ def admin_court_delete(request, court_id):
     court = get_object_or_404(Court, id=court_id)
     court.delete()
     messages.success(request, '场地删除成功')
+    return redirect('admin_court_list')
+
+
+@login_required
+def admin_court_batch_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        court_type_id = request.POST.get('court_type')
+        building = request.POST.get('building', '')
+        court_numbers_str = request.POST.get('court_numbers', '')
+        description = request.POST.get('description', '')
+        
+        court_type = None
+        if court_type_id:
+            try:
+                court_type = CourtType.objects.get(id=court_type_id)
+            except CourtType.DoesNotExist:
+                pass
+        
+        # Parse court numbers from comma-separated string
+        court_numbers = [n.strip() for n in court_numbers_str.split(',') if n.strip()]
+        
+        created_count = 0
+        for court_number in court_numbers:
+            try:
+                court_number_int = int(court_number)
+                Court.objects.create(
+                    description=description,
+                    court_type=court_type,
+                    court_number=court_number_int,
+                    building=building
+                )
+                created_count += 1
+            except (ValueError, TypeError):
+                continue
+        
+        if created_count > 0:
+            messages.success(request, f'成功添加 {created_count} 个场地')
+        else:
+            messages.warning(request, '未添加任何场地，请检查输入')
+        return redirect('admin_court_list')
+    
+    court_types = CourtType.objects.all()
+    building_choices = Court.BUILDING_CHOICES
+    return render(request, 'booking/admin/admin_court_batch_add.html', {
+        'court_types': court_types,
+        'building_choices': building_choices
+    })
+
+
+@login_required
+def admin_court_batch_delete(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        court_ids_str = request.POST.get('court_ids', '')
+        court_ids = [id.strip() for id in court_ids_str.split(',') if id.strip()]
+        
+        if court_ids:
+            # Filter to only valid integer IDs
+            valid_ids = []
+            for id_str in court_ids:
+                try:
+                    valid_ids.append(int(id_str))
+                except (ValueError, TypeError):
+                    continue
+            
+            if valid_ids:
+                Court.objects.filter(id__in=valid_ids).delete()
+                messages.success(request, f'成功删除 {len(valid_ids)} 个场地')
+            else:
+                messages.warning(request, '未选中有效的场地')
+        else:
+            messages.warning(request, '请选择要删除的场地')
+        return redirect('admin_court_list')
+    
     return redirect('admin_court_list')
 
 
@@ -427,6 +587,195 @@ def admin_availability_delete(request, availability_id):
     except CourtAvailability.DoesNotExist:
         messages.error(request, '时间段记录不存在')
     
+    return redirect('admin_availability_list')
+
+
+@login_required
+def admin_availability_batch_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+
+    courts = Court.objects.all()
+
+    if request.method == 'POST':
+        court_ids = request.POST.getlist('courts')
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+        start_time_str = request.POST.get('start_time')
+        end_time_str = request.POST.get('end_time')
+
+        if not court_ids:
+            messages.warning(request, '请至少选择一个场地')
+            return render(request, 'booking/admin/admin_availability_batch_add.html', {
+                'courts': courts,
+            })
+
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            start_time = datetime.strptime(start_time_str, '%H:%M').time()
+            end_time = datetime.strptime(end_time_str, '%H:%M').time()
+
+            if start_date > end_date:
+                messages.error(request, '结束日期必须大于等于开始日期')
+                return render(request, 'booking/admin/admin_availability_batch_add.html', {
+                    'courts': courts,
+                })
+
+            if start_time >= end_time:
+                messages.error(request, '结束时间必须大于开始时间')
+                return render(request, 'booking/admin/admin_availability_batch_add.html', {
+                    'courts': courts,
+                })
+
+            created_count = 0
+            skipped_count = 0
+
+            for court_id in court_ids:
+                try:
+                    court = Court.objects.get(id=court_id)
+                except (ValueError, Court.DoesNotExist):
+                    skipped_count += 1
+                    continue
+
+                # 检查该场地是否已有时间段记录
+                existing = CourtAvailability.objects.filter(court=court).first()
+                if existing:
+                    skipped_count += 1
+                    continue
+
+                CourtAvailability.objects.create(
+                    court=court,
+                    start_date=start_date,
+                    end_date=end_date,
+                    start_time=start_time,
+                    end_time=end_time
+                )
+                created_count += 1
+
+            if created_count > 0:
+                messages.success(request, f'成功设置 {created_count} 个场地的可用时间段')
+            if skipped_count > 0:
+                messages.info(request, f'{skipped_count} 个场地跳过（已有时间段记录）')
+            if created_count == 0 and skipped_count > 0:
+                messages.warning(request, '所有选中的场地已有时间段记录，请先编辑或删除现有记录')
+
+            return redirect('admin_availability_list')
+
+        except ValueError:
+            messages.error(request, '时间格式错误')
+
+    return render(request, 'booking/admin/admin_availability_batch_add.html', {
+        'courts': courts,
+    })
+
+
+@login_required
+def admin_availability_batch_edit(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+
+    if request.method == 'POST':
+        # 支持两种提交方式：
+        # 1. 列表页多选复选框 → getlist 返回 ['1', '2', '3']
+        # 2. 编辑页隐藏字段 → 单个值如 '1,2,3'
+        availability_ids_raw = request.POST.getlist('availability_ids')
+        availability_ids = []
+        for item in availability_ids_raw:
+            for part in item.split(','):
+                part = part.strip()
+                if part and part.isdigit():
+                    availability_ids.append(int(part))
+        availability_ids = list(set(availability_ids))  # 去重
+
+        if not availability_ids:
+            messages.warning(request, '请选择要编辑的时间段')
+            return redirect('admin_availability_list')
+
+        # 如果提交了 start_date 字段，说明是实际更新操作
+        if request.POST.get('start_date'):
+            start_date_str = request.POST.get('start_date')
+            end_date_str = request.POST.get('end_date')
+            start_time_str = request.POST.get('start_time')
+            end_time_str = request.POST.get('end_time')
+
+            try:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+                start_time = datetime.strptime(start_time_str, '%H:%M').time()
+                end_time = datetime.strptime(end_time_str, '%H:%M').time()
+
+                if start_date > end_date:
+                    messages.error(request, '结束日期必须大于等于开始日期')
+                    availabilities = CourtAvailability.objects.filter(
+                        id__in=availability_ids
+                    ).select_related('court')
+                    return render(
+                        request,
+                        'booking/admin/admin_availability_batch_edit.html',
+                        {
+                            'availabilities': availabilities,
+                            'availability_ids': ','.join(str(a.id) for a in availabilities),
+                        }
+                    )
+
+                if start_time >= end_time:
+                    messages.error(request, '结束时间必须大于开始时间')
+                    availabilities = CourtAvailability.objects.filter(
+                        id__in=availability_ids
+                    ).select_related('court')
+                    return render(
+                        request,
+                        'booking/admin/admin_availability_batch_edit.html',
+                        {
+                            'availabilities': availabilities,
+                            'availability_ids': ','.join(str(a.id) for a in availabilities),
+                        }
+                    )
+
+                updated = CourtAvailability.objects.filter(id__in=availability_ids).update(
+                    start_date=start_date,
+                    end_date=end_date,
+                    start_time=start_time,
+                    end_time=end_time
+                )
+                messages.success(request, f'成功更新 {updated} 个时间段')
+                return redirect('admin_availability_list')
+
+            except ValueError:
+                messages.error(request, '时间格式错误')
+                availabilities = CourtAvailability.objects.filter(
+                    id__in=availability_ids
+                ).select_related('court')
+                return render(
+                    request,
+                    'booking/admin/admin_availability_batch_edit.html',
+                    {
+                        'availabilities': availabilities,
+                        'availability_ids': ','.join(str(a.id) for a in availabilities),
+                    }
+                )
+
+        # 显示批量编辑表单
+        availabilities = CourtAvailability.objects.filter(
+            id__in=availability_ids
+        ).select_related('court')
+
+        if not availabilities:
+            messages.warning(request, '未找到选中的时间段')
+            return redirect('admin_availability_list')
+
+        return render(
+            request,
+            'booking/admin/admin_availability_batch_edit.html',
+            {
+                'availabilities': availabilities,
+                'availability_ids': ','.join(str(a.id) for a in availabilities),
+            }
+        )
+
     return redirect('admin_availability_list')
 
 
@@ -782,6 +1131,53 @@ def admin_student_add(request):
 
 
 @login_required
+def admin_student_batch_add(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        students_data = request.POST.get('students_data', '')
+        lines = [line.strip() for line in students_data.split('\n') if line.strip()]
+        
+        created_count = 0
+        errors = []
+        
+        for i, line in enumerate(lines, 1):
+            parts = [p.strip() for p in line.split(',')]
+            if len(parts) < 1 or not parts[0]:
+                errors.append(f'第{i}行：缺少姓名')
+                continue
+            
+            name = parts[0]
+            phone = parts[1] if len(parts) > 1 else ''
+            try:
+                total_class_hours = int(parts[2]) if len(parts) > 2 and parts[2] else 0
+            except (ValueError, TypeError):
+                errors.append(f'第{i}行：课时数格式无效（"{parts[2]}"）')
+                continue
+            
+            Student.objects.create(
+                name=name,
+                phone=phone,
+                total_class_hours=total_class_hours
+            )
+            created_count += 1
+        
+        if created_count > 0:
+            messages.success(request, f'成功添加 {created_count} 个学员')
+        if errors:
+            for err in errors:
+                messages.warning(request, err)
+        if created_count == 0 and not errors:
+            messages.warning(request, '未添加任何学员，请输入学员数据')
+        
+        return redirect('admin_student_list')
+    
+    return render(request, 'booking/admin/admin_student_batch_add.html')
+
+
+@login_required
 def admin_student_edit(request, student_id):
     if not is_admin_user(request.user):
         messages.error(request, '您没有权限访问此页面')
@@ -809,6 +1205,36 @@ def admin_student_delete(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     student.delete()
     messages.success(request, '学员删除成功')
+    return redirect('admin_student_list')
+
+
+@login_required
+def admin_student_batch_delete(request):
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    if request.method == 'POST':
+        student_ids_str = request.POST.get('student_ids', '')
+        student_ids = [id.strip() for id in student_ids_str.split(',') if id.strip()]
+        
+        if student_ids:
+            valid_ids = []
+            for id_str in student_ids:
+                try:
+                    valid_ids.append(int(id_str))
+                except (ValueError, TypeError):
+                    continue
+            
+            if valid_ids:
+                Student.objects.filter(id__in=valid_ids).delete()
+                messages.success(request, f'成功删除 {len(valid_ids)} 个学员')
+            else:
+                messages.warning(request, '未选中有效的学员')
+        else:
+            messages.warning(request, '请选择要删除的学员')
+        return redirect('admin_student_list')
+    
     return redirect('admin_student_list')
 
 

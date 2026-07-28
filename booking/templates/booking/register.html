@@ -1,18 +1,13 @@
 {% extends 'booking/base.html' %}
 
-{% block title %}登录 - 体育场馆预约系统{% endblock %}
+{% block title %}注册 - 体育场馆预约系统{% endblock %}
 
 {% block content %}
 <style>
-    /* 登录页面隐藏导航栏 */
     .nav {
         display: none !important;
     }
 
-    /* ============================================
-       Background — image injected via CSS custom property from inline style.
-       Falls back to pure mesh if no image is configured.
-       ============================================ */
     .auth-bg {
         position: fixed;
         inset: 0;
@@ -36,9 +31,6 @@
             radial-gradient(ellipse 60% 50% at 100% 100%, rgba(15, 23, 42, 0.06), transparent 60%);
     }
 
-    /* ============================================
-       Layout
-       ============================================ */
     .auth-container {
         min-height: 100dvh;
         display: grid;
@@ -49,12 +41,9 @@
         z-index: 1;
     }
 
-    /* ============================================
-       Card
-       ============================================ */
     .auth-card {
         width: 100%;
-        max-width: 420px;
+        max-width: 440px;
         background: #ffffff;
         padding: 44px 36px 36px;
         border-radius: 16px;
@@ -64,11 +53,8 @@
             0 12px 32px -8px rgba(15, 23, 42, 0.10);
     }
 
-    /* ============================================
-       Header
-       ============================================ */
     .auth-header {
-        margin-bottom: 32px;
+        margin-bottom: 28px;
     }
 
     .auth-brand {
@@ -99,13 +85,10 @@
         line-height: 1.5;
     }
 
-    /* ============================================
-       Form
-       ============================================ */
     .auth-form {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 16px;
     }
 
     .form-group {
@@ -173,41 +156,51 @@
         color: #2563eb;
     }
 
-    /* ============================================
-       Form row (remember + forgot)
-       ============================================ */
-    .form-row {
+    /* Inline help text under input */
+    .form-hint {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .form-error {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #b91c1c;
+        display: none;
+    }
+
+    .form-error.show {
+        display: block;
+    }
+
+    /* Strength meter */
+    .pw-strength {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 2px;
+        gap: 4px;
+        margin-top: 8px;
     }
 
-    .remember-me {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+    .pw-strength-bar {
+        flex: 1;
+        height: 3px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        transition: background-color 0.2s ease;
     }
 
-    .remember-me input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
-        accent-color: #2563eb;
-        cursor: pointer;
+    .pw-strength[data-level="1"] .pw-strength-bar:nth-child(-n+1) { background: #ef4444; }
+    .pw-strength[data-level="2"] .pw-strength-bar:nth-child(-n+2) { background: #f59e0b; }
+    .pw-strength[data-level="3"] .pw-strength-bar:nth-child(-n+3) { background: #10b981; }
+    .pw-strength[data-level="4"] .pw-strength-bar:nth-child(-n+4) { background: #059669; }
+
+    .pw-strength-label {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #64748b;
+        min-height: 16px;
     }
 
-    .remember-me label {
-        font-size: 13px;
-        font-weight: 400;
-        color: #475569;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    /* ============================================
-       Submit
-       ============================================ */
     .btn-submit {
         width: 100%;
         height: 46px;
@@ -273,11 +266,8 @@
         to { transform: rotate(360deg); }
     }
 
-    /* ============================================
-       Footer
-       ============================================ */
     .auth-footer {
-        margin-top: 24px;
+        margin-top: 22px;
         padding-top: 20px;
         border-top: 1px solid #e2e8f0;
         text-align: center;
@@ -301,9 +291,6 @@
         text-underline-offset: 2px;
     }
 
-    /* ============================================
-       Server error banner
-       ============================================ */
     .auth-error {
         display: flex;
         align-items: flex-start;
@@ -323,9 +310,6 @@
         margin-top: 1px;
     }
 
-    /* ============================================
-       Responsive
-       ============================================ */
     @media (max-width: 480px) {
         .auth-container {
             padding: 16px;
@@ -346,12 +330,14 @@
         <div class="auth-header">
             <div class="auth-brand" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="3"/>
-                    <path d="M3 9h18M9 3v18"/>
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <line x1="20" y1="8" x2="20" y2="14"/>
+                    <line x1="23" y1="11" x2="17" y2="11"/>
                 </svg>
             </div>
-            <h1 id="auth-title">登录</h1>
-            <p>使用您的账户登录体育场馆预约系统</p>
+            <h1 id="auth-title">创建账户</h1>
+            <p>注册新账户以开始预约场地</p>
         </div>
 
         {% if messages %}
@@ -369,7 +355,7 @@
             {% endfor %}
         {% endif %}
 
-        <form method="post" class="auth-form" id="loginForm" novalidate>
+        <form method="post" class="auth-form" id="registerForm" novalidate>
             {% csrf_token %}
 
             <div class="form-group">
@@ -381,10 +367,28 @@
                            placeholder="请输入用户名"
                            autocomplete="username"
                            required
-                           autofocus>
+                           autofocus
+                           minlength="3"
+                           maxlength="20">
                     <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <p class="form-hint">3-20 个字符</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱 <span style="color: #94a3b8; font-weight: 400;">（可选）</span></label>
+                <div class="input-wrapper">
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="请输入邮箱"
+                           autocomplete="email">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                     </svg>
                 </div>
             </div>
@@ -396,43 +400,53 @@
                            id="password"
                            name="password"
                            placeholder="请输入密码"
-                           autocomplete="current-password"
+                           autocomplete="new-password"
+                           required
+                           minlength="6">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <div class="pw-strength" id="pwStrength" data-level="0" aria-hidden="true">
+                    <div class="pw-strength-bar"></div>
+                    <div class="pw-strength-bar"></div>
+                    <div class="pw-strength-bar"></div>
+                    <div class="pw-strength-bar"></div>
+                </div>
+                <p class="pw-strength-label" id="pwStrengthLabel">至少 6 位</p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">确认密码</label>
+                <div class="input-wrapper">
+                    <input type="password"
+                           id="confirm_password"
+                           name="confirm_password"
+                           placeholder="请再次输入密码"
+                           autocomplete="new-password"
                            required>
                     <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
                 </div>
+                <p class="form-error" id="confirmError">两次输入的密码不一致</p>
             </div>
 
-            <div class="form-row">
-                <div class="remember-me">
-                    <input type="checkbox" id="rememberMe" name="remember_me">
-                    <label for="rememberMe">记住我</label>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit" id="loginBtn">
+            <button type="submit" class="btn-submit" id="registerBtn">
                 <span class="spinner" aria-hidden="true"></span>
-                <span class="btn-text">登录</span>
+                <span class="btn-text">注册</span>
             </button>
         </form>
 
         <div class="auth-footer">
-            <p>还没有账户？ <a href="{% url 'register' %}">创建新账户</a></p>
+            <p>已有账户？ <a href="{% url 'login' %}">立即登录</a></p>
         </div>
     </section>
 </main>
 
 <script>
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const rememberMeCheckbox = document.getElementById('rememberMe');
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-
-    // Background image fallback: if the configured file doesn't exist, drop the
-    // background-image layer so the mesh gradient is shown cleanly.
     (function() {
         const bg = document.querySelector('.auth-bg');
         if (!bg) return;
@@ -448,21 +462,55 @@
         probe.src = url;
     })();
 
-    // Localstorage username-only pref (never password — security)
-    const REMEMBERED_USER_KEY = 'remembered_username';
+    const form = document.getElementById('registerForm');
+    const btn = document.getElementById('registerBtn');
+    const usernameEl = document.getElementById('username');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const confirmEl = document.getElementById('confirm_password');
+    const confirmError = document.getElementById('confirmError');
+    const strengthBox = document.getElementById('pwStrength');
+    const strengthLabel = document.getElementById('pwStrengthLabel');
 
-    window.addEventListener('DOMContentLoaded', function() {
-        const rememberedUsername = localStorage.getItem(REMEMBERED_USER_KEY);
-        if (rememberedUsername) {
-            usernameInput.value = rememberedUsername;
-            rememberMeCheckbox.checked = true;
-        }
+    function calcStrength(pw) {
+        if (!pw) return 0;
+        let score = 0;
+        if (pw.length >= 6) score += 1;
+        if (pw.length >= 10) score += 1;
+        if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score += 1;
+        if (/\d/.test(pw) && /[^A-Za-z0-9]/.test(pw)) score += 1;
+        return Math.min(score, 4);
+    }
+
+    const strengthText = ['', '弱', '一般', '良好', '强'];
+
+    passwordEl.addEventListener('input', function() {
+        const level = calcStrength(passwordEl.value);
+        strengthBox.setAttribute('data-level', String(level));
+        strengthLabel.textContent = passwordEl.value
+            ? `强度：${strengthText[level]}`
+            : '至少 6 位';
     });
 
-    loginForm.addEventListener('submit', function(e) {
-        // Client-side: mark invalid + bail
+    function validateMatch() {
+        if (confirmEl.value && confirmEl.value !== passwordEl.value) {
+            confirmEl.setAttribute('aria-invalid', 'true');
+            confirmError.classList.add('show');
+            return false;
+        } else {
+            confirmEl.removeAttribute('aria-invalid');
+            confirmError.classList.remove('show');
+            return true;
+        }
+    }
+
+    confirmEl.addEventListener('input', validateMatch);
+    passwordEl.addEventListener('input', validateMatch);
+
+    form.addEventListener('submit', function(e) {
         let hasError = false;
-        [usernameInput, passwordInput].forEach(function(el) {
+
+        [usernameEl, passwordEl, confirmEl].forEach(function(el) {
             if (!el.value.trim()) {
                 el.setAttribute('aria-invalid', 'true');
                 hasError = true;
@@ -470,23 +518,24 @@
                 el.removeAttribute('aria-invalid');
             }
         });
+
+        if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+            emailEl.setAttribute('aria-invalid', 'true');
+            hasError = true;
+        }
+
+        if (!validateMatch()) hasError = true;
+
         if (hasError) {
             e.preventDefault();
             return;
         }
 
-        if (rememberMeCheckbox.checked) {
-            localStorage.setItem(REMEMBERED_USER_KEY, usernameInput.value.trim());
-        } else {
-            localStorage.removeItem(REMEMBERED_USER_KEY);
-        }
-
-        loginBtn.classList.add('loading');
-        loginBtn.disabled = true;
+        btn.classList.add('loading');
+        btn.disabled = true;
     });
 
-    // Clear invalid state on input
-    [usernameInput, passwordInput].forEach(function(el) {
+    [usernameEl, emailEl, passwordEl, confirmEl].forEach(function(el) {
         el.addEventListener('input', function() {
             if (el.value.trim()) el.removeAttribute('aria-invalid');
         });

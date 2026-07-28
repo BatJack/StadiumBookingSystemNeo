@@ -1,4 +1,4 @@
-﻿{% extends 'booking/base.html' %}
+{% extends 'booking/base.html' %}
 
 {% block title %}场地列表 - 体育场馆预约系统{% endblock %}
 
@@ -335,15 +335,15 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #ecf0f1;
-            border-radius: var(--radius);
+            background: white;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
             padding: 20px 24px;
             display: none;
-            border-top: 6px solid #3498db;
-            box-shadow: none;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -4px 20px rgba(44, 62, 80, 0.08);
             z-index: 1000;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             max-height: 35vh;
             overflow-y: auto;
         }
@@ -357,7 +357,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(15, 23, 42, 0.25);
+            backdrop-filter: blur(2px);
             display: none;
             z-index: 999;
         }
@@ -365,15 +366,20 @@
             display: block;
         }
         .booking-summary h4 {
-            color: #2c3e50;
+            color: #1e293b;
             margin-bottom: 12px;
             font-size: 16px;
             font-weight: 600;
         }
         .booking-summary p {
-            color: #7f8c8d;
+            color: #64748b;
             margin-bottom: 16px;
             font-size: 14px;
+            line-height: 1.5;
+        }
+        .booking-summary p strong {
+            color: #334155;
+            font-weight: 600;
         }
         .booking-actions {
             display: flex;
@@ -381,17 +387,17 @@
             justify-content: center;
         }
         .booking-summary .btn-cancel {
-            background: #ecf0f1;
-            color: #e74c3c;
-            border: 3px solid #e74c3c;
+            background: white;
+            color: #ef4444;
+            border: 1px solid #fecaca;
         }
         .booking-summary .btn-cancel:hover {
-            background: #e74c3c;
-            color: white;
+            background: #fef2f2;
+            border-color: #ef4444;
         }
         .btn-confirm {
             padding: 14px 32px;
-            background: #2ecc71;
+            background: #22c55e;
             color: white;
             border: none;
             border-radius: var(--radius);
@@ -399,16 +405,21 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: none;
+            box-shadow: 0 1px 3px rgba(34, 197, 94, 0.2);
         }
         .btn-confirm:hover {
-            background: #27ae60;
+            background: #16a34a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+        }
+        .btn-confirm:active {
+            transform: translateY(0);
         }
         .btn-cancel {
             padding: 14px 32px;
-            background: #ecf0f1;
-            color: #7f8c8d;
-            border: 3px solid #bdc3c7;
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
             border-radius: var(--radius);
             font-size: 15px;
             font-weight: 600;
@@ -416,8 +427,9 @@
             transition: all 0.2s ease;
         }
         .btn-cancel:hover {
-            background: #bdc3c7;
-            border-color: #95a5a6;
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #475569;
         }
         .matrix-legend {
             display: flex;
@@ -604,10 +616,12 @@
             .matrix-wrapper {
                 max-height: 70vh;
                 padding: 0;
+                border-radius: 6px;
             }
             .matrix-table th,
             .matrix-table td {
                 padding: 8px 4px;
+                font-size: 12px;
             }
             .legend {
                 flex-wrap: wrap;
@@ -618,30 +632,60 @@
                 flex: 1 1 auto;
                 min-width: calc(50% - 6px);
             }
+            .booking-summary {
+                padding: 16px;
+                border-radius: 6px;
+            }
+            .booking-summary h4 {
+                font-size: 15px;
+            }
+            .booking-summary p {
+                font-size: 13px;
+            }
+            .modal-content {
+                width: 92%;
+                margin: 20px auto;
+                border-radius: 6px;
+            }
+            .modal-header {
+                padding: 16px 18px;
+            }
+            .modal-body {
+                padding: 16px 18px;
+            }
+            .modal-footer {
+                padding: 16px 18px;
+            }
         }
 
         @media (max-width: 480px) {
             .court-type-filter {
                 padding: 10px;
                 gap: 6px;
+                border-radius: 4px;
             }
             .filter-btn {
                 padding: 8px 12px;
                 font-size: 12px;
                 min-height: 38px;
             }
+            .matrix-wrapper {
+                border-radius: 4px;
+            }
             .matrix-table th,
             .matrix-table td {
                 padding: 6px 3px;
+                font-size: 11px;
             }
             .booking-summary {
-                padding: 16px;
+                padding: 14px;
+                border-radius: 4px;
             }
             .booking-summary h4 {
-                font-size: 16px;
+                font-size: 14px;
             }
             .booking-summary p {
-                font-size: 13px;
+                font-size: 12px;
             }
             .booking-actions {
                 flex-direction: column;
@@ -653,7 +697,8 @@
             }
             .modal-content {
                 width: 95%;
-                margin: 0 10px;
+                margin: 10px auto;
+                border-radius: 4px;
             }
             .modal-header {
                 padding: 14px 16px;
@@ -673,7 +718,7 @@
                 padding: 10px;
             }
             .legend-item span {
-                font-size: 12px;
+                font-size: 11px;
             }
         }
     </style>
@@ -842,8 +887,7 @@
             html += '<thead><tr>';
             html += '<th class="time-header">时间</th>';
             filteredCourts.forEach(court => {
-                const courtNumber = court.court_number ? ` - ${court.court_number}` : '';
-                html += `<th class="court-header">${court.name}${courtNumber}</th>`;
+                html += `<th class="court-header">${court.name}</th>`;
             });
             html += '</tr></thead>';
 
@@ -869,7 +913,7 @@
                         html += `<td><div class="time-cell no-court"><span class="slot-label">-</span></div></td>`;
                     } else if (isBooked) {
                         const bookingType = courtSlot ? courtSlot.booking_type : 'court';
-                        const bookerName = courtSlot ? (courtSlot.booker_name || '未知') : '未知';
+                        const bookerName = courtSlot ? (courtSlot.booker_name || '暂未开放') : '暂未开放';
                         const bookerPhone = courtSlot ? (courtSlot.booker_phone || '') : '';
                         const bookingId = courtSlot ? courtSlot.booking_id : '';
                         const studentCount = courtSlot ? (courtSlot.student_count || 0) : 0;

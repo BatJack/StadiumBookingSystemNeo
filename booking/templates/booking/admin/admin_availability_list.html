@@ -54,8 +54,53 @@
         padding: 0px;
         margin-top: 0px;
         margin-bottom: 0px;
-        min-width: 600px;
+        min-width: 650px;
         border-radius: var(--radius);
+    }
+    th.check-col {
+        width: 40px;
+        text-align: center;
+    }
+    th.check-col input[type="checkbox"],
+    td.check-col input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #3498db;
+        cursor: pointer;
+    }
+    .batch-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding: 10px 14px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        flex-wrap: wrap;
+    }
+    .batch-bar .batch-info {
+        font-size: 13px;
+        color: #64748b;
+    }
+    .batch-bar .batch-info strong {
+        color: #334155;
+    }
+    .batch-bar .batch-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+    }
+    .batch-bar .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .btn-batch-edit {
+        background-color: #3498db;
+        color: white;
+    }
+    .btn-batch-edit:hover:not(:disabled) {
+        background-color: #2980b9;
     }
 
     @media (max-width: 768px) {
@@ -70,7 +115,14 @@
             overflow-x: auto;
         }
         table {
-            min-width: 600px;
+            min-width: 650px;
+        }
+        .batch-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .batch-bar .batch-actions {
+            margin-left: 0;
         }
     }
 
@@ -110,48 +162,72 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="margin: 0;">时间段列表</h2>
-            <a href="{% url 'admin_availability_add' %}" class="btn btn-success">+ 设置时间段</a>
+            <div style="display: flex; gap: 8px;">
+                <a href="{% url 'admin_availability_batch_add' %}" class="btn btn-success">+ 批量添加</a>
+                <a href="{% url 'admin_availability_add' %}" class="btn btn-outline">+ 单个添加</a>
+            </div>
         </div>
 
         {% if availabilities %}
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>场地</th>
-                            <th>开始日期</th>
-                            <th>结束日期</th>
-                            <th>每天开放时间</th>
-                            <th>更新时间</th>
-                            <th style="width: 160px;">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for availability in availabilities %}
+            <form id="batch-form" method="post" action="{% url 'admin_availability_batch_edit' %}">
+                {% csrf_token %}
+
+                <div class="batch-bar">
+                    <span class="batch-info">
+                        已选 <strong id="selected-count">0</strong> 项
+                    </span>
+                    <div class="batch-actions">
+                        <button type="submit" class="btn btn-sm btn-batch-edit" id="batch-edit-btn" disabled>
+                            批量编辑
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>
-                                    <span class="badge badge-primary">{{ availability.court.name }}</span>
-                                </td>
-                                <td>{{ availability.start_date|date:"Y-m-d" }}</td>
-                                <td>{{ availability.end_date|date:"Y-m-d" }}</td>
-                                <td>{{ availability.start_time|time:"H:i" }} - {{ availability.end_time|time:"H:i" }}</td>
-                                <td>{{ availability.updated_at|date:"Y-m-d H:i" }}</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <a href="{% url 'admin_availability_edit' availability.id %}" class="btn btn-sm btn-outline">编辑</a>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteAvailability({{ availability.id }}, '{{ availability.court.name }}')">删除</button>
-                                    </div>
-                                </td>
+                                <th class="check-col">
+                                    <input type="checkbox" id="select-all" title="全选/取消全选">
+                                </th>
+                                <th>场地</th>
+                                <th>开始日期</th>
+                                <th>结束日期</th>
+                                <th>每天开放时间</th>
+                                <th>更新时间</th>
+                                <th style="width: 160px;">操作</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {% for availability in availabilities %}
+                                <tr>
+                                    <td class="check-col">
+                                        <input type="checkbox" name="availability_ids" value="{{ availability.id }}" class="row-checkbox">
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-primary">{{ availability.court.name }}</span>
+                                    </td>
+                                    <td>{{ availability.start_date|date:"Y-m-d" }}</td>
+                                    <td>{{ availability.end_date|date:"Y-m-d" }}</td>
+                                    <td>{{ availability.start_time|time:"H:i" }} - {{ availability.end_time|time:"H:i" }}</td>
+                                    <td>{{ availability.updated_at|date:"Y-m-d H:i" }}</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <a href="{% url 'admin_availability_edit' availability.id %}" class="btn btn-sm btn-outline">编辑</a>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteAvailability({{ availability.id }}, '{{ availability.court.name }}')">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         {% else %}
             <div class="empty-state">
                 <div class="empty-state-icon">⏰</div>
                 <h3>暂无可用时间段</h3>
-                <p>点击上方"设置时间段"按钮添加可用时间</p>
+                <p>点击上方"批量添加"或"单个添加"按钮设置可用时间</p>
             </div>
         {% endif %}
     </div>
@@ -168,5 +244,46 @@
                 form.submit();
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAllCheckbox = document.getElementById('select-all');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            const selectedCountSpan = document.getElementById('selected-count');
+            const batchEditBtn = document.getElementById('batch-edit-btn');
+            const batchForm = document.getElementById('batch-form');
+
+            function updateBatchBar() {
+                const checked = document.querySelectorAll('.row-checkbox:checked');
+                const count = checked.length;
+                selectedCountSpan.textContent = count;
+                batchEditBtn.disabled = count === 0;
+            }
+
+            selectAllCheckbox.addEventListener('change', function() {
+                const isChecked = this.checked;
+                rowCheckboxes.forEach(function(cb) {
+                    cb.checked = isChecked;
+                });
+                updateBatchBar();
+            });
+
+            rowCheckboxes.forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    const allChecked = document.querySelectorAll('.row-checkbox:checked').length === rowCheckboxes.length;
+                    selectAllCheckbox.checked = allChecked && rowCheckboxes.length > 0;
+                    updateBatchBar();
+                });
+            });
+
+            batchForm.addEventListener('submit', function(e) {
+                const checked = document.querySelectorAll('.row-checkbox:checked');
+                if (checked.length === 0) {
+                    e.preventDefault();
+                    alert('请至少选择一个时间段');
+                    return false;
+                }
+                return true;
+            });
+        });
     </script>
 {% endblock %}

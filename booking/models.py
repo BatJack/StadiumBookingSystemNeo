@@ -54,9 +54,13 @@ class CourtType(models.Model):
 
 
 class Court(models.Model):
+    BUILDING_CHOICES = [(chr(i), f'{chr(i)}馆') for i in range(65, 91)]  # A-Z
+    COURT_NUMBER_CHOICES = [(i, f'{i}号') for i in range(1, 100)]  # 1-99
+
     court_type = models.ForeignKey(CourtType, on_delete=models.PROTECT, related_name='courts', verbose_name='场地类型', null=True, blank=True)
-    name = models.CharField(max_length=100, verbose_name='场地名称')
-    court_number = models.CharField(max_length=20, blank=True, verbose_name='场地编号')
+    name = models.CharField(max_length=100, verbose_name='场地名称', blank=True)
+    court_number = models.IntegerField(choices=COURT_NUMBER_CHOICES, verbose_name='场地编号', null=True, blank=True)
+    building = models.CharField(max_length=1, choices=BUILDING_CHOICES, blank=True, verbose_name='所属场馆')
     description = models.TextField(blank=True, verbose_name='场地描述')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
@@ -64,11 +68,20 @@ class Court(models.Model):
     class Meta:
         verbose_name = '场地'
         verbose_name_plural = '场地'
-        ordering = ['court_type__name', 'court_number', 'id']
+        ordering = ['building', 'court_type__name', 'court_number', 'id']
+
+    def save(self, *args, **kwargs):
+        parts = []
+        if self.court_type:
+            parts.append(self.court_type.name)
+        if self.building:
+            parts.append(f'{self.building}馆')
+        if self.court_number:
+            parts.append(f'{self.court_number}号')
+        self.name = ' '.join(parts) if parts else '未命名场地'
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        if self.court_type and self.court_number:
-            return f'{self.court_type.name} - {self.court_number}'
         return self.name
 
 
