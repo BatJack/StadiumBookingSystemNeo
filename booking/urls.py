@@ -48,5 +48,7 @@ urlpatterns = [
     path('manage/coaches/', views.admin_coach_list, name='admin_coach_list'),
     path('manage/coaches/add/', views.admin_coach_add, name='admin_coach_add'),
     path('manage/coaches/edit/<int:coach_id>/', views.admin_coach_edit, name='admin_coach_edit'),
+    path('manage/coaches/edit/<int:coach_id>/add-students/', views.admin_coach_add_students, name='admin_coach_add_students'),
+    path('manage/coaches/edit/<int:coach_id>/unbind-student/<int:student_id>/', views.admin_coach_unbind_student, name='admin_coach_unbind_student'),
     path('manage/coaches/delete/<int:coach_id>/', views.admin_coach_delete, name='admin_coach_delete'),
 ]

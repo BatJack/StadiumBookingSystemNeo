@@ -1644,21 +1644,10 @@ def admin_coach_add(request):
             return render(request, 'booking/admin/admin_coach_form.html')
         
         coach = Coach.objects.create(name=name, phone=phone)
-        
-        # 处理学员选择
-        student_ids = request.POST.getlist('students')
-        for student_id in student_ids:
-            try:
-                student = Student.objects.get(id=student_id)
-                CoachStudent.objects.create(coach=coach, student=student, class_hours=0)
-            except Student.DoesNotExist:
-                continue
-        
-        messages.success(request, '教练添加成功')
-        return redirect('admin_coach_list')
+        messages.success(request, '教练添加成功，请继续添加授课学员')
+        return redirect('admin_coach_edit', coach_id=coach.id)
     
-    students = Student.objects.all().order_by('name')
-    return render(request, 'booking/admin/admin_coach_form.html', {'students': students})
+    return render(request, 'booking/admin/admin_coach_form.html')
 
 
 @login_required
@@ -1673,36 +1662,72 @@ def admin_coach_edit(request, coach_id):
         coach.name = request.POST.get('name')
         coach.phone = request.POST.get('phone', '')
         coach.save()
-        
-        # 更新学员关系
-        selected_student_ids = set(request.POST.getlist('students'))
-        current_relations = CoachStudent.objects.filter(coach=coach)
-        current_student_ids = set(str(rel.student.id) for rel in current_relations)
-        
-        # 删除取消选择的学员
-        for rel in current_relations:
-            if str(rel.student.id) not in selected_student_ids:
-                rel.delete()
-        
-        # 添加新选择的学员
-        for student_id in selected_student_ids:
-            if student_id not in current_student_ids:
-                try:
-                    student = Student.objects.get(id=student_id)
-                    CoachStudent.objects.create(coach=coach, student=student, class_hours=0)
-                except Student.DoesNotExist:
-                    continue
-        
         messages.success(request, '教练信息更新成功')
         return redirect('admin_coach_list')
     
-    students = Student.objects.all().order_by('name')
-    coach_student_ids = set(coach.students.values_list('student_id', flat=True))
+    bound_students = CoachStudent.objects.filter(coach=coach).select_related('student')
     return render(request, 'booking/admin/admin_coach_form.html', {
         'coach': coach,
-        'students': students,
-        'coach_student_ids': coach_student_ids
+        'bound_students': bound_students
     })
+
+
+@login_required
+def admin_coach_add_students(request, coach_id):
+    """添加学员到教练（子页面）"""
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    coach = get_object_or_404(Coach, id=coach_id)
+    
+    if request.method == 'POST':
+        student_ids = request.POST.getlist('students')
+        added_count = 0
+        
+        for student_id in student_ids:
+            try:
+                student = Student.objects.get(id=student_id)
+                # 检查是否已绑定
+                if not CoachStudent.objects.filter(coach=coach, student=student).exists():
+                    CoachStudent.objects.create(coach=coach, student=student, class_hours=0)
+                    added_count += 1
+            except Student.DoesNotExist:
+                continue
+        
+        if added_count > 0:
+            messages.success(request, f'成功添加 {added_count} 名学员')
+        else:
+            messages.warning(request, '未添加任何学员')
+        
+        return redirect('admin_coach_edit', coach_id=coach.id)
+    
+    # 获取已绑定的学员ID列表
+    bound_student_ids = set(coach.students.values_list('student_id', flat=True))
+    students = Student.objects.all().order_by('name')
+    
+    return render(request, 'booking/admin/admin_coach_add_students.html', {
+        'coach': coach,
+        'students': students,
+        'bound_student_ids': bound_student_ids
+    })
+
+
+@login_required
+def admin_coach_unbind_student(request, coach_id, student_id):
+    """解除教练与学员的绑定"""
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限访问此页面')
+        return redirect('court_list')
+    
+    coach = get_object_or_404(Coach, id=coach_id)
+    student = get_object_or_404(Student, id=student_id)
+    
+    # 删除绑定关系
+    CoachStudent.objects.filter(coach=coach, student=student).delete()
+    messages.success(request, f'已解除与学员 {student.name} 的绑定')
+    
+    return redirect('admin_coach_edit', coach_id=coach.id)
 
 
 @login_required
