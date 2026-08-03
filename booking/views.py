@@ -915,6 +915,35 @@ def admin_booking_edit(request, booking_id):
 
 
 @login_required
+@require_POST
+def admin_booking_complete(request, booking_id):
+    """核销预约（状态变为已完成）"""
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限执行此操作')
+        return redirect('court_list')
+
+    booking = get_object_or_404(Booking, id=booking_id, status='active')
+    booking.status = 'completed'
+    booking.save()
+    messages.success(request, '预约已核销')
+    return redirect('admin_bookings')
+
+
+@login_required
+@require_POST
+def admin_booking_delete(request, booking_id):
+    """删除预约"""
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限执行此操作')
+        return redirect('court_list')
+    
+    booking = get_object_or_404(Booking, id=booking_id)
+    booking.delete()
+    messages.success(request, '预约已删除')
+    return redirect('admin_bookings')
+
+
+@login_required
 @require_GET
 def get_time_slots(request):
     date_str = request.GET.get('date')

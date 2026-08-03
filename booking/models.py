@@ -154,7 +154,8 @@ class Booking(models.Model):
     ]
 
     STATUS_CHOICES = [
-        ('active', '有效'),
+        ('active', '进行中'),
+        ('completed', '已完成'),
         ('cancelled', '已取消'),
     ]
 
