@@ -162,6 +162,7 @@ class Booking(models.Model):
     booking_type = models.CharField(max_length=20, choices=BOOKING_TYPE_CHOICES, default='court', verbose_name='预约类型')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings', verbose_name='用户', null=True, blank=True)
     court = models.ForeignKey(Court, on_delete=models.CASCADE, related_name='bookings', verbose_name='场地')
+    coach = models.ForeignKey(Coach, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookings', verbose_name='教练')
     date = models.DateField(verbose_name='预约日期')
     start_time = models.TimeField(verbose_name='开始时间')
     end_time = models.TimeField(verbose_name='结束时间')

@@ -219,8 +219,10 @@
             <label>状态</label>
             <span>
                 {% if booking.status == 'active' %}
-                    <span class="badge badge-success">有效</span>
-                {% else %}
+                    <span class="badge badge-success">进行中</span>
+                {% elif booking.status == 'completed' %}
+                    <span class="badge badge-warning">已完成</span>
+                {% elif booking.status == 'cancelled' %}
                     <span class="badge badge-danger">已取消</span>
                 {% endif %}
             </span>
@@ -250,6 +252,35 @@
             <button type="submit" class="btn btn-sm">保存修改</button>
         </div>
     </form>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 16px;">教练选择</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="set_coach">
+        <div class="form-group">
+            <label for="coach_id">选择教练 <span style="color: #ef4444;">*</span></label>
+            <select id="coach_id" name="coach_id" class="form-control" required onchange="this.form.submit()">
+                <option value="">请选择教练</option>
+                {% for coach in coaches %}
+                    <option value="{{ coach.id }}" {% if booking.coach_id == coach.id %}selected{% endif %}>
+                        {{ coach.name }}{% if coach.phone %} ({{ coach.phone }}){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    {% if booking.coach %}
+        <div style="margin-top: 12px; padding: 12px; background: #f0f9ff; border-radius: var(--radius);">
+            <strong>当前教练：</strong>{{ booking.coach.name }}
+            {% if booking.coach.phone %} - {{ booking.coach.phone }}{% endif %}
+        </div>
+    {% else %}
+        <div style="margin-top: 12px; padding: 12px; background: #fef3c7; border-radius: var(--radius); color: #92400e;">
+            ⚠️ 请先选择教练，然后才能添加学员
+        </div>
+    {% endif %}
 </div>
 {% endif %}
 

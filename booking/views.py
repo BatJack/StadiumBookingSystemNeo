@@ -1442,11 +1442,48 @@ def admin_course_booking_edit(request, booking_id):
     
     booking = get_object_or_404(Booking, id=booking_id, booking_type='course')
     booking_students = booking.students.select_related('student').all()
-    all_students = Student.objects.all()
-    
+    coaches = Coach.objects.all()
+
+    # 根据教练获取可添加的学员列表（教练绑定的学员）
+    if booking.coach_id:
+        coach_student_ids = booking.coach.students.values_list('student_id', flat=True)
+        available_students = Student.objects.filter(id__in=coach_student_ids)
+    else:
+        available_students = Student.objects.none()
+
+    def _edit_context(**extra):
+        ctx = {
+            'booking': booking,
+            'booking_students': booking_students,
+            'coaches': coaches,
+            'students': available_students,
+        }
+        ctx.update(extra)
+        return ctx
+
     if request.method == 'POST':
+        if booking.status != 'active':
+            messages.error(request, '已完成或已取消的预约不可编辑')
+            return redirect('admin_course_booking_list')
+
         action = request.POST.get('action')
-        
+
+        if action == 'set_coach':
+            coach_id = request.POST.get('coach_id')
+            if coach_id:
+                try:
+                    coach = Coach.objects.get(id=coach_id)
+                    booking.coach = coach
+                    booking.save()
+                    messages.success(request, f'已设置教练：{coach.name}')
+                except Coach.DoesNotExist:
+                    messages.error(request, '教练不存在')
+            else:
+                booking.coach = None
+                booking.save()
+                messages.success(request, '已清除教练')
+            return redirect('admin_course_booking_edit', booking_id=booking_id)
+
         if action == 'remove_student':
             cs_id = request.POST.get('cs_id')
             try:
@@ -1466,30 +1503,22 @@ def admin_course_booking_edit(request, booking_id):
             student_ids = request.POST.getlist('students')
             class_hours = request.POST.get('class_hours')
             
+            if not booking.coach_id:
+                messages.error(request, '请先选择教练')
+                return redirect('admin_course_booking_edit', booking_id=booking_id)
+
             if not student_ids:
                 messages.error(request, '请至少选择一名学员')
-                return render(request, 'booking/admin/admin_course_booking_edit.html', {
-                    'booking': booking,
-                    'booking_students': booking_students,
-                    'students': all_students,
-                })
-            
+                return render(request, 'booking/admin/admin_course_booking_edit.html', _edit_context())
+
             try:
                 hours = int(class_hours)
                 if hours <= 0:
                     messages.error(request, '课时数必须大于0')
-                    return render(request, 'booking/admin/admin_course_booking_edit.html', {
-                        'booking': booking,
-                        'booking_students': booking_students,
-                        'students': all_students,
-                    })
+                    return render(request, 'booking/admin/admin_course_booking_edit.html', _edit_context())
             except (ValueError, TypeError):
                 messages.error(request, '课时数格式错误')
-                return render(request, 'booking/admin/admin_course_booking_edit.html', {
-                    'booking': booking,
-                    'booking_students': booking_students,
-                    'students': all_students,
-                })
+                return render(request, 'booking/admin/admin_course_booking_edit.html', _edit_context())
             
             added = 0
             for sid in student_ids:
@@ -1559,11 +1588,22 @@ def admin_course_booking_edit(request, booking_id):
             
             return redirect('admin_course_booking_edit', booking_id=booking_id)
     
-    return render(request, 'booking/admin/admin_course_booking_edit.html', {
-        'booking': booking,
-        'booking_students': booking_students,
-        'students': all_students,
-    })
+    return render(request, 'booking/admin/admin_course_booking_edit.html', _edit_context())
+
+
+@login_required
+@require_POST
+def admin_course_booking_complete(request, booking_id):
+    """核销课程预约（状态变为已完成）"""
+    if not is_admin_user(request.user):
+        messages.error(request, '您没有权限执行此操作')
+        return redirect('court_list')
+    
+    booking = get_object_or_404(Booking, id=booking_id, booking_type='course', status='active')
+    booking.status = 'completed'
+    booking.save()
+    messages.success(request, '课程预约已核销')
+    return redirect('admin_course_booking_list')
 
 
 @login_required
